@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using HarmonyLib;
 using RimWorld;
@@ -28,18 +29,46 @@ namespace UniqueWeaponsUnbound.Patches
             foreach (Gizmo g in __result)
                 yield return g;
 
-            Thing parent = __instance.parent;
+            // Analysis is wrapped in a try/catch helper because an uncaught
+            // throw here would propagate into vanilla's gizmo iterator and
+            // break selection rendering on the host Thing — including
+            // unrelated gizmos contributed by other comps.
+            Gizmo customize = TryBuildCustomizeGizmo(__instance.parent);
+            if (customize != null)
+                yield return customize;
+        }
 
+        private static Gizmo TryBuildCustomizeGizmo(Thing parent)
+        {
+            try
+            {
+                return BuildCustomizeGizmo(parent);
+            }
+            catch (Exception ex)
+            {
+                // ErrorOnce keyed by defName so a recurring per-frame failure
+                // on a selected weapon doesn't flood the log.
+                string defName = parent?.def?.defName ?? "(null)";
+                Log.ErrorOnce(
+                    "[Unique Weapons Unbound] Customize gizmo failed for "
+                        + defName + ": " + ex,
+                    ("UWU_GizmoFail_" + defName).GetHashCode());
+                return null;
+            }
+        }
+
+        private static Gizmo BuildCustomizeGizmo(Thing parent)
+        {
             // Layer 1: Hidden — skip non-weapons and non-customizable weapons.
             // Registry membership isn't checked here so CustomizationRules.IsCustomizable
             // can still surface its HiddenUnlessDev rejection reasons as a
             // visible-but-disabled gizmo in dev mode.
             if (!parent.def.IsWeapon || !parent.Spawned)
-                yield break;
+                return null;
 
             AcceptanceReport customizable = CustomizationRules.IsCustomizable(parent);
             if (!customizable.Accepted && customizable.Reason.NullOrEmpty())
-                yield break;
+                return null;
 
             WeaponRegistry.ResolveWeaponDefs(parent,
                 out ThingDef baseDef, out ThingDef uniqueDef);
@@ -81,47 +110,66 @@ namespace UniqueWeaponsUnbound.Patches
 
             gizmo.action = delegate
             {
-                TargetingParameters parms = TargetingParameters.ForColonist();
-
-                // Layer 3: pawn-specific validation on the targeter
-                parms.validator = delegate(TargetInfo targetInfo)
+                // Click-time hardening: a throw here would bubble through
+                // vanilla's UI handler. ErrorOnce keyed by defName so a
+                // pathological weapon doesn't flood the log on repeat clicks.
+                try
                 {
-                    if (!(targetInfo.Thing is Pawn p))
-                        return false;
-                    return WorkbenchUtility.FindBestWorkbench(
-                        p, capturedBaseDef, capturedUniqueDef,
-                        capturedTechLevel, weapon.Position).Found;
-                };
-
-                Find.Targeter.BeginTargeting(parms,
-                    delegate(LocalTargetInfo target)
-                    {
-                        // Layer 4: create job
-                        Pawn pawn = target.Pawn;
-                        if (pawn == null)
-                            return;
-
-                        var result = WorkbenchUtility.FindBestWorkbench(
-                            pawn, capturedBaseDef, capturedUniqueDef,
-                            capturedTechLevel, weapon.Position);
-                        if (!result.Found)
-                        {
-                            Messages.Message(
-                                "UWU_CustomizeWeapon".Translate(weapon.LabelShortCap)
-                                    + " (" + result.BestRejection.Reason + ")",
-                                weapon, MessageTypeDefOf.RejectInput, false);
-                            return;
-                        }
-
-                        Job job = JobMaker.MakeJob(UWU_JobDefOf.UWU_CustomizeWeapon);
-                        job.targetB = weapon;
-                        job.targetC = result.Workbench;
-                        job.count = 1;
-                        pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-                    });
+                    BeginCustomizeTargeting(
+                        weapon, capturedBaseDef, capturedUniqueDef, capturedTechLevel);
+                }
+                catch (Exception ex)
+                {
+                    string defName = weapon?.def?.defName ?? "(null)";
+                    Log.ErrorOnce(
+                        "[Unique Weapons Unbound] Customize action failed for "
+                            + defName + ": " + ex,
+                        ("UWU_GizmoAction_" + defName).GetHashCode());
+                }
             };
 
-            yield return gizmo;
+            return gizmo;
+        }
+
+        private static void BeginCustomizeTargeting(
+            Thing weapon, ThingDef baseDef, ThingDef uniqueDef, TechLevel techLevel)
+        {
+            TargetingParameters parms = TargetingParameters.ForColonist();
+
+            // Layer 3: pawn-specific validation on the targeter
+            parms.validator = delegate(TargetInfo targetInfo)
+            {
+                if (!(targetInfo.Thing is Pawn p))
+                    return false;
+                return WorkbenchUtility.FindBestWorkbench(
+                    p, baseDef, uniqueDef, techLevel, weapon.Position).Found;
+            };
+
+            Find.Targeter.BeginTargeting(parms,
+                delegate(LocalTargetInfo target)
+                {
+                    // Layer 4: create job
+                    Pawn pawn = target.Pawn;
+                    if (pawn == null)
+                        return;
+
+                    var result = WorkbenchUtility.FindBestWorkbench(
+                        pawn, baseDef, uniqueDef, techLevel, weapon.Position);
+                    if (!result.Found)
+                    {
+                        Messages.Message(
+                            "UWU_CustomizeWeapon".Translate(weapon.LabelShortCap)
+                                + " (" + result.BestRejection.Reason + ")",
+                            weapon, MessageTypeDefOf.RejectInput, false);
+                        return;
+                    }
+
+                    Job job = JobMaker.MakeJob(UWU_JobDefOf.UWU_CustomizeWeapon);
+                    job.targetB = weapon;
+                    job.targetC = result.Workbench;
+                    job.count = 1;
+                    pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+                });
         }
     }
 }
