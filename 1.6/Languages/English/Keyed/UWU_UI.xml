@@ -11,10 +11,9 @@
   <UWU_CustomizeGizmoDesc>Select a colonist to customize this weapon at a nearby workbench.</UWU_CustomizeGizmoDesc>
 
   <!-- Dev-mode diagnostic reasons (surfaced when Prefs.DevMode is on, otherwise hidden) -->
-  <UWU_DevNoUniqueVariant>no unique variant registered for {0}</UWU_DevNoUniqueVariant>
-  <UWU_DevDefConversionDisabled>def conversion disabled in mod settings</UWU_DevDefConversionDisabled>
-  <UWU_DevSmithingNotFinished>Unique Smithing research not finished</UWU_DevSmithingNotFinished>
-  <UWU_DevTechLevelUnsupported>tech level {0} is not supported</UWU_DevTechLevelUnsupported>
+  <UWU_DevNoUniqueVariant>no unique variant</UWU_DevNoUniqueVariant>
+  <UWU_DevDefConversionDisabled>base variant upgrades disabled</UWU_DevDefConversionDisabled>
+  <UWU_DevTechLevelBeyondComprehension>{0} is beyond comprehension</UWU_DevTechLevelBeyondComprehension>
 
   <!-- Dialog: Buttons -->
   <UWU_Cancel>Cancel</UWU_Cancel>

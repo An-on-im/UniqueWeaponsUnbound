@@ -29,7 +29,7 @@ namespace UniqueWeaponsUnbound
             else
             {
                 if (WeaponRegistry.GetUniqueVariant(def) == null)
-                    return HiddenUnlessDev("UWU_DevNoUniqueVariant".Translate(def.defName));
+                    return HiddenUnlessDev("UWU_DevNoUniqueVariant".Translate());
 
                 // When def conversion is disabled, only already-unique weapons
                 // can enter the customization system.
@@ -37,25 +37,23 @@ namespace UniqueWeaponsUnbound
                     return HiddenUnlessDev("UWU_DevDefConversionDisabled".Translate());
             }
 
+            // Tech-level ceiling applies regardless of requireCustomizationResearch:
+            // the Ultra/Archotech setting toggles are about whether those tiers participate
+            // in the customization system at all, not about gating the research projects.
+            ResearchProjectDef requiredResearch = GetRequiredResearch(def.techLevel);
+            if (requiredResearch == null)
+                return HiddenUnlessDev("UWU_DevTechLevelBeyondComprehension".Translate(def.techLevel.ToStringHuman()));
+
             if (UWU_Mod.Settings.requireCustomizationResearch)
             {
-                // Don't surface any customization UI until the player has completed
-                // UniqueSmithing, so we don't clutter menus for uninterested players.
-                if (!UWU_ResearchDefOf.UniqueSmithing.IsFinished)
-                    return HiddenUnlessDev("UWU_DevSmithingNotFinished".Translate());
-
-                ResearchProjectDef requiredResearch = GetRequiredResearch(def.techLevel);
-                if (requiredResearch == null)
-                    return HiddenUnlessDev("UWU_DevTechLevelUnsupported".Translate(def.techLevel.ToStringHuman()));
+                // Don't surface customization UI until the player has completed UniqueSmithing,
+                // so we don't clutter menus for uninterested players. Bypassed in dev mode so the
+                // per-weapon research blocker is shown instead.
+                if (!Prefs.DevMode && !UWU_ResearchDefOf.UniqueSmithing.IsFinished)
+                    return false;
 
                 if (!requiredResearch.IsFinished)
                     return "UWU_RequiresResearch".Translate(requiredResearch.label);
-            }
-            else
-            {
-                // Even without research requirements, tech-level gating still applies
-                if (GetRequiredResearch(def.techLevel) == null)
-                    return HiddenUnlessDev("UWU_DevTechLevelUnsupported".Translate(def.techLevel.ToStringHuman()));
             }
 
             QualityCategory minQuality = UWU_Mod.Settings.minimumQuality;
@@ -92,29 +90,37 @@ namespace UniqueWeaponsUnbound
 
         /// <summary>
         /// Returns the required research project for customizing weapons of the given tech level,
-        /// or null if the tech level is gated off by a mod setting (Ultra/Archotech).
+        /// or null when the tech level is above the configured customization ceiling
+        /// (i.e. Ultra/Archotech with their mod settings disabled).
         ///
-        /// Uses a tier-ceiling fallthrough rather than an exact match, so weapons tagged with
-        /// Animal or Undefined fall up to UniqueSmithing instead of being silently dropped.
-        /// This makes the gate robust against modded weapons with unusual tech levels.
-        ///
-        /// Enabling Archotech customization implies Ultratech, since they're gated by the
-        /// same research and there's no scenario where someone wants the higher tier
-        /// customizable without the lower one.
+        /// Uses tier fallthroughs at both ends: weapons tagged Animal or Undefined fall up to
+        /// UniqueSmithing, and the fabrication tier extends up to whichever high-end tier the
+        /// player has enabled. This makes the gate robust against modded weapons with unusual
+        /// tech levels.
         /// </summary>
         public static ResearchProjectDef GetRequiredResearch(TechLevel techLevel)
         {
-            if (techLevel >= TechLevel.Archotech)
-                return UWU_Mod.Settings.allowArchotechCustomization ? UWU_ResearchDefOf.UniqueFabrication : null;
-            if (techLevel >= TechLevel.Ultra)
-                return (UWU_Mod.Settings.allowUltratechCustomization || UWU_Mod.Settings.allowArchotechCustomization)
-                    ? UWU_ResearchDefOf.UniqueFabrication
-                    : null;
+            if (techLevel > GetCustomizationCeiling())
+                return null;
             if (techLevel >= TechLevel.Spacer)
                 return UWU_ResearchDefOf.UniqueFabrication;
             if (techLevel >= TechLevel.Industrial)
                 return UWU_ResearchDefOf.UniqueMachining;
             return UWU_ResearchDefOf.UniqueSmithing;
+        }
+
+        /// <summary>
+        /// The highest tech level the player has opted into customizing. Anything above
+        /// this is "beyond comprehension" and falls out of the customization system.
+        /// Archotech implies Ultra, since they share the same research gate.
+        /// </summary>
+        private static TechLevel GetCustomizationCeiling()
+        {
+            if (UWU_Mod.Settings.allowArchotechCustomization)
+                return TechLevel.Archotech;
+            if (UWU_Mod.Settings.allowUltratechCustomization)
+                return TechLevel.Ultra;
+            return TechLevel.Spacer;
         }
 
         /// <summary>
