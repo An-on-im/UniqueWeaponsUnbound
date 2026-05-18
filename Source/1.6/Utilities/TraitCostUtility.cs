@@ -38,16 +38,28 @@ namespace UniqueWeaponsUnbound
         public static IReadOnlyList<TraitCostRuleDef> CachedRules => cachedRules;
 
         /// <summary>
-        /// Initializes material caches and builds the sorted rule list from DefDatabase.
-        /// Must be called during StaticConstructorOnStartup (after all defs are loaded).
+        /// Initializes material caches and builds the sorted rule list from
+        /// DefDatabase. Must be called during StaticConstructorOnStartup
+        /// (after all defs are loaded). A non-null <paramref name="report"/>
+        /// absorbs any fatal exception so the rest of the mod can still
+        /// initialize; passing null preserves the throwing contract for
+        /// direct callers.
         /// </summary>
-        public static void Initialize()
+        public static void Initialize(InitDiagnostics report = null)
         {
-            CostRuleHelpers.Initialize();
+            try
+            {
+                CostRuleHelpers.Initialize();
 
-            cachedRules = DefDatabase<TraitCostRuleDef>.AllDefs
-                .OrderBy(d => d.priority)
-                .ToList();
+                cachedRules = DefDatabase<TraitCostRuleDef>.AllDefs
+                    .OrderBy(d => d.priority)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                if (report == null) throw;
+                report.RecordFailure(nameof(TraitCostUtility), ex);
+            }
         }
 
         /// <summary>

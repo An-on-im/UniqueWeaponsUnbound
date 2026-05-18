@@ -16,24 +16,35 @@ namespace UniqueWeaponsUnbound
 
         /// <summary>
         /// Builds the base↔unique weapon pair cache. Must be called during
-        /// StaticConstructorOnStartup (after all defs are loaded).
+        /// StaticConstructorOnStartup (after all defs are loaded). A non-null
+        /// <paramref name="report"/> absorbs any fatal exception so the rest
+        /// of the mod can still initialize; passing null preserves the
+        /// throwing contract for direct callers.
         /// </summary>
-        public static void Initialize()
+        public static void Initialize(InitDiagnostics report = null)
         {
-            baseToUnique = new Dictionary<ThingDef, ThingDef>();
-            uniqueToBase = new Dictionary<ThingDef, ThingDef>();
-
-            foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs)
+            try
             {
-                try
+                baseToUnique = new Dictionary<ThingDef, ThingDef>();
+                uniqueToBase = new Dictionary<ThingDef, ThingDef>();
+
+                foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs)
                 {
-                    RegisterUniqueWeaponDef(def);
+                    try
+                    {
+                        RegisterUniqueWeaponDef(def);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("[Unique Weapons Unbound] Skipped weapon registration for "
+                            + def.SourceForLog() + " due to error: " + ex);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Log.Error("[Unique Weapons Unbound] Skipped weapon registration for "
-                        + def.SourceForLog() + " due to error: " + ex);
-                }
+            }
+            catch (Exception ex)
+            {
+                if (report == null) throw;
+                report.RecordFailure(nameof(WeaponRegistry), ex);
             }
         }
 

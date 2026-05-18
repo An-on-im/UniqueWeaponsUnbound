@@ -25,25 +25,36 @@ namespace UniqueWeaponsUnbound
 
         /// <summary>
         /// Initializes workbench tier sets and the weapon-workbench registry.
-        /// Must be called during StaticConstructorOnStartup (after all defs are loaded).
+        /// Must be called during StaticConstructorOnStartup (after all defs
+        /// are loaded). A non-null <paramref name="report"/> absorbs any fatal
+        /// exception so the rest of the mod can still initialize; passing null
+        /// preserves the throwing contract for direct callers.
         /// </summary>
-        public static void Initialize()
+        public static void Initialize(InitDiagnostics report = null)
         {
-            // Initialize workbench tier sets from vanilla anchors
-            smithyDefs = ResolveDefSet("FueledSmithy", "ElectricSmithy");
-            machiningDefs = ResolveDefSet("TableMachining");
-            fabricationDefs = ResolveDefSet("FabricationBench");
+            try
+            {
+                // Initialize workbench tier sets from vanilla anchors
+                smithyDefs = ResolveDefSet("FueledSmithy", "ElectricSmithy");
+                machiningDefs = ResolveDefSet("TableMachining");
+                fabricationDefs = ResolveDefSet("FabricationBench");
 
-            // Resolve display labels from vanilla anchors only (before expanding with modded benches)
-            smithyLabel = ResolveWorkbenchLabel(smithyDefs);
-            machiningLabel = ResolveWorkbenchLabel(machiningDefs);
-            fabricationLabel = ResolveWorkbenchLabel(fabricationDefs);
+                // Resolve display labels from vanilla anchors only (before expanding with modded benches)
+                smithyLabel = ResolveWorkbenchLabel(smithyDefs);
+                machiningLabel = ResolveWorkbenchLabel(machiningDefs);
+                fabricationLabel = ResolveWorkbenchLabel(fabricationDefs);
 
-            // Expand tier sets with benches that inherit recipes from vanilla anchors via VEF
-            ExpandTiersFromVEF();
+                // Expand tier sets with benches that inherit recipes from vanilla anchors via VEF
+                ExpandTiersFromVEF();
 
-            // Build the set of all workbench defs that have at least one weapon recipe
-            InitializeWeaponWorkbenches();
+                // Build the set of all workbench defs that have at least one weapon recipe
+                InitializeWeaponWorkbenches();
+            }
+            catch (Exception ex)
+            {
+                if (report == null) throw;
+                report.RecordFailure(nameof(WorkbenchUtility), ex);
+            }
         }
 
         /// <summary>
