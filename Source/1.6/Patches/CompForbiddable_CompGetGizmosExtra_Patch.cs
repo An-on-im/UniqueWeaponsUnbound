@@ -6,27 +6,44 @@ using Verse.AI;
 
 namespace UniqueWeaponsUnbound.Patches
 {
-    [HarmonyPatch(typeof(ThingWithComps), nameof(ThingWithComps.GetGizmos))]
-    public static class ThingWithComps_GetGizmos_Patch
+    // Comp-scoped postfix instead of ThingWithComps.GetGizmos so the patch
+    // body only runs for Things whose def carries CompForbiddable — items,
+    // some buildings, doors. Pawns, walls, plants, and terrain features
+    // never enter this code. Every weapon that can be selected on the
+    // ground carries CompForbiddable, so the gizmo's reachability set is
+    // unchanged.
+    //
+    // CompUniqueWeapon would be the narrowest possible target (unique
+    // weapons only) but vanilla doesn't override CompGetGizmosExtra on it,
+    // so there's no method body to postfix. It would also miss base
+    // weapons with a registered unique variant, which still need the
+    // gizmo to start a base→unique conversion.
+    [HarmonyPatch(typeof(CompForbiddable), nameof(CompForbiddable.CompGetGizmosExtra))]
+    public static class CompForbiddable_CompGetGizmosExtra_Patch
     {
         [HarmonyPostfix]
         public static IEnumerable<Gizmo> Postfix(
-            IEnumerable<Gizmo> __result, ThingWithComps __instance)
+            IEnumerable<Gizmo> __result, CompForbiddable __instance)
         {
             foreach (Gizmo g in __result)
                 yield return g;
 
-            // Layer 1: Hidden — skip non-weapons and non-customizable weapons
-            if (!__instance.def.IsWeapon || !__instance.Spawned)
+            Thing parent = __instance.parent;
+
+            // Layer 1: Hidden — skip non-weapons and non-customizable weapons.
+            // Registry membership isn't checked here so CustomizationRules.IsCustomizable
+            // can still surface its HiddenUnlessDev rejection reasons as a
+            // visible-but-disabled gizmo in dev mode.
+            if (!parent.def.IsWeapon || !parent.Spawned)
                 yield break;
 
-            AcceptanceReport customizable = CustomizationRules.IsCustomizable(__instance);
+            AcceptanceReport customizable = CustomizationRules.IsCustomizable(parent);
             if (!customizable.Accepted && customizable.Reason.NullOrEmpty())
                 yield break;
 
-            WeaponRegistry.ResolveWeaponDefs(__instance,
+            WeaponRegistry.ResolveWeaponDefs(parent,
                 out ThingDef baseDef, out ThingDef uniqueDef);
-            TechLevel techLevel = CustomizationRules.GetWeaponTechLevel(__instance);
+            TechLevel techLevel = CustomizationRules.GetWeaponTechLevel(parent);
 
             Command_Action gizmo = new Command_Action();
             gizmo.defaultLabel = "UWU_CustomizeGizmoLabel".Translate();
@@ -48,7 +65,7 @@ namespace UniqueWeaponsUnbound.Patches
             else
             {
                 var workbenchCheck = WorkbenchUtility.FindBestWorkbench(
-                    __instance.Map, baseDef, uniqueDef, techLevel, __instance.Position);
+                    parent.Map, baseDef, uniqueDef, techLevel, parent.Position);
                 if (!workbenchCheck.Found)
                 {
                     gizmo.Disabled = true;
@@ -57,7 +74,7 @@ namespace UniqueWeaponsUnbound.Patches
             }
 
             // Capture locals for the delegate closures
-            Thing weapon = __instance;
+            Thing weapon = parent;
             ThingDef capturedBaseDef = baseDef;
             ThingDef capturedUniqueDef = uniqueDef;
             TechLevel capturedTechLevel = techLevel;
