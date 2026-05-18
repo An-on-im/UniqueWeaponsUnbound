@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using RimWorld;
 using Verse;
@@ -14,39 +15,93 @@ namespace UniqueWeaponsUnbound
         public override IEnumerable<FloatMenuOption> GetOptionsFor(
             Thing clickedThing, FloatMenuContext context)
         {
-            if (!(clickedThing is Building_WorkTable workbench))
-                yield break;
+            // Materialize options outside the iterator. yield return forbids
+            // try/catch around it, so a throw inside GetOptionForWeapon would
+            // abort the iterator and silently drop every remaining option for
+            // the pawn (equipped + inventory). Building into a list first lets
+            // us isolate per-weapon failures.
+            List<FloatMenuOption> options = null;
+            try
+            {
+                options = BuildOptions(clickedThing, context);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[Unique Weapons Unbound] Skipped customization menu construction at "
+                    + (clickedThing?.LabelShortCap ?? "(null)") + " due to error: " + ex);
+            }
 
-            if (!WorkbenchUtility.IsCustomizationWorkbench(workbench))
+            if (options == null)
                 yield break;
+            foreach (FloatMenuOption opt in options)
+                yield return opt;
+        }
+
+        private static List<FloatMenuOption> BuildOptions(
+            Thing clickedThing, FloatMenuContext context)
+        {
+            if (!(clickedThing is Building_WorkTable workbench))
+                return null;
+
+            bool isCustomizationBench;
+            try
+            {
+                isCustomizationBench = WorkbenchUtility.IsCustomizationWorkbench(workbench);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[Unique Weapons Unbound] Workbench classification failed for "
+                    + (workbench.def?.defName ?? "(null def)") + ": " + ex);
+                return null;
+            }
+            if (!isCustomizationBench)
+                return null;
 
             Pawn pawn = context.FirstSelectedPawn;
             if (pawn == null)
-                yield break;
+                return null;
+
+            var options = new List<FloatMenuOption>();
 
             // Entry point 1: equipped weapon
             Thing equipped = pawn.equipment?.Primary;
             if (equipped != null)
-            {
-                FloatMenuOption option = GetOptionForWeapon(
-                    pawn, equipped, workbench);
-                if (option != null)
-                    yield return option;
-            }
+                TryAddOption(options, pawn, equipped, workbench);
 
-            // Entry point 2: inventory weapons
+            // Entry point 2: inventory weapons.
             if (pawn.inventory?.innerContainer != null)
             {
                 foreach (Thing item in pawn.inventory.innerContainer)
                 {
-                    if (!item.def.IsWeapon)
+                    if (item?.def == null || !item.def.IsWeapon)
                         continue;
-
-                    FloatMenuOption option = GetOptionForWeapon(
-                        pawn, item, workbench);
-                    if (option != null)
-                        yield return option;
+                    TryAddOption(options, pawn, item, workbench);
                 }
+            }
+
+            return options;
+        }
+
+        /// <summary>
+        /// Builds the option for one weapon and appends on success. Per-weapon
+        /// failures are isolated and logged so a single broken weapon (modded
+        /// stuff/quality throw, upstream cache NRE, etc.) can't suppress the
+        /// other entries.
+        /// </summary>
+        private static void TryAddOption(
+            List<FloatMenuOption> options, Pawn pawn, Thing weapon, Building_WorkTable workbench)
+        {
+            try
+            {
+                FloatMenuOption option = GetOptionForWeapon(pawn, weapon, workbench);
+                if (option != null)
+                    options.Add(option);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[Unique Weapons Unbound] Skipped customization menu entry for "
+                    + SafeLabel(weapon) + " (" + (weapon?.def?.defName ?? "?")
+                    + ") due to error: " + ex);
             }
         }
 
@@ -99,19 +154,54 @@ namespace UniqueWeaponsUnbound
                     null);
             }
 
+            // Capture for the click delegate so a destroyed-mid-menu weapon
+            // doesn't NRE inside vanilla's order dispatch.
+            Thing capturedWeapon = weapon;
+            Building_WorkTable capturedWorkbench = workbench;
+            Pawn capturedPawn = pawn;
+
             return FloatMenuUtility.DecoratePrioritizedTask(
                 new FloatMenuOption(
                     label,
                     delegate
                     {
-                        Job job = JobMaker.MakeJob(
-                            UWU_JobDefOf.UWU_CustomizeWeapon);
-                        job.targetB = weapon;
-                        job.targetC = workbench;
-                        job.count = 1;
-                        pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+                        TryQueueCustomizeJob(capturedPawn, capturedWeapon, capturedWorkbench);
                     }),
                 pawn, workbench);
+        }
+
+        /// <summary>
+        /// Click-delegate handler. Wrapped in try/catch so a missing JobDef or
+        /// any other unexpected failure surfaces as a player-visible message
+        /// rather than a silent no-op on the order.
+        /// </summary>
+        internal static void TryQueueCustomizeJob(
+            Pawn pawn, Thing weapon, Building_WorkTable workbench)
+        {
+            try
+            {
+                Job job = JobMaker.MakeJob(UWU_JobDefOf.UWU_CustomizeWeapon);
+                job.targetB = weapon;
+                job.targetC = workbench;
+                job.count = 1;
+                pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[Unique Weapons Unbound] Failed to queue customization job for "
+                    + SafeLabel(weapon) + ": " + ex);
+                Messages.Message("UWU_CustomizeWeapon".Translate(SafeLabel(weapon))
+                    + " (" + "Error".Translate() + ")",
+                    weapon ?? (Thing)workbench,
+                    MessageTypeDefOf.RejectInput, historical: false);
+            }
+        }
+
+        private static string SafeLabel(Thing t)
+        {
+            if (t == null) return "(null)";
+            try { return t.LabelShortCap; }
+            catch { return t.def?.defName ?? "(unlabelled)"; }
         }
 
         private static FloatMenuOption DisabledOrHidden(Thing weapon, AcceptanceReport report)

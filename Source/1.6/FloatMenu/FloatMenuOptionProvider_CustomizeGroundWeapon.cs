@@ -1,3 +1,4 @@
+using System;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -17,7 +18,28 @@ namespace UniqueWeaponsUnbound
         protected override FloatMenuOption GetSingleOptionFor(
             Thing clickedThing, FloatMenuContext context)
         {
-            if (!UWU_Mod.Settings.enableGroundCustomization)
+            // Outer guard so an unexpected throw inside the analysis (broken
+            // building def during workbench search, modded weapon throwing
+            // inside LabelShortCap, upstream cache NRE, etc.) drops only the
+            // option instead of cascading into vanilla's menu construction.
+            try
+            {
+                return BuildOption(clickedThing, context);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[Unique Weapons Unbound] Skipped ground-customization menu entry for "
+                    + SafeLabel(clickedThing) + " ("
+                    + (clickedThing?.def?.defName ?? "?") + ") due to error: " + ex);
+                return null;
+            }
+        }
+
+        private static FloatMenuOption BuildOption(Thing clickedThing, FloatMenuContext context)
+        {
+            if (UWU_Mod.Settings == null || !UWU_Mod.Settings.enableGroundCustomization)
+                return null;
+            if (clickedThing == null || clickedThing.def == null)
                 return null;
             if (clickedThing is Building)
                 return null;
@@ -73,19 +95,29 @@ namespace UniqueWeaponsUnbound
                 return DisabledOrHidden(weapon, result.BestRejection);
 
             Building_WorkTable workbench = result.Workbench;
+
+            // Capture for the click delegate so a destroyed-mid-menu weapon
+            // doesn't NRE inside vanilla's order dispatch.
+            Thing capturedWeapon = weapon;
+            Building_WorkTable capturedWorkbench = workbench;
+            Pawn capturedPawn = pawn;
+
             return FloatMenuUtility.DecoratePrioritizedTask(
                 new FloatMenuOption(
                     label,
                     delegate
                     {
-                        Job job = JobMaker.MakeJob(
-                            UWU_JobDefOf.UWU_CustomizeWeapon);
-                        job.targetB = weapon;
-                        job.targetC = workbench;
-                        job.count = 1;
-                        pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+                        FloatMenuOptionProvider_CustomizeWeapon.TryQueueCustomizeJob(
+                            capturedPawn, capturedWeapon, capturedWorkbench);
                     }),
                 pawn, weapon);
+        }
+
+        private static string SafeLabel(Thing t)
+        {
+            if (t == null) return "(null)";
+            try { return t.LabelShortCap; }
+            catch { return t.def?.defName ?? "(unlabelled)"; }
         }
 
         private static FloatMenuOption DisabledOrHidden(Thing weapon, AcceptanceReport report)
