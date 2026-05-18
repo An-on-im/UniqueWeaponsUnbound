@@ -29,12 +29,12 @@ namespace UniqueWeaponsUnbound
             else
             {
                 if (WeaponRegistry.GetUniqueVariant(def) == null)
-                    return false;
+                    return HiddenUnlessDev("UWU_DevNoUniqueVariant".Translate(def.defName));
 
                 // When def conversion is disabled, only already-unique weapons
                 // can enter the customization system.
                 if (!UWU_Mod.Settings.allowDefConversion)
-                    return false;
+                    return HiddenUnlessDev("UWU_DevDefConversionDisabled".Translate());
             }
 
             if (UWU_Mod.Settings.requireCustomizationResearch)
@@ -42,11 +42,11 @@ namespace UniqueWeaponsUnbound
                 // Don't surface any customization UI until the player has completed
                 // UniqueSmithing, so we don't clutter menus for uninterested players.
                 if (!UWU_ResearchDefOf.UniqueSmithing.IsFinished)
-                    return false;
+                    return HiddenUnlessDev("UWU_DevSmithingNotFinished".Translate());
 
                 ResearchProjectDef requiredResearch = GetRequiredResearch(def.techLevel);
                 if (requiredResearch == null)
-                    return false;
+                    return HiddenUnlessDev("UWU_DevTechLevelUnsupported".Translate(def.techLevel.ToStringHuman()));
 
                 if (!requiredResearch.IsFinished)
                     return "UWU_RequiresResearch".Translate(requiredResearch.label);
@@ -55,7 +55,7 @@ namespace UniqueWeaponsUnbound
             {
                 // Even without research requirements, tech-level gating still applies
                 if (GetRequiredResearch(def.techLevel) == null)
-                    return false;
+                    return HiddenUnlessDev("UWU_DevTechLevelUnsupported".Translate(def.techLevel.ToStringHuman()));
             }
 
             QualityCategory minQuality = UWU_Mod.Settings.minimumQuality;
@@ -92,35 +92,29 @@ namespace UniqueWeaponsUnbound
 
         /// <summary>
         /// Returns the required research project for customizing weapons of the given tech level,
-        /// or null if the tech level is not customizable (e.g. Archotech without mod setting).
+        /// or null if the tech level is gated off by a mod setting (Ultra/Archotech).
+        ///
+        /// Uses a tier-ceiling fallthrough rather than an exact match, so weapons tagged with
+        /// Animal or Undefined fall up to UniqueSmithing instead of being silently dropped.
+        /// This makes the gate robust against modded weapons with unusual tech levels.
+        ///
+        /// Enabling Archotech customization implies Ultratech, since they're gated by the
+        /// same research and there's no scenario where someone wants the higher tier
+        /// customizable without the lower one.
         /// </summary>
         public static ResearchProjectDef GetRequiredResearch(TechLevel techLevel)
         {
-            switch (techLevel)
-            {
-                case TechLevel.Neolithic:
-                case TechLevel.Medieval:
-                    return UWU_ResearchDefOf.UniqueSmithing;
-
-                case TechLevel.Industrial:
-                    return UWU_ResearchDefOf.UniqueMachining;
-
-                case TechLevel.Spacer:
-                    return UWU_ResearchDefOf.UniqueFabrication;
-
-                case TechLevel.Ultra:
-                    if (UWU_Mod.Settings.allowUltratechCustomization)
-                        return UWU_ResearchDefOf.UniqueFabrication;
-                    return null;
-
-                case TechLevel.Archotech:
-                    if (UWU_Mod.Settings.allowArchotechCustomization)
-                        return UWU_ResearchDefOf.UniqueFabrication;
-                    return null;
-
-                default:
-                    return null;
-            }
+            if (techLevel >= TechLevel.Archotech)
+                return UWU_Mod.Settings.allowArchotechCustomization ? UWU_ResearchDefOf.UniqueFabrication : null;
+            if (techLevel >= TechLevel.Ultra)
+                return (UWU_Mod.Settings.allowUltratechCustomization || UWU_Mod.Settings.allowArchotechCustomization)
+                    ? UWU_ResearchDefOf.UniqueFabrication
+                    : null;
+            if (techLevel >= TechLevel.Spacer)
+                return UWU_ResearchDefOf.UniqueFabrication;
+            if (techLevel >= TechLevel.Industrial)
+                return UWU_ResearchDefOf.UniqueMachining;
+            return UWU_ResearchDefOf.UniqueSmithing;
         }
 
         /// <summary>
@@ -130,6 +124,18 @@ namespace UniqueWeaponsUnbound
         {
             ResearchProjectDef required = GetRequiredResearch(techLevel);
             return required != null && required.IsFinished;
+        }
+
+        /// <summary>
+        /// Rejection report for paths that are normally hidden (silent <c>false</c>).
+        /// In dev mode, surfaces the reason so the option/gizmo renders as visible-but-disabled,
+        /// letting modders diagnose why a weapon isn't customizable without exporting logs.
+        /// </summary>
+        private static AcceptanceReport HiddenUnlessDev(string devReason)
+        {
+            if (!Prefs.DevMode)
+                return false;
+            return devReason;
         }
 
         /// <summary>

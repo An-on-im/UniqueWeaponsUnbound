@@ -145,10 +145,30 @@ namespace UniqueWeaponsUnbound
 
             listing.Gap();
 
-            listing.CheckboxLabeled(
-                "UWU_AllowUltratech".Translate(),
-                ref Settings.allowUltratechCustomization,
-                "UWU_AllowUltratechDesc".Translate());
+            if (Settings.allowArchotechCustomization)
+            {
+                // Visually forced on — Archotech implies Ultratech at runtime
+                // (see CustomizationRules.GetRequiredResearch). Stored setting is
+                // left untouched so toggling Archotech off restores prior intent.
+                Color prevColor = GUI.color;
+                Color prevContent = GUI.contentColor;
+                GUI.color = new Color(0.4f, 0.4f, 0.4f);
+                GUI.contentColor = new Color(0.5f, 0.5f, 0.5f);
+                bool forcedOn = true;
+                listing.CheckboxLabeled(
+                    "UWU_AllowUltratech".Translate(),
+                    ref forcedOn,
+                    "UWU_AllowUltratechImpliedDesc".Translate());
+                GUI.contentColor = prevContent;
+                GUI.color = prevColor;
+            }
+            else
+            {
+                listing.CheckboxLabeled(
+                    "UWU_AllowUltratech".Translate(),
+                    ref Settings.allowUltratechCustomization,
+                    "UWU_AllowUltratechDesc".Translate());
+            }
 
             listing.Gap();
 

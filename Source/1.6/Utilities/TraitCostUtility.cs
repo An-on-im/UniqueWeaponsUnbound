@@ -32,6 +32,12 @@ namespace UniqueWeaponsUnbound
         private static List<TraitCostRuleDef> cachedRules;
 
         /// <summary>
+        /// All registered cost rule defs in priority order.
+        /// Used by the startup diagnostic to bucket rules by source mod.
+        /// </summary>
+        public static IReadOnlyList<TraitCostRuleDef> CachedRules => cachedRules;
+
+        /// <summary>
         /// Initializes material caches and builds the sorted rule list from DefDatabase.
         /// Must be called during StaticConstructorOnStartup (after all defs are loaded).
         /// </summary>

@@ -10,6 +10,12 @@
   <UWU_CustomizeGizmoLabel>Customize</UWU_CustomizeGizmoLabel>
   <UWU_CustomizeGizmoDesc>Select a colonist to customize this weapon at a nearby workbench.</UWU_CustomizeGizmoDesc>
 
+  <!-- Dev-mode diagnostic reasons (surfaced when Prefs.DevMode is on, otherwise hidden) -->
+  <UWU_DevNoUniqueVariant>no unique variant registered for {0}</UWU_DevNoUniqueVariant>
+  <UWU_DevDefConversionDisabled>def conversion disabled in mod settings</UWU_DevDefConversionDisabled>
+  <UWU_DevSmithingNotFinished>Unique Smithing research not finished</UWU_DevSmithingNotFinished>
+  <UWU_DevTechLevelUnsupported>tech level {0} is not supported</UWU_DevTechLevelUnsupported>
+
   <!-- Dialog: Buttons -->
   <UWU_Cancel>Cancel</UWU_Cancel>
   <UWU_Reset>Reset</UWU_Reset>
@@ -128,6 +134,7 @@
   <UWU_AllowUncraftableDesc>Allow customization of weapons that have no crafting recipe.</UWU_AllowUncraftableDesc>
   <UWU_AllowUltratech>Allow customizing ultratech-level weapons</UWU_AllowUltratech>
   <UWU_AllowUltratechDesc>Allow customization of ultratech weapons, requiring Advanced Weapon Customization research.</UWU_AllowUltratechDesc>
+  <UWU_AllowUltratechImpliedDesc>Automatically enabled because "Allow customizing archotech-level weapons" is on. Both tiers share the same research gate.</UWU_AllowUltratechImpliedDesc>
   <UWU_AllowArchotech>Allow customizing archotech-level weapons</UWU_AllowArchotech>
   <UWU_AllowArchotechDesc>Allow customization of archotech weapons, requiring Advanced Weapon Customization research.</UWU_AllowArchotechDesc>
 

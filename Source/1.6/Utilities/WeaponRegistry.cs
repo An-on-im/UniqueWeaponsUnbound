@@ -85,6 +85,12 @@ namespace UniqueWeaponsUnbound
         }
 
         /// <summary>
+        /// All registered unique-variant ThingDefs (one per base↔unique pair).
+        /// Used by the startup diagnostic to bucket pairs by source mod.
+        /// </summary>
+        public static IEnumerable<ThingDef> AllUniqueDefs => uniqueToBase.Keys;
+
+        /// <summary>
         /// Returns the base weapon for a unique weapon def, or null if not found.
         /// </summary>
         public static ThingDef GetBaseVariant(ThingDef uniqueDef)

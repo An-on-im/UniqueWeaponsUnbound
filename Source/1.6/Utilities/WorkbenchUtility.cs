@@ -233,32 +233,28 @@ namespace UniqueWeaponsUnbound
             if (WorkbenchHasRecipeFor(workbench.def, baseDef, uniqueDef))
                 return true;
 
-            // Layer 3: Tech-level tier fallback
+            // Layer 3: Tech-level tier fallback.
+            //
+            // Uses a tier-ceiling fallthrough that mirrors GetRequiredResearch, so weapons
+            // tagged with Animal or Undefined fall up to the smithy tier instead of being
+            // silently rejected.
             ThingDef benchDef = workbench.def;
             bool isMachiningOrHigher = machiningDefs.Contains(benchDef) || fabricationDefs.Contains(benchDef);
             bool isFabrication = fabricationDefs.Contains(benchDef);
 
-            switch (weaponTechLevel)
+            if (weaponTechLevel >= TechLevel.Spacer)
             {
-                case TechLevel.Neolithic:
-                case TechLevel.Medieval:
+                if (isFabrication)
                     return true;
-
-                case TechLevel.Industrial:
-                    if (isMachiningOrHigher)
-                        return true;
-                    return "UWU_RequiresWorkbench".Translate(machiningLabel);
-
-                case TechLevel.Spacer:
-                case TechLevel.Ultra:
-                case TechLevel.Archotech:
-                    if (isFabrication)
-                        return true;
-                    return "UWU_RequiresWorkbench".Translate(fabricationLabel);
-
-                default:
-                    return false;
+                return "UWU_RequiresWorkbench".Translate(fabricationLabel);
             }
+            if (weaponTechLevel >= TechLevel.Industrial)
+            {
+                if (isMachiningOrHigher)
+                    return true;
+                return "UWU_RequiresWorkbench".Translate(machiningLabel);
+            }
+            return true;
         }
 
         /// <summary>
