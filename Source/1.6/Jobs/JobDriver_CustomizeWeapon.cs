@@ -469,12 +469,21 @@ namespace UniqueWeaponsUnbound
                 }
 
                 // Surface the recorded bail reason as a transient top-left message.
-                // Restricted to Incompletable so player-driven interrupts (drafting,
-                // cancelling) and dev-error paths (Errored) stay silent.
+                // Incompletable carries the recorded reason; Errored falls back to
+                // a generic "unexpected" message so the player isn't left wondering
+                // why the pawn stopped (the Log.Error at the assertion site has the
+                // technical detail). Player-driven interrupts (drafting, cancelling)
+                // use other JobConditions and stay silent.
                 if (condition == JobCondition.Incompletable
                     && !string.IsNullOrEmpty(bailMessage))
                 {
                     Messages.Message(bailMessage, pawn,
+                        MessageTypeDefOf.NegativeEvent, historical: false);
+                }
+                else if (condition == JobCondition.Errored)
+                {
+                    Messages.Message(
+                        "UWU_BailUnexpected".Translate(WeaponLabel), pawn,
                         MessageTypeDefOf.NegativeEvent, historical: false);
                 }
 
@@ -517,6 +526,7 @@ namespace UniqueWeaponsUnbound
                     if (!pawn.carryTracker.TryStartCarry(w))
                     {
                         pawn.equipment.AddEquipment((ThingWithComps)w);
+                        SetBailMessage("UWU_BailCarryStartFailed".Translate(WeaponLabel));
                         EndJobWith(JobCondition.Incompletable);
                         return;
                     }
@@ -528,6 +538,7 @@ namespace UniqueWeaponsUnbound
                     if (!pawn.carryTracker.TryStartCarry(w))
                     {
                         pawn.inventory.innerContainer.TryAdd(w);
+                        SetBailMessage("UWU_BailCarryStartFailed".Translate(WeaponLabel));
                         EndJobWith(JobCondition.Incompletable);
                         return;
                     }
