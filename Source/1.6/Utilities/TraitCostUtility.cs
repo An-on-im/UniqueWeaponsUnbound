@@ -239,6 +239,20 @@ namespace UniqueWeaponsUnbound
                 }
             }
 
+            // Finalize: enforce the per-entry invariant (non-null, non-null
+            // def, positive count). Null/null-def entries can only appear if
+            // a cost-rule worker inserted them (e.g. via a misconfigured
+            // material lookup), so log them — they signal a worker bug rather
+            // than a normal zero-cost outcome. count <= 0 is the expected
+            // "this material rounded down to nothing" case and stays silent.
+            int malformedCount = costs.RemoveAll(c => c == null || c.thingDef == null);
+            if (malformedCount > 0)
+            {
+                Log.Warning("[Unique Weapons Unbound] Cost pipeline for trait "
+                    + trait.SourceForLog() + " produced " + malformedCount
+                    + " malformed entries (null entry or null thingDef); "
+                    + "dropping. Indicates a bug in a TraitCostRuleWorker.");
+            }
             costs.RemoveAll(c => c.count <= 0);
             return costs;
         }

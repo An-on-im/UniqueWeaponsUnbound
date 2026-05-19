@@ -35,40 +35,97 @@ namespace UniqueWeaponsUnbound.HaulPlanning
         }
 
         /// <summary>
+        /// Result of <see cref="TryReserveIngredientsForJob"/>. Distinguishes
+        /// success from the three failure modes so the caller can produce a
+        /// specific log entry and player-facing message rather than a generic
+        /// "click did nothing." The two failure modes that can realistically
+        /// occur in production are <see cref="PlanInfeasible"/> and
+        /// <see cref="ReservationConflict"/>; <see cref="NoActiveDriver"/>
+        /// indicates an invariant violation (the dialog should only be open
+        /// while our JobDriver is the active driver).
+        /// </summary>
+        public enum ReservationOutcome
+        {
+            Success,
+            NoActiveDriver,
+            PlanInfeasible,
+            ReservationConflict,
+        }
+
+        /// <summary>
+        /// Pairs an <see cref="ReservationOutcome"/> with the conflict detail
+        /// for <see cref="ReservationOutcome.ReservationConflict"/>: which def
+        /// + count failed to reserve, and (when discoverable) the pawn already
+        /// holding the reservation. Lets callers surface a concrete
+        /// "failed to reserve plasteel x75 (held by Steven)" message instead
+        /// of a vague "materials unavailable." Conflict fields are default
+        /// for non-conflict outcomes; ConflictReserver may be null on a real
+        /// conflict if the existing reserver wasn't a pawn or wasn't reportable
+        /// (e.g. mod-side reservations that don't expose a Pawn).
+        /// </summary>
+        public readonly struct ReservationResult
+        {
+            public readonly ReservationOutcome Outcome;
+            public readonly ThingDef ConflictDef;
+            public readonly int ConflictCount;
+            public readonly Pawn ConflictReserver;
+
+            public bool IsSuccess => Outcome == ReservationOutcome.Success;
+
+            private ReservationResult(
+                ReservationOutcome outcome, ThingDef def, int count, Pawn reserver)
+            {
+                Outcome = outcome;
+                ConflictDef = def;
+                ConflictCount = count;
+                ConflictReserver = reserver;
+            }
+
+            public static ReservationResult Success() =>
+                new ReservationResult(ReservationOutcome.Success, null, 0, null);
+            public static ReservationResult NoActiveDriver() =>
+                new ReservationResult(ReservationOutcome.NoActiveDriver, null, 0, null);
+            public static ReservationResult PlanInfeasible() =>
+                new ReservationResult(ReservationOutcome.PlanInfeasible, null, 0, null);
+            public static ReservationResult Conflict(ThingDef def, int count, Pawn reserver) =>
+                new ReservationResult(ReservationOutcome.ReservationConflict, def, count, reserver);
+        }
+
+        /// <summary>
         /// Builds a candidate pool, dispatches to the configured IHaulPlanner,
-        /// reserves the chosen stacks against <paramref name="job"/>, and
+        /// reserves the chosen stacks against the active JobDriver's job, and
         /// populates job.targetQueueA / countQueue for the haul phase. Atomic:
         /// if planning fails or any reservation can't be acquired, releases
-        /// anything it reserved and returns false without mutating the job's
-        /// queues.
+        /// anything it reserved and returns a failure result without mutating
+        /// the job's queues. Pulls the active job from
+        /// <c>pawn.jobs.curDriver.job</c> directly — the dialog only opens
+        /// from inside the customize JobDriver's wait toil, so this is the
+        /// authoritative source under the dialog's forcePause + absorbInput
+        /// invariants.
         /// </summary>
-        public static bool TryReserveIngredientsForJob(
-            Pawn pawn, Job job, List<ThingDefCountClass> totalCost)
+        public static ReservationResult TryReserveIngredientsForJob(
+            Pawn pawn, List<ThingDefCountClass> totalCost)
         {
+            // Resolve the driver first — every downstream step depends on it,
+            // and a missing driver is the only "invariant broke upstream" case
+            // we can detect at this layer.
+            var driver = pawn.jobs?.curDriver as JobDriver_CustomizeWeapon;
+            if (driver == null)
+                return ReservationResult.NoActiveDriver();
+
+            Job job = driver.job;
+
             if (totalCost == null || totalCost.Count == 0)
-                return true;
+                return ReservationResult.Success();
 
             // Demand: collapse possible duplicate ThingDef entries by summing.
+            // TraitCostUtility.RunPipeline guarantees each entry is non-null
+            // with a non-null thingDef and a positive count.
             var demand = new Dictionary<ThingDef, int>();
             foreach (ThingDefCountClass cost in totalCost)
             {
-                if (cost == null || cost.thingDef == null || cost.count <= 0)
-                    continue;
                 demand.TryGetValue(cost.thingDef, out int existing);
                 demand[cost.thingDef] = existing + cost.count;
-            }
-            if (demand.Count == 0)
-                return true;
-
-            // The customization JobDriver owns the parallel destination/trip-
-            // boundary lists, populated below alongside job.targetQueueA. If
-            // the running driver isn't ours something is badly wrong upstream.
-            var driver = pawn.jobs?.curDriver as JobDriver_CustomizeWeapon;
-            if (driver == null)
-            {
-                Log.Error("[Unique Weapons Unbound] No customize-weapon driver "
-                    + "active during ingredient reservation.");
-                return false;
             }
 
             HaulPlannerKind kind = UWU_Mod.Settings.haulPlannerKind;
@@ -76,25 +133,32 @@ namespace UniqueWeaponsUnbound.HaulPlanning
 
             HaulPlan plan = AttemptPlan(pawn, demand, workbenchPos, kind);
 
-            // Silent fallback to Sequential when the configured planner can't
-            // satisfy demand. Common cause: Sweep's pool cap (6 candidates
-            // per def) excludes stacks Sequential's no-cap pool would include.
+            // Fallback to Sequential when the configured planner can't satisfy
+            // demand. Common (benign) cause: Sweep's pool cap (6 candidates per
+            // def) excludes stacks Sequential's no-cap pool would include.
             // Sequential is also the bedrock fallback for stub planners
             // (Optimal) that throw NotImplementedException — AttemptPlan
-            // returns null in that case and we retry here.
+            // returns null in that case and we retry here. The fallback is
+            // logged at Message level so the dev console captures it for
+            // diagnosis, but the player only sees a Messages.Message if the
+            // Sequential attempt ALSO fails (PlanInfeasible below).
             if (plan == null && kind != HaulPlannerKind.Sequential)
+            {
+                Log.Message("[Unique Weapons Unbound] Configured haul planner ("
+                    + kind + ") returned no plan; retrying with Sequential.");
                 plan = AttemptPlan(pawn, demand, workbenchPos, HaulPlannerKind.Sequential);
+            }
 
             if (plan == null || !plan.IsValid)
-                return false;
+                return ReservationResult.PlanInfeasible();
 
             return CommitPlanAtomic(pawn, job, driver, plan);
         }
 
         /// <summary>
         /// Builds the pool, request, and runs the configured planner. Returns
-        /// null on failure (planner returned null, or stub planner threw
-        /// NotImplementedException).
+        /// null on failure (planner returned null, stub planner threw
+        /// NotImplementedException, or planner threw any other exception).
         /// </summary>
         private static HaulPlan AttemptPlan(
             Pawn pawn, Dictionary<ThingDef, int> demand, IntVec3 workbenchPos, HaulPlannerKind kind)
@@ -124,6 +188,21 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                     + $"({kind}) is not implemented; falling back to Sequential.");
                 return null;
             }
+            catch (System.Exception ex)
+            {
+                // A planner crash would otherwise propagate up through the
+                // Footer's confirm click handler and break the dialog frame
+                // with no actionable diagnostic. Returning null lets the
+                // caller's Sequential fallback (the bedrock path) try to
+                // satisfy the same demand; the stack trace identifies the
+                // offending planner for diagnosis.
+                string suffix = kind == HaulPlannerKind.Sequential
+                    ? "no further fallback available."
+                    : "falling back to Sequential.";
+                Log.Error($"[Unique Weapons Unbound] Haul planner ({kind}) threw "
+                    + $"during Plan(); {suffix} Exception: " + ex);
+                return null;
+            }
         }
 
         /// <summary>
@@ -133,9 +212,11 @@ namespace UniqueWeaponsUnbound.HaulPlanning
         /// (split across CarryTracker + Inventory or across trips); we reserve
         /// it once, and the driver re-reserves before subsequent pickups since
         /// vanilla's Toils_Haul.StartCarryThing auto-releases when the per-
-        /// pickup count is satisfied.
+        /// pickup count is satisfied. On reservation failure the returned
+        /// result carries the failed pickup's def + count so the caller can
+        /// surface a concrete "failed to reserve {def} x{count}" message.
         /// </summary>
-        private static bool CommitPlanAtomic(
+        private static ReservationResult CommitPlanAtomic(
             Pawn pawn, Job job, JobDriver_CustomizeWeapon driver, HaulPlan plan)
         {
             var reservedThings = new HashSet<Thing>();
@@ -168,9 +249,26 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                     {
                         if (!pawn.Reserve(pickup.Thing, job, 1, -1, null, errorOnFailed: false))
                         {
+                            // Surface the current reserver (if any) as the most
+                            // useful piece of forensic data — in single-player
+                            // it's almost always another job on the same pawn
+                            // (a stale hold from an earlier interrupt); in
+                            // multiplayer it could be a peer's pawn entirely.
+                            // Looked up once and shared with both the log line
+                            // and the returned result so they agree.
+                            Pawn reserver = pawn.Map.reservationManager
+                                .FirstRespectedReserver(pickup.Thing, pawn);
+                            string reserverInfo = reserver != null
+                                ? " (held by " + reserver.LabelShortCap + ")"
+                                : "";
+                            Log.Warning("[Unique Weapons Unbound] Could not reserve "
+                                + pickup.Thing.LabelShortCap + " x" + pickup.Count
+                                + " for customization haul" + reserverInfo + ".");
+
                             foreach (Thing t in reservedThings)
                                 pawn.Map.reservationManager.Release(t, pawn, job);
-                            return false;
+                            return ReservationResult.Conflict(
+                                pickup.Thing.def, pickup.Count, reserver);
                         }
                     }
 
@@ -184,7 +282,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             job.targetQueueA = queueA;
             job.countQueue = countQueue;
             driver.SetHaulPickupMetadata(plan.ExecutionStrategy, destinations, lastInTripFlags);
-            return true;
+            return ReservationResult.Success();
         }
 
         /// <summary>

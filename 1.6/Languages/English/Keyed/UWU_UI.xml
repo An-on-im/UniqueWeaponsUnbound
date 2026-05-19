@@ -50,6 +50,10 @@
   <UWU_CostFree>Free</UWU_CostFree>
   <UWU_MissingResources>Missing resources</UWU_MissingResources>
   <UWU_NotEnoughMaterials>Required materials are insufficient, forbidden, reserved by another pawn, or unreachable from this pawn's position.</UWU_NotEnoughMaterials>
+  <UWU_CouldNotStartPlanInfeasible>Could not customize {0}: no viable haul plan.</UWU_CouldNotStartPlanInfeasible>
+  <UWU_CouldNotStartReservationConflict>Could not customize {0}: failed to reserve {1} x{2}.</UWU_CouldNotStartReservationConflict>
+  <UWU_CouldNotStartReservationConflictHeldBy>Could not customize {0}: failed to reserve {1} x{2} (held by {3}).</UWU_CouldNotStartReservationConflictHeldBy>
+  <UWU_CouldNotStartInternalError>Could not customize {0}: internal error. See log.</UWU_CouldNotStartInternalError>
 
   <!-- Trait tooltips -->
   <UWU_Effects>Effects:</UWU_Effects>

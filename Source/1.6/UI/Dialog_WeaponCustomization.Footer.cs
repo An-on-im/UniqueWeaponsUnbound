@@ -180,16 +180,31 @@ namespace UniqueWeaponsUnbound
                     // Reserve ingredients synchronously while forcePause holds the game
                     // still — no other pawn AI runs between the per-frame availability
                     // check and this commit, so what the player saw is what they get.
-                    Verse.AI.Job job = pawn.CurJob;
-                    if (job == null
-                        || !IngredientReservation.TryReserveIngredientsForJob(
-                            pawn, job, spec.totalCost))
+                    //
+                    // Explicit CurJob null guard: in a single-player session forcePause
+                    // + absorbInputAroundWindow makes this impossible, but RimWorld
+                    // Multiplayer doesn't enforce pause across clients — a peer could
+                    // retarget our pawn between dialog open and confirm. The downstream
+                    // driver lookup inside TryReserveIngredientsForJob would also catch
+                    // this, but a paired check at the call site keeps the multiplayer-
+                    // readiness visible here next to the reservation call it protects.
+                    if (pawn.CurJob == null)
                     {
-                        // Defensive — should be unreachable under forcePause. Leave the
-                        // dialog open so the per-frame availability recompute reveals the
-                        // new state on the next render.
-                        Log.Warning("[Unique Weapons Unbound] Confirmed customization but "
-                            + "could not reserve ingredients. Dialog left open.");
+                        HandleReservationFailure(
+                            IngredientReservation.ReservationResult.NoActiveDriver());
+                        return;
+                    }
+                    var result = IngredientReservation.TryReserveIngredientsForJob(
+                        pawn, spec.totalCost);
+                    if (!result.IsSuccess)
+                    {
+                        // Leave the dialog open (per-frame availability recompute
+                        // reveals new state on the next render) and surface both a
+                        // log line and a player-visible message via the helper, so
+                        // log + Messages text agree and the click isn't perceived
+                        // as a no-op. NoActiveDriver is a genuine invariant break
+                        // and logs at Error; the others at Warning.
+                        HandleReservationFailure(result);
                         return;
                     }
 
@@ -390,6 +405,66 @@ namespace UniqueWeaponsUnbound
         public override void OnCancelKeyPressed()
         {
             Close();
+        }
+
+        /// <summary>
+        /// Maps a non-Success <see cref="IngredientReservation.ReservationResult"/>
+        /// to a paired log line + player-visible message describing what happened
+        /// at confirm time. Centralised so the two strings can't drift apart.
+        /// For <see cref="IngredientReservation.ReservationOutcome.ReservationConflict"/>
+        /// the result carries the specific def + count that failed to reserve,
+        /// so the message can name it concretely (e.g. "failed to reserve
+        /// plasteel x75") instead of saying "materials unavailable."
+        /// </summary>
+        private void HandleReservationFailure(IngredientReservation.ReservationResult result)
+        {
+            string logReason;
+            string messageText;
+            bool isInternalError = false;
+            switch (result.Outcome)
+            {
+                case IngredientReservation.ReservationOutcome.NoActiveDriver:
+                    logReason = "no active customize-weapon driver "
+                        + "(invariant violation — dialog opened without our driver running)";
+                    messageText = "UWU_CouldNotStartInternalError".Translate(weapon.LabelShortCap);
+                    isInternalError = true;
+                    break;
+                case IngredientReservation.ReservationOutcome.PlanInfeasible:
+                    logReason = "no haul planner could satisfy demand from the "
+                        + "candidate pool (Sequential fallback also returned null)";
+                    messageText = "UWU_CouldNotStartPlanInfeasible".Translate(weapon.LabelShortCap);
+                    break;
+                case IngredientReservation.ReservationOutcome.ReservationConflict:
+                    string defLabel = result.ConflictDef?.label ?? "(unknown)";
+                    string reserverInfo = result.ConflictReserver != null
+                        ? " (held by " + result.ConflictReserver.LabelShortCap + ")"
+                        : "";
+                    logReason = "reservation conflict during commit "
+                        + "(could not reserve " + defLabel + " x" + result.ConflictCount
+                        + reserverInfo + ")";
+                    // Pick the matching translation key — the held-by variant
+                    // names the conflicting reserver so the player can find and
+                    // investigate that pawn rather than retrying blindly.
+                    messageText = result.ConflictReserver != null
+                        ? "UWU_CouldNotStartReservationConflictHeldBy".Translate(
+                            weapon.LabelShortCap, defLabel, result.ConflictCount,
+                            result.ConflictReserver.LabelShortCap)
+                        : "UWU_CouldNotStartReservationConflict".Translate(
+                            weapon.LabelShortCap, defLabel, result.ConflictCount);
+                    break;
+                default:
+                    return;
+            }
+
+            string logLine = "[Unique Weapons Unbound] Could not start customization of "
+                + weapon.LabelShortCap + ": " + logReason + ". Dialog left open.";
+            if (isInternalError)
+                Log.Error(logLine);
+            else
+                Log.Warning(logLine);
+
+            Messages.Message(
+                messageText, weapon, MessageTypeDefOf.RejectInput, historical: false);
         }
     }
 }
