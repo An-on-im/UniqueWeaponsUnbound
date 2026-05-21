@@ -13,6 +13,7 @@ namespace UniqueWeaponsUnbound
     {
         private static Dictionary<ThingDef, ThingDef> baseToUnique;
         private static Dictionary<ThingDef, ThingDef> uniqueToBase;
+        private static List<ThingDef> orphanUniqueDefs;
 
         /// <summary>
         /// Builds the base↔unique weapon pair cache. Must be called during
@@ -27,6 +28,7 @@ namespace UniqueWeaponsUnbound
             {
                 baseToUnique = new Dictionary<ThingDef, ThingDef>();
                 uniqueToBase = new Dictionary<ThingDef, ThingDef>();
+                orphanUniqueDefs = new List<ThingDef>();
 
                 foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs)
                 {
@@ -39,6 +41,19 @@ namespace UniqueWeaponsUnbound
                         Log.Error("[Unique Weapons Unbound] Skipped weapon registration for "
                             + def.SourceForLog() + " due to error: " + ex);
                     }
+                }
+
+                // One warning per orphan, after the scan completes, so the log
+                // groups them together rather than interleaving with per-def
+                // error spam from the catch above. Orphans stay customizable
+                // via the IsUniqueWeapon HasComp check; what they lose is the
+                // ability to revert to a base def when the trait list empties.
+                foreach (ThingDef orphan in orphanUniqueDefs)
+                {
+                    Log.Warning("[Unique Weapons Unbound] No base weapon detected for "
+                        + orphan.SourceForLog()
+                        + "; customizable but cannot revert to base. "
+                        + "Add a descriptionHyperlinks entry or use the '_Unique' suffix.");
                 }
             }
             catch (Exception ex)
@@ -58,6 +73,10 @@ namespace UniqueWeaponsUnbound
             {
                 uniqueToBase[def] = baseDef;
                 baseToUnique[baseDef] = def;
+            }
+            else
+            {
+                orphanUniqueDefs.Add(def);
             }
         }
 
@@ -100,6 +119,15 @@ namespace UniqueWeaponsUnbound
         /// Used by the startup diagnostic to bucket pairs by source mod.
         /// </summary>
         public static IEnumerable<ThingDef> AllUniqueDefs => uniqueToBase.Keys;
+
+        /// <summary>
+        /// Unique-comp ThingDefs that loaded with no detectable base weapon
+        /// (no descriptionHyperlinks pointing at a non-unique weapon and no
+        /// matching '{BaseDefName}_Unique' naming). Still customizable, but
+        /// cannot revert to base. Used by the startup diagnostic.
+        /// </summary>
+        public static IEnumerable<ThingDef> OrphanUniqueDefs =>
+            orphanUniqueDefs ?? (IEnumerable<ThingDef>)System.Array.Empty<ThingDef>();
 
         /// <summary>
         /// Returns the base weapon for a unique weapon def, or null if not found.

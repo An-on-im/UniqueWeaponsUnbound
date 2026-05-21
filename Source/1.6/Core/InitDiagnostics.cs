@@ -40,6 +40,7 @@ namespace UniqueWeaponsUnbound
         private void LogSummaryInner()
         {
             var pairsByMod = GroupBySourceMod(WeaponRegistry.AllUniqueDefs);
+            var orphansByMod = GroupBySourceMod(WeaponRegistry.OrphanUniqueDefs);
             var traitsByMod = GroupBySourceMod(DefDatabase<WeaponTraitDef>.AllDefs);
             var rulesByMod = GroupBySourceMod(TraitCostUtility.CachedRules);
 
@@ -54,6 +55,11 @@ namespace UniqueWeaponsUnbound
                 sb.AppendLine("  (see preceding errors; counts below may be empty or partial)");
             }
             AppendCategory(sb, "Weapon Pairs", pairsByMod);
+            // Only surface the orphan row when there's something to surface —
+            // a "(0): none" line for the typical clean-install case would be
+            // noise. Per-orphan warnings are emitted by WeaponRegistry itself.
+            if (orphansByMod.Values.Sum() > 0)
+                AppendCategory(sb, "Orphan Unique Weapons", orphansByMod);
             AppendCategory(sb, "Weapon Traits", traitsByMod);
             AppendCategory(sb, "Trait Cost Rules", rulesByMod);
             Log.Message(sb.ToString().TrimEnd());
