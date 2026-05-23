@@ -16,7 +16,10 @@ namespace UniqueWeaponsUnbound
     /// </summary>
     public static class WeaponModificationUtility
     {
-        // Reflection fields for CompUniqueWeapon private members
+        // Reflection fields for CompUniqueWeapon private members. Resolved once
+        // at static-init; verified by Initialize() so a RimWorld API rename
+        // surfaces as a startup error instead of a silent no-op on every
+        // SetName/SetColor/AddTrait/RemoveTrait at runtime.
         internal static readonly FieldInfo CompNameField = typeof(CompUniqueWeapon)
             .GetField("name", BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -25,6 +28,27 @@ namespace UniqueWeaponsUnbound
 
         internal static readonly FieldInfo IgnoreAccuracyField = typeof(CompUniqueWeapon)
             .GetField("ignoreAccuracyMaluses", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        /// <summary>
+        /// Verifies that every cached CompUniqueWeapon FieldInfo resolved.
+        /// Should be called during StaticConstructorOnStartup so a RimWorld
+        /// API rename surfaces as a startup error rather than a silent no-op
+        /// on every later SetName/SetColor/AddTrait/RemoveTrait. Pure
+        /// diagnostic — no state is built here; the FieldInfos are resolved
+        /// at class-load time by the field initializers above.
+        /// </summary>
+        public static void VerifyReflection()
+        {
+            if (CompNameField == null)
+                Log.Error("[Unique Weapons Unbound] CompUniqueWeapon.name field not found via reflection; "
+                    + "weapon renaming will silently no-op. RimWorld API may have changed.");
+            if (CompColorField == null)
+                Log.Error("[Unique Weapons Unbound] CompUniqueWeapon.color field not found via reflection; "
+                    + "weapon color changes will silently no-op. RimWorld API may have changed.");
+            if (IgnoreAccuracyField == null)
+                Log.Error("[Unique Weapons Unbound] CompUniqueWeapon.ignoreAccuracyMaluses field not found via reflection; "
+                    + "accuracy-malus cache won't be invalidated after trait changes. RimWorld API may have changed.");
+        }
 
         public static void AddTrait(Thing weapon, WeaponTraitDef trait)
         {

@@ -15,6 +15,7 @@ namespace UniqueWeaponsUnbound
             WeaponRegistry.Initialize(report);
             WorkbenchUtility.Initialize(report);
             TraitCostUtility.Initialize(report);
+            WeaponModificationUtility.VerifyReflection();
             report.LogSummary();
         }
     }
