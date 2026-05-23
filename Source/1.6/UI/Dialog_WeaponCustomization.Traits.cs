@@ -11,6 +11,21 @@ namespace UniqueWeaponsUnbound
 
         private void DrawTraitsTab(Rect rect)
         {
+            // Empty compatible-trait pool: skip the search/filter chrome
+            // entirely and let the centered "no compatible traits" message
+            // own the full tab area, mirroring the disabled Texture/Color
+            // tab pattern.
+            if (compatibleTraits.Count == 0)
+            {
+                Text.Anchor = TextAnchor.MiddleCenter;
+                Color prevColor = GUI.color;
+                GUI.color = Color.gray;
+                Widgets.Label(rect, "UWU_NoTraitsAvailable".Translate());
+                GUI.color = prevColor;
+                Text.Anchor = TextAnchor.UpperLeft;
+                return;
+            }
+
             float curY = rect.y + 6f;
 
             // Search field at top — matches vanilla z-search look and behaviour
@@ -96,6 +111,9 @@ namespace UniqueWeaponsUnbound
         /// </summary>
         private string GetEmptyTraitListMessage()
         {
+            // DrawTraitsTab returns early when compatibleTraits is empty, so
+            // every branch here can assume at least one compatible trait exists
+            // and reason purely about which filter excluded the visible set.
             if (traitSearchWidget.filter.Active)
                 return "UWU_NoTraitsMatchSearch".Translate();
 
