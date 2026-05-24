@@ -11,13 +11,30 @@ namespace UniqueWeaponsUnbound
     /// customization at the 0↔1 trait boundary to swap between a weapon's
     /// base def and its unique counterpart.
     /// </summary>
+    [StaticConstructorOnStartup]
     public static class WeaponDefConversion
     {
         // Ideology DLC: Precept_Relic.generatedRelic (private Thing).
         // Resolved once at startup; null if Ideology is not installed.
+        // A null value when Ideology IS installed means the field surface has
+        // drifted — the static ctor below logs that as an error so a silently
+        // stale relic→thing pointer doesn't corrupt a relic during def
+        // conversion (see TransferRelicStatus).
         private static readonly FieldInfo GeneratedRelicField =
             GenTypes.GetTypeInAnyAssembly("RimWorld.Precept_Relic")
                 ?.GetField("generatedRelic", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        static WeaponDefConversion()
+        {
+            if (ModsConfig.IdeologyActive && GeneratedRelicField == null)
+            {
+                Log.Error("[Unique Weapons Unbound] Ideology active but "
+                    + "Precept_Relic.generatedRelic could not be resolved via reflection; "
+                    + "relic-flagged weapons that undergo a base<->unique def conversion "
+                    + "during customization will leave the precept pointing at the "
+                    + "destroyed pre-conversion weapon. RimWorld API may have changed.");
+            }
+        }
 
         /// <summary>
         /// Creates a new weapon Thing from targetDef, copying quality and hitpoints
@@ -85,16 +102,32 @@ namespace UniqueWeaponsUnbound
             // Precept_Relic.Notify_ThingLost from firing RelicDestroyed/RelicLost events.
             oldWeapon.StyleSourcePrecept = null;
 
-            // Point the new weapon back at the precept.
-            newWeapon.StyleSourcePrecept = precept;
-
-            // Transfer the "ever seen by player" flag so the relic remains
-            // recognized as player-possessed.
+            // Pre-seed the new weapon's CompStyleable state from the old weapon
+            // before the StyleSourcePrecept setter runs below.
+            //
+            // styleDef: the SourcePrecept setter only writes styleDef when the
+            // new def's randomStyleChance is 0 AND the ideo has a style mapping
+            // for the new def. Either condition failing leaves the new weapon
+            // styleless after conversion. Copying first preserves the visual
+            // continuity; the setter still overwrites our copy when it has a
+            // valid ideo-driven answer for the new def.
+            //
+            // everSeenByPlayer: the setter never touches this, so the copy is
+            // strictly additive. Direct field assignment rather than
+            // SetEverSeenByPlayer so we don't re-fire Notify_RelicSeenByPlayer
+            // (which would spam the "relics collected" letter on every
+            // customization of an already-seen relic).
             if (oldWeapon is ThingWithComps oldTwc && newWeapon is ThingWithComps newTwc
                 && oldTwc.compStyleable != null && newTwc.compStyleable != null)
             {
+                newTwc.compStyleable.styleDef = oldTwc.compStyleable.styleDef;
                 newTwc.compStyleable.everSeenByPlayer = oldTwc.compStyleable.everSeenByPlayer;
             }
+
+            // Point the new weapon back at the precept. The setter may overwrite
+            // the styleDef we just copied via ideo.style.StyleForThingDef for
+            // the new def — that's the right behavior when the lookup succeeds.
+            newWeapon.StyleSourcePrecept = precept;
 
             // Update the Precept_Relic's private generatedRelic field to point
             // at the new weapon instance, keeping the precept→thing reference valid.

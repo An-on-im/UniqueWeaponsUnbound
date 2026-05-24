@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -349,24 +348,20 @@ namespace UniqueWeaponsUnbound
         /// <summary>
         /// Expands workbench tier sets by walking VEF's RecipeInheritanceExtension.
         /// Benches that inherit recipes from a vanilla anchor are classified at the
-        /// highest tier of their inheritance sources.
+        /// highest tier of their inheritance sources. No-op when VEF is not loaded
+        /// or its integration surface has drifted (the integration class logs the
+        /// drift warning once at static-ctor time).
         /// </summary>
         private static void ExpandTiersFromVEF()
         {
-            Type extensionType = GenTypes.GetTypeInAnyAssembly("VEF.Buildings.RecipeInheritanceExtension");
-            if (extensionType == null)
-                return;
-
-            FieldInfo field = extensionType.GetField("inheritRecipesFrom",
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            if (field == null)
+            if (!VEFRecipeInheritanceIntegration.Available)
                 return;
 
             foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs)
             {
                 try
                 {
-                    ClassifyVEFInheritedDef(def, extensionType, field);
+                    ClassifyVEFInheritedDef(def);
                 }
                 catch (Exception ex)
                 {
@@ -376,7 +371,7 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        private static void ClassifyVEFInheritedDef(ThingDef def, Type extensionType, FieldInfo field)
+        private static void ClassifyVEFInheritedDef(ThingDef def)
         {
             if (def.modExtensions == null)
                 return;
@@ -385,10 +380,7 @@ namespace UniqueWeaponsUnbound
 
             foreach (DefModExtension ext in def.modExtensions)
             {
-                if (!extensionType.IsInstanceOfType(ext))
-                    continue;
-
-                if (!(field.GetValue(ext) is List<ThingDef> inheritFrom))
+                if (!VEFRecipeInheritanceIntegration.TryGetInheritFrom(ext, out List<ThingDef> inheritFrom))
                     continue;
 
                 // Classify at highest inherited tier
