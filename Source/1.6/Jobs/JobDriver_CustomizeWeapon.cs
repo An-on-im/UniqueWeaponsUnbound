@@ -716,16 +716,45 @@ namespace UniqueWeaponsUnbound
             Toil finalize = ToilMaker.MakeToil("MakeNewToils");
             finalize.initAction = delegate
             {
+                // Each step is isolated so a throw doesn't Errored the job
+                // and surface UWU_BailUnexpected — by this toil the weapon is
+                // already traited and ingredients are consumed, so failure
+                // here is post-success cleanup. Continue to admire + return
+                // so the player walks away with the customized weapon; raise
+                // a soft message naming what specifically didn't stick.
+
                 // Final Setup call for ability prop wiring. Routed through the
                 // utility so cosmetics-only customizations don't free-reload
                 // unchanged ability traits — vanilla Setup() forces
                 // RemainingCharges = MaxCharges on every ability trait it sees.
-                EquippableAbilityUtility.SyncToTraits(weapon);
+                try
+                {
+                    EquippableAbilityUtility.SyncToTraits(weapon);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[Unique Weapons Unbound] Ability sync failed during finalize on "
+                        + WeaponLabel + ": " + ex);
+                    Messages.Message(
+                        "UWU_FinalizeAbilitySyncFailed".Translate(WeaponLabel),
+                        weapon, MessageTypeDefOf.NegativeEvent, historical: false);
+                }
 
                 // Apply final color after Setup() to ensure it sticks
-                CompUniqueWeapon uniqueComp = weapon.TryGetComp<CompUniqueWeapon>();
-                if (spec.finalColor != null && uniqueComp != null)
-                    WeaponModificationUtility.SetColor(weapon, spec.finalColor);
+                try
+                {
+                    CompUniqueWeapon uniqueComp = weapon.TryGetComp<CompUniqueWeapon>();
+                    if (spec.finalColor != null && uniqueComp != null)
+                        WeaponModificationUtility.SetColor(weapon, spec.finalColor);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[Unique Weapons Unbound] Final color application failed on "
+                        + WeaponLabel + ": " + ex);
+                    Messages.Message(
+                        "UWU_FinalizeColorFailed".Translate(WeaponLabel),
+                        weapon, MessageTypeDefOf.NegativeEvent, historical: false);
+                }
             };
             finalize.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return finalize;

@@ -16,6 +16,7 @@ namespace UniqueWeaponsUnbound
             WorkbenchUtility.Initialize(report);
             TraitCostUtility.Initialize(report);
             WeaponModificationUtility.VerifyReflection();
+            EquippableAbilityUtility.VerifyReflection();
             report.LogSummary();
         }
     }

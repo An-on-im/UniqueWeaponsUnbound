@@ -34,6 +34,20 @@ namespace UniqueWeaponsUnbound
                 .GetField("ability", BindingFlags.NonPublic | BindingFlags.Instance);
 
         /// <summary>
+        /// Verifies that the cached CompEquippableAbility FieldInfo resolved.
+        /// Mirrors <see cref="WeaponModificationUtility.VerifyReflection"/>: if a
+        /// RimWorld API rename drops the field, the heal-orphaned-cache check and
+        /// the preserve-charges restore both silently degrade to no-ops, so surface
+        /// the breakage as a startup error instead.
+        /// </summary>
+        public static void VerifyReflection()
+        {
+            if (CachedAbilityField == null)
+                Log.Error("[Unique Weapons Unbound] CompEquippableAbility.ability field not found via reflection; "
+                    + "orphan-ability heal and charge preservation will silently no-op. RimWorld API may have changed.");
+        }
+
+        /// <summary>
         /// Entry for the customization JobDriver's finalize toil. Runs the heal
         /// check first (so a stale instance never collides with a legitimate
         /// re-wire) then defers to <see cref="SetupAndPreserveCharges"/> for
