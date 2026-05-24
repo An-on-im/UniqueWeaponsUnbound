@@ -5,6 +5,40 @@ All notable changes to Unique Weapons Unbound will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2] - 2026-05-25
+
+### Added
+
+- Log a startup warning and surface an "Orphan Unique Weapons" row in startup diagnostics for unique weapons with no detectable base (mod-author visibility)
+- Dev diagnostics for tech-level gating, with hardened tech-level enforcement
+
+### Fixed
+
+- Invalidate Verb burst caches when traits change so cached projectile/burst behavior refreshes
+- Close double-recovery window in the weapon return toil
+- Prevent phantom abilities on customized weapons
+- Surface no-compatible-traits state in the customization dialog
+- Surface ingredient reservation failures at confirm time
+- Surface bail messages on silent customization paths
+- Detect Alpha Armoury API drift without nagging users who don't have it
+- Surface CompUniqueWeapon reflection failures at startup
+
+### Changed
+
+- Isolate dialog open and per-frame render failures
+- Harden research-tab filter against throws and reduce per-frame work
+- Verify and harden remaining reflection sites
+- Isolate finalize-toil failures from the job error path
+- Isolate ApplyOperation failures per customization op
+- Isolate ability heal failures at job start
+- Isolate gizmo build and click failures
+- Isolate float menu failures per weapon entry
+- Isolate Initialize failures across subsystems
+- Narrow weapon gizmo patch to CompForbiddable
+- Consolidate tech-level gate around configured ceiling
+- Align UWU_Settings field lists to UI section order
+- Split JobDriver_CustomizeWeapon into phase partials
+
 ## [1.2.1] - 2026-05-12
 
 ### Added
@@ -100,6 +134,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for unique weapons without a base weapon variant
 - Full localization support — all UI strings extracted into keyed files
 
+[1.2.2]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.2.2
 [1.2.1]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.2.1
 [1.2.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.2.0
 [1.1.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.1.0
