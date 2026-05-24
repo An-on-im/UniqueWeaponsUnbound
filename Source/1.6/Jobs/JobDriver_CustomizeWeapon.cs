@@ -190,8 +190,24 @@ namespace UniqueWeaponsUnbound
         public override void Notify_Starting()
         {
             base.Notify_Starting();
-            EquippableAbilityUtility.HealOrphaned(
-                job.GetTarget(WeaponIndex).Thing);
+            // Heal runs before any toil and outside the finish-action bail
+            // surface; an uncaught throw here would abort job start with no
+            // UWU-prefixed log. Best-effort by design — swallow and proceed
+            // so a broken heal can't block a legitimate customization order.
+            try
+            {
+                EquippableAbilityUtility.HealOrphaned(
+                    job.GetTarget(WeaponIndex).Thing);
+            }
+            catch (Exception ex)
+            {
+                Thing target = job?.GetTarget(WeaponIndex).Thing;
+                string defName = target?.def?.defName ?? "(null)";
+                Log.ErrorOnce(
+                    "[Unique Weapons Unbound] Ability heal failed on job start for "
+                        + defName + "; continuing without heal: " + ex,
+                    ("UWU_HealOrphaned_" + defName).GetHashCode());
+            }
         }
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
