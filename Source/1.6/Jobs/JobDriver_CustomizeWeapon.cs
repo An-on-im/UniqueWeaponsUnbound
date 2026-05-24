@@ -775,8 +775,13 @@ namespace UniqueWeaponsUnbound
             Toil returnWeaponToil = ToilMaker.MakeToil("MakeNewToils");
             returnWeaponToil.initAction = delegate
             {
-                QueueWeaponRecovery();
-                weapon = null; // Prevent finish action from double-recovering
+                // Null the field before recovery runs so the finish-action's
+                // recovery call sees a null weapon and bails. If recovery
+                // throws after queueing the follow-up job, the finish action
+                // would otherwise re-queue and double-recover.
+                Thing recoverWeapon = weapon;
+                weapon = null;
+                QueueWeaponRecoveryFor(recoverWeapon);
             };
             returnWeaponToil.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return returnWeaponToil;

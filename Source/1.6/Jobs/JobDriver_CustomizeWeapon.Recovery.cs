@@ -46,31 +46,51 @@ namespace UniqueWeaponsUnbound
         /// up via the standard equip/take-inventory job drivers. Used for both
         /// normal completion (pawn is at workbench, job completes near-instantly)
         /// and interruption recovery (pawn walks back to retrieve weapon).
+        ///
+        /// Reads <see cref="weapon"/>; called from the finish action where the
+        /// success-path toil has already nulled the field, so this short-circuits
+        /// on Succeeded and only runs on actual interruption.
+        ///
+        /// TODO: the finish action fires on Succeeded too, so the
+        /// returnWeaponToil's separate recovery call is structurally redundant.
+        /// Removing the toil and relying solely on the finish action would
+        /// collapse the two call sites into one and obsolete the field-null
+        /// guard added for the double-recovery footgun.
         /// </summary>
-        private void QueueWeaponRecovery()
+        private void QueueWeaponRecovery() => QueueWeaponRecoveryFor(weapon);
+
+        /// <summary>
+        /// Explicit-weapon variant used by the success-path toil so the field
+        /// can be nulled before recovery runs. The toil nulls
+        /// <see cref="weapon"/> first, then calls this with a stashed reference;
+        /// if recovery throws after enqueueing the follow-up job, the finish
+        /// action's <see cref="QueueWeaponRecovery"/> call sees null and bails
+        /// instead of double-recovering.
+        /// </summary>
+        private void QueueWeaponRecoveryFor(Thing recoverWeapon)
         {
-            if (weapon == null || weapon.Destroyed)
+            if (recoverWeapon == null || recoverWeapon.Destroyed)
                 return;
 
             if (pawn.Map == null)
                 return;
 
             // Drop from carry if the pawn is still holding the weapon
-            if (pawn.carryTracker?.CarriedThing == weapon)
+            if (pawn.carryTracker?.CarriedThing == recoverWeapon)
                 pawn.carryTracker.TryDropCarriedThing(pawn.Position, ThingPlaceMode.Near, out _);
 
-            if (!weapon.Spawned || weapon.Destroyed)
+            if (!recoverWeapon.Spawned || recoverWeapon.Destroyed)
                 return;
 
             switch (returnMode)
             {
                 case WeaponReturnMode.Reequip:
                     pawn.jobs.jobQueue.EnqueueFirst(
-                        JobMaker.MakeJob(JobDefOf.Equip, weapon));
+                        JobMaker.MakeJob(JobDefOf.Equip, recoverWeapon));
                     break;
 
                 case WeaponReturnMode.ReturnToInventory:
-                    Job takeJob = JobMaker.MakeJob(JobDefOf.TakeInventory, weapon);
+                    Job takeJob = JobMaker.MakeJob(JobDefOf.TakeInventory, recoverWeapon);
                     takeJob.count = 1;
                     pawn.jobs.jobQueue.EnqueueFirst(takeJob);
                     break;
