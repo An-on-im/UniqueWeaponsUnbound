@@ -491,8 +491,24 @@ namespace UniqueWeaponsUnbound
                     EndJobWith(JobCondition.Incompletable);
                     return;
                 }
-                Find.WindowStack.Add(
-                    new Dialog_WeaponCustomization(pawn, weapon, Workbench));
+                // Dialog ctor does heavy work (reflection, TraitProgressionPool
+                // build, ColorDef enumerations, relic precept access). An
+                // uncaught throw here would Error the job and surface only the
+                // generic UWU_BailUnexpected; wrap so the player sees a
+                // dialog-specific bail reason and the log carries the
+                // weapon-context exception.
+                try
+                {
+                    Find.WindowStack.Add(
+                        new Dialog_WeaponCustomization(pawn, weapon, Workbench));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[Unique Weapons Unbound] Could not open customization dialog for "
+                        + WeaponLabel + ": " + ex);
+                    SetBailMessage("UWU_BailDialogOpenFailed".Translate(WeaponLabel));
+                    EndJobWith(JobCondition.Incompletable);
+                }
             };
             waitForDialog.tickAction = delegate
             {

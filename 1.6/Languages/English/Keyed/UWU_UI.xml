@@ -105,6 +105,8 @@
   <UWU_BailOpRemoveTraitFailed>{0} customization interrupted: an error occurred while removing {1}.</UWU_BailOpRemoveTraitFailed>
   <UWU_BailOpCosmeticsFailed>{0} customization interrupted: an error occurred while applying cosmetic changes.</UWU_BailOpCosmeticsFailed>
   <UWU_BailUnexpected>{0} customization failed unexpectedly.</UWU_BailUnexpected>
+  <UWU_BailDialogOpenFailed>{0} customization interrupted: the customization dialog could not be opened. See log.</UWU_BailDialogOpenFailed>
+  <UWU_DialogErrored>{0} customization dialog errored and was closed. See log.</UWU_DialogErrored>
   <UWU_FinalizeAbilitySyncFailed>{0} customized, but ability state could not be reconciled. See log.</UWU_FinalizeAbilitySyncFailed>
   <UWU_FinalizeColorFailed>{0} customized, but the final color could not be applied. See log.</UWU_FinalizeColorFailed>
   <UWU_RelicIdeoColorTip>{0}'s ideoligion color. This weapon is a relic of the {1} ideoligion.</UWU_RelicIdeoColorTip>

@@ -84,6 +84,13 @@ namespace UniqueWeaponsUnbound
         private bool hideNegativeTraits;
         private string lastAutoName;
 
+        // Latch flipped by the DoWindowContents catch handler. Close() schedules
+        // teardown but the window can still receive one more draw call before
+        // it's removed from the stack — this guard short-circuits that frame so
+        // a recurring render-loop exception can't spam the log or fire the
+        // player-visible Messages.Message twice.
+        private bool renderErrored;
+
         // Affordability state — recomputed each frame in DoWindowContents
         private HashSet<ThingDef> insufficientResources;
         private Dictionary<ThingDef, int> committedResources;
@@ -628,6 +635,36 @@ namespace UniqueWeaponsUnbound
         // --- Main drawing ---
 
         public override void DoWindowContents(Rect inRect)
+        {
+            if (renderErrored)
+                return;
+            try
+            {
+                DoWindowContentsInner(inRect);
+            }
+            catch (Exception ex)
+            {
+                renderErrored = true;
+                // Per-frame surfaces (cost pipelines, modded trait workers,
+                // the JobDriver cast in the Confirm path) can throw inside
+                // vanilla's window pump. Without this guard the dialog would
+                // be torn down by vanilla with only a stack trace in the log:
+                // the JobDriver's tickAction then sees window-closed +
+                // null-spec and bails silently. Surface a player-visible
+                // message and close cleanly so the bail is attributable.
+                string label;
+                try { label = weapon?.LabelShortCap ?? "(unknown weapon)"; }
+                catch { label = weapon?.def?.defName ?? "(unknown weapon)"; }
+                Log.Error("[Unique Weapons Unbound] Customization dialog errored for "
+                    + label + ": " + ex);
+                Messages.Message(
+                    "UWU_DialogErrored".Translate(label),
+                    weapon, MessageTypeDefOf.NegativeEvent, historical: false);
+                Close();
+            }
+        }
+
+        private void DoWindowContentsInner(Rect inRect)
         {
             // Compute affordability state for cost coloring across all draw calls
             List<ThingDefCountClass> frameCost = GetTotalCost();
