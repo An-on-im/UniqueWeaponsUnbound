@@ -1271,6 +1271,72 @@ namespace UniqueWeaponsUnbound
 
         private void ApplyOperation(CustomizationOp op)
         {
+            try
+            {
+                ApplyOperationInner(op);
+            }
+            catch (Exception ex)
+            {
+                // The weapon may be in a partial state — e.g. cost paid but
+                // trait not yet added, or trait added but ability comp not
+                // wired. Continuing would compound the damage: a failed remove
+                // leaves the trait in place (and no refund credit to the
+                // ledger), so a subsequent add could push the count past the
+                // trait limit and/or run short on materials the refund was
+                // funding. Bail here; placed ingredients consumed by
+                // TryConsumeOpCost prior to the throw are not recovered.
+                RecordOpFailureBail(op, ex);
+                EndJobWith(JobCondition.Incompletable);
+            }
+        }
+
+        /// <summary>
+        /// Records a structured log line plus a translated, op-type-specific
+        /// bail message for an unexpected throw inside ApplyOperation. The log
+        /// names the op index, op type, trait defName, and weapon defName so
+        /// post-mortem triage doesn't have to reconstruct the failing op from
+        /// the surrounding toil context. The bail message is routed through
+        /// the first-set-wins <see cref="SetBailMessage"/> channel so a cascade
+        /// failure can't overwrite the original cause.
+        /// </summary>
+        private void RecordOpFailureBail(CustomizationOp op, Exception ex)
+        {
+            string opDescr;
+            string bailMessageText;
+            switch (op.type)
+            {
+                case OpType.AddTrait:
+                    opDescr = "adding trait " + (op.trait?.defName ?? "(null)");
+                    bailMessageText = "UWU_BailOpAddTraitFailed".Translate(
+                        WeaponLabel, op.trait?.LabelCap ?? "");
+                    break;
+                case OpType.RemoveTrait:
+                    opDescr = "removing trait " + (op.trait?.defName ?? "(null)");
+                    bailMessageText = "UWU_BailOpRemoveTraitFailed".Translate(
+                        WeaponLabel, op.trait?.LabelCap ?? "");
+                    break;
+                case OpType.ApplyCosmetics:
+                    opDescr = "applying cosmetics";
+                    bailMessageText = "UWU_BailOpCosmeticsFailed".Translate(WeaponLabel);
+                    break;
+                default:
+                    opDescr = "op type " + op.type;
+                    bailMessageText = "UWU_BailUnexpected".Translate(WeaponLabel);
+                    break;
+            }
+
+            int totalOps = spec?.operations?.Count ?? -1;
+            string weaponDefName = weapon?.def?.defName
+                ?? job?.GetTarget(WeaponIndex).Thing?.def?.defName
+                ?? "(null)";
+            Log.Error("[Unique Weapons Unbound] Customization aborted while " + opDescr
+                + " on " + WeaponLabel + " [" + weaponDefName + "] "
+                + "(op " + (currentOpIndex + 1) + "/" + totalOps + "): " + ex);
+            SetBailMessage(bailMessageText);
+        }
+
+        private void ApplyOperationInner(CustomizationOp op)
+        {
             switch (op.type)
             {
                 case OpType.RemoveTrait:
