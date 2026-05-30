@@ -22,21 +22,18 @@ jobs:
       - name: Build
         run: dotnet build UniqueWeaponsUnbound.sln -c Release
 
+      - name: Stage mod files
+        # Reuse the .csproj's StageMod target — the single source of truth for what
+        # files constitute the mod — so the release zip can never drift from the
+        # local deploy (e.g. forget Patches). StageMod wipes + recopies $(StageDir).
+        run: >
+          dotnet build Source/1.6/UniqueWeaponsUnbound.csproj -c Release
+          -t:StageMod -p:StageDir=${{ github.workspace }}/release/UniqueWeaponsUnbound
+
       - name: Package mod
         run: |
           set -e
-          mkdir -p release/UniqueWeaponsUnbound/About
-          mkdir -p release/UniqueWeaponsUnbound/1.6/Assemblies
-          mkdir -p release/UniqueWeaponsUnbound/1.6/Defs
-          mkdir -p release/UniqueWeaponsUnbound/1.6/Patches
-          cp About/About.xml release/UniqueWeaponsUnbound/About/
-          [ -f About/Preview.png ] && cp About/Preview.png release/UniqueWeaponsUnbound/About/ || true
-          cp LoadFolders.xml release/UniqueWeaponsUnbound/
-          cp 1.6/Assemblies/UniqueWeaponsUnbound.dll release/UniqueWeaponsUnbound/1.6/Assemblies/
-          [ -d 1.6/Defs ] && [ "$(ls -A 1.6/Defs)" ] && cp -r 1.6/Defs/* release/UniqueWeaponsUnbound/1.6/Defs/ || true
-          [ -d 1.6/Patches ] && [ "$(ls -A 1.6/Patches)" ] && cp -r 1.6/Patches/* release/UniqueWeaponsUnbound/1.6/Patches/ || true
-          [ -d 1.6/Languages ] && cp -r 1.6/Languages release/UniqueWeaponsUnbound/1.6/ || true
-          cd release && zip -r ../UniqueWeaponsUnbound-${{ github.ref_name }}.zip UniqueWeaponsUnbound
+          cd release && zip -r ../UniqueWeaponsUnbound-${GITHUB_REF_NAME}.zip UniqueWeaponsUnbound
 
       - name: Create Release
         uses: softprops/action-gh-release@v2

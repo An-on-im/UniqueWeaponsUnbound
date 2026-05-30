@@ -78,32 +78,69 @@
     </PackageReference>
   </ItemGroup>
 
-  <!-- Deploy runtime mod files to RimWorld Mods folder after build -->
+  <!-- ===== Mod packaging / deployment =====
+       The ItemGroup inside StageMod below is the SINGLE source of truth for what
+       files constitute the deployable mod. It feeds BOTH the post-build deploy into
+       the local RimWorld Mods folder AND the CI release (which invokes StageMod with
+       a -p:StageDir pointing at its staging dir). Add/remove shipped files here only. -->
   <PropertyGroup>
+    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/../..'))</RepoRoot>
     <ModDeployPath>$(RimWorldPath)/Mods/UniqueWeaponsUnbound</ModDeployPath>
+    <!-- StageMod writes here. Defaults to the local Mods folder; CI overrides with -p:StageDir=... -->
+    <StageDir Condition="'$(StageDir)' == ''">$(ModDeployPath)</StageDir>
   </PropertyGroup>
-  <!-- Clean deployed mod folder (use: dotnet build -t:CleanModFolder) -->
-  <Target Name="CleanModFolder" Condition="'$(UseLocalRimWorld)' == 'true'">
-    <RemoveDir Directories="$(ModDeployPath)/About;$(ModDeployPath)/1.6" />
-    <Delete Files="$(ModDeployPath)/LoadFolders.xml" />
-    <Message Text="Cleaned deployed mod folder: $(ModDeployPath)" Importance="high" />
-  </Target>
-  <Target Name="DeployToModFolder" AfterTargets="Build" Condition="'$(UseLocalRimWorld)' == 'true'">
+
+  <!-- Wipe $(StageDir) then recopy the full mod from source: atomic and self-cleaning,
+       so renamed/deleted Defs/Patches/Textures never linger. Invoke directly for CI:
+         dotnet build Source/1.6/UniqueWeaponsUnbound.csproj -c Release \
+           -t:StageMod -p:StageDir=/path/to/release/UniqueWeaponsUnbound -->
+  <Target Name="StageMod">
+    <Error Condition="'$(StageDir)' == ''" Text="StageMod requires a non-empty -p:StageDir." />
     <ItemGroup>
-      <AboutFiles Include="$(MSBuildProjectDirectory)/../../About/**/*" />
-      <AssemblyFiles Include="$(MSBuildProjectDirectory)/../../1.6/Assemblies/*.dll" />
-      <DefFiles Include="$(MSBuildProjectDirectory)/../../1.6/Defs/**/*" Exclude="$(MSBuildProjectDirectory)/../../1.6/Defs/**/*.md" />
-      <PatchFiles Include="$(MSBuildProjectDirectory)/../../1.6/Patches/**/*" />
-      <LanguageFiles Include="$(MSBuildProjectDirectory)/../../1.6/Languages/**/*" />
-      <TextureFiles Include="$(MSBuildProjectDirectory)/../../Textures/**/*" />
-      <LoadFoldersFile Include="$(MSBuildProjectDirectory)/../../LoadFolders.xml" />
+      <!-- The deployable mod = the well-known RimWorld content folders, whitelisted to
+           only the file types the game loads at runtime (+ Workshop release metadata in
+           About/). Each content folder is matched at the mod root AND under any one
+           top-level subfolder ("$(RepoRoot)/*/<Folder>") — i.e. version folders (1.6/,
+           a future 1.7/) and Common/ — so content deploys wherever it lives and new
+           version folders need no change here. Source layout is mirrored verbatim into
+           $(StageDir), so e.g. root Textures/ stays at root and 1.6/Defs/ stays under 1.6/.
+
+           To support a new content type, add ONE <_ModFiles Include="..."/> line below.
+
+           Deliberately lean: ModContentLoader lists .psd/.dds among acceptable texture
+           extensions, but the runtime decode path (Texture2D.LoadImage) only handles
+           PNG/JPEG — a shipped .psd/.dds would fail to render AND bloat the download, so
+           only .png/.jpg/.jpeg are whitelisted. The DLL ships without its .pdb. OS junk,
+           editor backups (incl. .kra art sources), dev notes, and Source/ never match. -->
+
+      <!-- Root-only metadata -->
+      <_ModFiles Include="$(RepoRoot)/LoadFolders.xml" />
+      <_ModFiles Include="$(RepoRoot)/About/**/*.xml;$(RepoRoot)/About/**/*.png;$(RepoRoot)/About/**/*.txt" />
+
+      <!-- Code + content (matched at root and under any version / Common folder) -->
+      <_ModFiles Include="$(RepoRoot)/Assemblies/**/*.dll;$(RepoRoot)/*/Assemblies/**/*.dll" />
+      <_ModFiles Include="$(RepoRoot)/Defs/**/*.xml;$(RepoRoot)/*/Defs/**/*.xml" />
+      <_ModFiles Include="$(RepoRoot)/Patches/**/*.xml;$(RepoRoot)/*/Patches/**/*.xml" />
+      <_ModFiles Include="$(RepoRoot)/Textures/**/*.png;$(RepoRoot)/Textures/**/*.jpg;$(RepoRoot)/Textures/**/*.jpeg;$(RepoRoot)/*/Textures/**/*.png;$(RepoRoot)/*/Textures/**/*.jpg;$(RepoRoot)/*/Textures/**/*.jpeg" />
+      <_ModFiles Include="$(RepoRoot)/Sounds/**/*.wav;$(RepoRoot)/Sounds/**/*.mp3;$(RepoRoot)/Sounds/**/*.ogg;$(RepoRoot)/*/Sounds/**/*.wav;$(RepoRoot)/*/Sounds/**/*.mp3;$(RepoRoot)/*/Sounds/**/*.ogg" />
+      <_ModFiles Include="$(RepoRoot)/Languages/**/*.xml;$(RepoRoot)/Languages/**/*.txt;$(RepoRoot)/*/Languages/**/*.xml;$(RepoRoot)/*/Languages/**/*.txt" />
     </ItemGroup>
-    <Copy SourceFiles="@(AboutFiles)" DestinationFiles="@(AboutFiles->'$(ModDeployPath)/About/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="@(AssemblyFiles)" DestinationFiles="@(AssemblyFiles->'$(ModDeployPath)/1.6/Assemblies/%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="@(DefFiles)" DestinationFiles="@(DefFiles->'$(ModDeployPath)/1.6/Defs/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="@(PatchFiles)" DestinationFiles="@(PatchFiles->'$(ModDeployPath)/1.6/Patches/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="@(LanguageFiles)" DestinationFiles="@(LanguageFiles->'$(ModDeployPath)/1.6/Languages/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="@(TextureFiles)" DestinationFiles="@(TextureFiles->'$(ModDeployPath)/Textures/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="@(LoadFoldersFile)" DestinationFolder="$(ModDeployPath)" SkipUnchangedFiles="true" />
+    <!-- Mirror each file's path relative to the repo root into $(StageDir). Computed as
+         per-item metadata (MakeRelative inside a transform string evaluates only once,
+         not per item). %(FullPath) is concrete, so the version folder (1.6/) matched by
+         the "*/" wildcards is recovered here verbatim. -->
+    <ItemGroup>
+      <_ModFiles>
+        <Dest>$(StageDir)/$([MSBuild]::MakeRelative('$(RepoRoot)', '%(FullPath)'))</Dest>
+      </_ModFiles>
+    </ItemGroup>
+    <RemoveDir Directories="$(StageDir)" />
+    <Copy SourceFiles="@(_ModFiles)" DestinationFiles="@(_ModFiles->'%(Dest)')" />
+    <Message Text="Staged @(_ModFiles->Count()) mod files -> $(StageDir)" Importance="high" />
+  </Target>
+
+  <!-- After every local build, atomically redeploy into the RimWorld Mods folder. -->
+  <Target Name="DeployToModFolder" AfterTargets="Build" Condition="'$(UseLocalRimWorld)' == 'true'">
+    <CallTarget Targets="StageMod" />
   </Target>
 </Project>

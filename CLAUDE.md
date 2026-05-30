@@ -11,10 +11,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build Commands
 
 ```bash
-# Build the mod (outputs to 1.6/Assemblies/)
+# Build the mod (outputs to 1.6/Assemblies/ AND atomically redeploys to the RimWorld Mods folder)
 dotnet build UniqueWeaponsUnbound.sln -c Release
 
-# Build only the main project
+# Build only the main project (also triggers the deploy)
 dotnet build Source/1.6/UniqueWeaponsUnbound.csproj
 
 # Clean build artifacts
@@ -25,9 +25,21 @@ RIMWORLD_PATH="/path/to/RimWorld" dotnet build UniqueWeaponsUnbound.sln -c Relea
 # Or: dotnet build -p:RimWorldPath="/path/to/RimWorld"
 ```
 
-The build system auto-detects the RimWorld installation path on Windows/Linux/Mac. For CI builds without RimWorld installed, it falls back to the `Krafs.Rimworld.Ref` NuGet package. For local development and api inspection (monodis, ilspycmd etc), the local installation should be preferred as the source of truth.
+The build system auto-detects the RimWorld installation path on Windows/Linux/Mac (including WSL targeting a Windows install). For CI builds without RimWorld installed, it falls back to the `Krafs.Rimworld.Ref` NuGet package. For local development and api inspection (monodis, ilspycmd etc), the local installation should be preferred as the source of truth.
 
-**Releases:** Push a tag matching `v*.*.*` to trigger the GitHub Actions release workflow (`.github/workflows/release.yml`), which builds, packages, and creates a GitHub release.
+### Deployment
+
+Every local build auto-deploys into the RimWorld `Mods/` folder (when a local install is detected) — no separate clean/copy step. The `StageMod` target in `Source/1.6/UniqueWeaponsUnbound.csproj` is the **single source of truth** for what ships: it wipes the target dir and recopies a whitelist of runtime file types, so deleted/renamed files never linger. To change what ships, edit its `_ModFiles` ItemGroup. CI (`.github/workflows/release.yml`) and the local Stop hook both reuse this target, so the release zip can't drift from the local deploy.
+
+A gitignored Stop hook (`.claude/hooks/sync-mod.sh`) rebuilds + redeploys after any turn that touched mod source/content.
+
+**WSL Setup:** Requires `RIMWORLD_PATH` env var in `~/.bashrc` pointing to the Windows RimWorld install (e.g., `/mnt/c/Program Files (x86)/Steam/steamapps/common/RimWorld`).
+
+**Releases:** Push a tag matching `v*.*.*` to trigger the release workflow (`.github/workflows/release.yml`).
+
+### Tests
+
+xUnit suite under `Tests/1.6/` (a separate project, never shipped). Run with `./Scripts/test-windows.sh` — WSL can't host the net472 runner, so it shells out to the Windows `dotnet` CLI. CI builds but doesn't run it.
 
 ## Architecture
 
