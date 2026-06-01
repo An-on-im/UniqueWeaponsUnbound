@@ -11,6 +11,8 @@ namespace UniqueWeaponsUnbound
     /// </summary>
     public static class WeaponRegistry
     {
+        private const string UniqueSuffix = "_Unique";
+
         private static Dictionary<ThingDef, ThingDef> baseToUnique;
         private static Dictionary<ThingDef, ThingDef> uniqueToBase;
         private static List<ThingDef> orphanUniqueDefs;
@@ -69,15 +71,32 @@ namespace UniqueWeaponsUnbound
                 return;
 
             ThingDef baseDef = FindBaseWeapon(def);
-            if (baseDef != null)
-            {
-                uniqueToBase[def] = baseDef;
-                baseToUnique[baseDef] = def;
-            }
-            else
+            if (baseDef == null)
             {
                 orphanUniqueDefs.Add(def);
+                return;
             }
+
+            // Each unique def always knows its own base, so this side never collides.
+            uniqueToBase[def] = baseDef;
+
+            // The reverse mapping can collide: with mods installed, several unique
+            // defs may resolve to the same base (e.g. multiple variants of a vanilla
+            // weapon, or descriptionHyperlinks that all point back to it). Prefer the
+            // one whose defName is exactly '{BaseDefName}_Unique'; failing an exact
+            // match, keep the first registered and let load order decide the winner.
+            if (!baseToUnique.ContainsKey(baseDef) || IsExactNamingMatch(def, baseDef))
+                baseToUnique[baseDef] = def;
+        }
+
+        /// <summary>
+        /// Whether the unique def's name is exactly '{BaseDefName}_Unique' for the
+        /// given base — the strongest pairing signal, used to break ties when several
+        /// unique defs resolve to the same base weapon.
+        /// </summary>
+        private static bool IsExactNamingMatch(ThingDef uniqueDef, ThingDef baseDef)
+        {
+            return uniqueDef.defName == baseDef.defName + UniqueSuffix;
         }
 
         /// <summary>
@@ -97,9 +116,9 @@ namespace UniqueWeaponsUnbound
             }
 
             // Fallback: naming convention ({BaseDefName}_Unique)
-            if (uniqueDef.defName.EndsWith("_Unique"))
+            if (uniqueDef.defName.EndsWith(UniqueSuffix))
             {
-                string baseName = uniqueDef.defName.Substring(0, uniqueDef.defName.Length - "_Unique".Length);
+                string baseName = uniqueDef.defName.Substring(0, uniqueDef.defName.Length - UniqueSuffix.Length);
                 return DefDatabase<ThingDef>.GetNamedSilentFail(baseName);
             }
 
