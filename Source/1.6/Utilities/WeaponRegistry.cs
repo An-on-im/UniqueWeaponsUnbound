@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using Verse;
 
@@ -57,6 +58,8 @@ namespace UniqueWeaponsUnbound
                         + "; customizable but cannot revert to base. "
                         + "Add a descriptionHyperlinks entry or use the '_Unique' suffix.");
                 }
+
+                WarnOnPairConflicts();
             }
             catch (Exception ex)
             {
@@ -123,6 +126,41 @@ namespace UniqueWeaponsUnbound
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Logs one warning per base weapon that several unique defs resolved to
+        /// (a mod conflict the player owns). Only one variant wins the base→unique
+        /// mapping (see <see cref="RegisterUniqueWeaponDef"/>), so the rest can't be
+        /// produced by customizing the base weapon. Each variant is reported with its
+        /// source mod so players and modders know which defs to reconcile. Grouped
+        /// after the scan, like the orphan warnings.
+        /// </summary>
+        private static void WarnOnPairConflicts()
+        {
+            Dictionary<ThingDef, List<ThingDef>> variantsByBase = new Dictionary<ThingDef, List<ThingDef>>();
+            foreach (KeyValuePair<ThingDef, ThingDef> pair in uniqueToBase)
+            {
+                if (!variantsByBase.TryGetValue(pair.Value, out List<ThingDef> variants))
+                    variantsByBase[pair.Value] = variants = new List<ThingDef>();
+                variants.Add(pair.Key);
+            }
+
+            foreach (KeyValuePair<ThingDef, List<ThingDef>> entry in variantsByBase)
+            {
+                if (entry.Value.Count < 2)
+                    continue;
+
+                ThingDef winner = baseToUnique[entry.Key];
+                string variantList = string.Join(", ", entry.Value
+                    .OrderBy(v => v.defName)
+                    .Select(v => v.SourceForLog()));
+
+                Log.Warning("[Unique Weapons Unbound] Base weapon " + entry.Key.SourceForLog()
+                    + " maps to multiple unique variants (" + variantList + "); using "
+                    + winner.defName + " as the base's unique form. This is a mod conflict; "
+                    + "reconcile the mods or load order if that is not the intended variant.");
+            }
         }
 
         /// <summary>
