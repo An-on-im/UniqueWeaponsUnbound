@@ -323,9 +323,12 @@ namespace UniqueWeaponsUnbound
             IntVec3 pos = weapon.Position;
             Map map = weapon.Map;
 
-            // Transfer relic status BEFORE destroying the old weapon so that
-            // Thing.Destroy() does not fire Notify_ThingLost on the precept.
+            // Transfer relic status and authored art BEFORE destroying the old
+            // weapon: relic transfer keeps Thing.Destroy() from firing
+            // Notify_ThingLost on the precept, and art transfer hands off the
+            // TaleReference before PostDestroy would tear it down.
             WeaponDefConversion.TransferRelicStatus(weapon, newWeapon);
+            WeaponDefConversion.TransferArt(weapon, newWeapon);
 
             if (weapon.Spawned)
                 weapon.Destroy();
