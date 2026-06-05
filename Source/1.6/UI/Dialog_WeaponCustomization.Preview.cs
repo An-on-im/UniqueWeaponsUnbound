@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -9,10 +8,6 @@ namespace UniqueWeaponsUnbound
 {
     public partial class Dialog_WeaponCustomization
     {
-        // Reflection: access protected Graphic_Collection.subGraphics for variant preview
-        private static readonly FieldInfo SubGraphicsField = typeof(Graphic_Collection)
-            .GetField("subGraphics", BindingFlags.Instance | BindingFlags.NonPublic);
-
         private const int PreviewRTSize = 256;
         private const int TextureGridRTSize = 128;
 
@@ -278,28 +273,26 @@ namespace UniqueWeaponsUnbound
             if (graphic == null)
                 return null;
 
-            // Unwrap Graphic_RandomRotated to access underlying Graphic_Random
+            // Recolor the top-level graphic exactly as the engine does for a Thing
+            // (GraphicData.GraphicColoredFor): hand its own shader, the prospective
+            // first color, and the weapon's own second color to GetColoredVersion.
+            // Dispatching on the top-level graphic runs the weapon's own graphic
+            // class (e.g. a Graphic_Random subclass that preserves colorTwo through
+            // the CutoutComplex green mask) — we invoke that recolor logic rather
+            // than reimplementing it, so any mod's color handling comes through for
+            // free within the engine's two-color contract. Shader and color two
+            // match in-game; only color one is the prospective dialog choice.
+            if (colorDef != null)
+                graphic = graphic.GetColoredVersion(
+                    graphic.Shader, colorDef.color, weapon?.DrawColorTwo ?? Color.white);
+
+            // Select the texture variant from the (recolored) graphic, mirroring
+            // Graphic_Random.SubGraphicFor at draw time. GetColoredVersion preserves
+            // the wrapper types, so unwrap rotation then index into the variants.
             if (graphic is Graphic_RandomRotated rotated)
                 graphic = rotated.SubGraphic;
-
-            // Select specific variant from Graphic_Random
             if (graphic is Graphic_Random random)
-            {
-                Graphic[] subs = SubGraphicsField?.GetValue(random) as Graphic[];
-                if (subs != null && subs.Length > 0)
-                    graphic = subs[textureIndex % subs.Length];
-            }
-
-            // Get colored version through the shader system — GetColoredVersion
-            // re-initializes the graphic with the weapon's shader (CutoutComplex),
-            // which loads the mask texture (_m suffix) so color is applied
-            // only to masked regions (e.g. inlays, not the entire blade).
-            if (colorDef != null)
-            {
-                Shader shader = resultDef.graphicData?.shaderType?.Shader
-                    ?? ShaderDatabase.Cutout;
-                graphic = graphic.GetColoredVersion(shader, colorDef.color, Color.white);
-            }
+                graphic = random.SubGraphicAtIndex(textureIndex);
 
             Material mat = graphic.MatSingle;
             Texture mainTex = mat?.mainTexture;

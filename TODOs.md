@@ -2,6 +2,8 @@
 
 ## Features
 
+- Blood-soaked trait rule requiring hemogen if biotech and UMW are installed
+
 - Random button?
 - Mod setting to disable trait customization?
 - Dev mode mod settings page button to copy settings to clipboard?
