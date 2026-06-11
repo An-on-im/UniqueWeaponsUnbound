@@ -3,6 +3,7 @@
 ## Features
 
 - Blood-soaked trait rule requiring hemogen if biotech and UMW are installed
+- Optional reinforced barrel replacement rule for underbarrel traits?
 
 - Random button?
 - Mod setting to disable trait customization?
