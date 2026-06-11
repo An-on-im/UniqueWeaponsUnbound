@@ -21,9 +21,12 @@ namespace UniqueWeaponsUnbound.HaulPlanning
         Sweep = 1,
 
         /// <summary>
-        /// Exhaustive subset-DP partitioning with sourcing enumeration; falls
-        /// back to k-means clustering + sweep for inputs above a tractability
-        /// threshold. Planned, not yet implemented.
+        /// Joint sourcing + trip-partition + routing optimization over
+        /// storage-grouped candidates: minimal-cover support enumeration, one
+        /// shared all-subsets Held-Karp table, and a subset-partition DP.
+        /// Returns null above its tractability guards so the caller's ladder
+        /// (Optimal -> Sweep -> Sequential) degrades to Sweep. Planned, not
+        /// yet implemented.
         /// </summary>
         Optimal = 2,
     }

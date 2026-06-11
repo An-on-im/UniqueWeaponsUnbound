@@ -133,19 +133,25 @@ namespace UniqueWeaponsUnbound.HaulPlanning
 
             HaulPlan plan = AttemptPlan(pawn, demand, workbenchPos, kind);
 
-            // Fallback to Sequential when the configured planner can't satisfy
-            // demand. Common (benign) cause: Sweep's pool cap (6 candidates per
-            // def) excludes stacks Sequential's no-cap pool would include.
-            // Sequential is also the bedrock fallback for stub planners
-            // (Optimal) that throw NotImplementedException — AttemptPlan
-            // returns null in that case and we retry here. The fallback is
+            // Degradation ladder: Optimal -> Sweep -> Sequential. Each rung
+            // runs only when the rung above produced no plan (returned null or
+            // threw — AttemptPlan normalizes both to null), and rebuilds the
+            // pool with its own planner's parameters. Common (benign) causes:
+            // a planner's pool cap excludes stacks a lower rung's pool would
+            // include, or Optimal's tractability guards trip. Each step is
             // logged at Message level so the dev console captures it for
             // diagnosis, but the player only sees a Messages.Message if the
-            // Sequential attempt ALSO fails (PlanInfeasible below).
+            // final rung ALSO fails (PlanInfeasible below).
+            if (plan == null && kind == HaulPlannerKind.Optimal)
+            {
+                Log.Message("[Unique Weapons Unbound] Configured haul planner "
+                    + "(Optimal) returned no plan; retrying with Sweep.");
+                plan = AttemptPlan(pawn, demand, workbenchPos, HaulPlannerKind.Sweep);
+            }
             if (plan == null && kind != HaulPlannerKind.Sequential)
             {
-                Log.Message("[Unique Weapons Unbound] Configured haul planner ("
-                    + kind + ") returned no plan; retrying with Sequential.");
+                Log.Message("[Unique Weapons Unbound] Haul planning fell through "
+                    + "to Sequential after higher-tier planners returned no plan.");
                 plan = AttemptPlan(pawn, demand, workbenchPos, HaulPlannerKind.Sequential);
             }
 
@@ -173,7 +179,10 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                 PawnPosition = pawn.Position,
                 WorkbenchPosition = workbenchPos,
                 CapacityKg = MassUtility.Capacity(pawn),
-                CurrentEncumbranceKg = MassUtility.GearMass(pawn),
+                // Gear AND inventory: anything already in the pawn's inventory
+                // (meals, drugs, ammo) stays aboard across every haul trip, so
+                // it occupies per-trip mass budget the whole time.
+                CurrentEncumbranceKg = MassUtility.GearAndInventoryMass(pawn),
                 Demand = demand,
                 Pool = pool,
             };
