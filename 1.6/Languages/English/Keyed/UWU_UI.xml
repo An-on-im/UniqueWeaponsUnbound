@@ -168,9 +168,9 @@
   <!-- Settings: Haul planner -->
   <UWU_HaulPlannerSequential>Sequential</UWU_HaulPlannerSequential>
   <UWU_HaulPlannerSequentialDesc>Vanilla behavior. Pawns carry up to one ingredient stack at a time, always grabbing the nearest first. Simple and predictable, but means lots of short trips for resource-heavy customizations.</UWU_HaulPlannerSequentialDesc>
-  <UWU_HaulPlannerSweep>Sweep + Held-Karp</UWU_HaulPlannerSweep>
+  <UWU_HaulPlannerSweep>Sweep</UWU_HaulPlannerSweep>
   <UWU_HaulPlannerSweepDesc>Pawns plan ahead and use spare inventory space to carry more at once, while also routing more efficiently between pickups. Much fewer trips than Sequential, with negligible planning overhead.</UWU_HaulPlannerSweepDesc>
-  <UWU_HaulPlannerOptimal>Optimal</UWU_HaulPlannerOptimal>
-  <UWU_HaulPlannerOptimalDesc>Like Sweep, but also weighs which stacks to draw from when the map has multiple candidates, rather than always taking the closest. Slower to plan, but produces the shortest possible runs when ingredients are scattered or carrying capacity is tight.</UWU_HaulPlannerOptimalDesc>
+  <UWU_HaulPlannerThorough>Thorough</UWU_HaulPlannerThorough>
+  <UWU_HaulPlannerThoroughDesc>Like Sweep, but also weighs which stacks to draw from when the map has multiple candidates, rather than always taking the closest. Slower to plan, but usually finds the shortest runs when ingredients are scattered or carrying capacity is tight. Falls back to Sweep for hauls too complex to fully analyze.</UWU_HaulPlannerThoroughDesc>
 
 </LanguageData>

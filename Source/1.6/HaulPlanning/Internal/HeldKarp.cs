@@ -8,7 +8,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning.Internal
     /// Held-Karp dynamic programming over Manhattan distances (Held &amp; Karp
     /// 1962). Two entry points: the single-trip solver both planners use to
     /// cost and sequence a trip's pickups, and <see cref="SubsetTourTable"/>,
-    /// the all-subsets table the Optimal planner queries during its partition
+    /// the all-subsets table the Thorough planner queries during its partition
     /// DP. Costs stay int throughout — Manhattan distance is integral, and
     /// float ties would threaten determinism.
     ///
@@ -225,7 +225,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning.Internal
     /// One Held-Karp pass over a set of unique positions, queryable for the
     /// closed-tour cost of ANY position subset: tour(mask) = min over ends i
     /// in mask of dp[mask][i] + dist(i, depot). Built in O(2^M * M^2); each
-    /// query is an array read. This is what lets the Optimal planner's
+    /// query is an array read. This is what lets the Thorough planner's
     /// partition DP evaluate every candidate trip without per-subset solves.
     /// </summary>
     internal sealed class SubsetTourTable

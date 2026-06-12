@@ -8,7 +8,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
 {
     /*
     ============================================================================
-    OptimalHaulPlanner — algorithm specification and design rationale
+    ThoroughHaulPlanner — algorithm specification and design rationale
     ============================================================================
 
     PURPOSE
@@ -24,7 +24,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
     Scope commitments:
       - No bespoke heuristic path. When a tractability guard trips, Plan()
         returns null and the caller's degradation ladder (IngredientReservation:
-        Optimal -> Sweep -> Sequential) rebuilds the pool with Sweep's own
+        Thorough -> Sweep -> Sequential) rebuilds the pool with Sweep's own
         parameters and runs Sweep. One battle-tested fallback, zero duplicated
         heuristic machinery.
       - PawnPosition is deliberately ignored. The customization flow opens the
@@ -221,7 +221,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
         that split a stack across trips — and assert the planner matches the
         optimum. (Hand-computed cases can't cover the split-stack space; the
         earlier draft's gap there would have been caught by this oracle.)
-      - Comparative property: Optimal's plan cost <= Sweep's plan cost on the
+      - Comparative property: Thorough's plan cost <= Sweep's plan cost on the
         same request, on fixtures whose group spans are small (the
         representative-position error bound is the tolerance).
       - Contract invariants: per-def pickup totals exactly equal demand;
@@ -258,7 +258,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
     /// the spec comment above); returns null when a tractability guard trips
     /// so the caller's ladder degrades to Sweep.
     /// </summary>
-    public class OptimalHaulPlanner : IHaulPlanner
+    public class ThoroughHaulPlanner : IHaulPlanner
     {
         // Group-level pool sizing (GroupPoolBySlotGroup): gather nearest
         // stacks until cumulative count >= 2x demand AND >= 2 distinct
@@ -1112,7 +1112,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
         {
             if (EmitGuardLogs)
             {
-                Log.Message("[Unique Weapons Unbound] Optimal haul planner guard "
+                Log.Message("[Unique Weapons Unbound] Thorough haul planner guard "
                     + "tripped (" + reason + "); deferring to the next planner "
                     + "in the ladder.");
             }

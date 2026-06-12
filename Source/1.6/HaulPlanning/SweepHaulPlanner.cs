@@ -32,7 +32,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
 
         public int CandidatePoolCap => 6;
 
-        // Stack-level pool — grouping is the Optimal planner's contract.
+        // Stack-level pool — grouping is the Thorough planner's contract.
         public bool GroupPoolBySlotGroup => false;
 
         private const int MaxRepairRounds = 3;

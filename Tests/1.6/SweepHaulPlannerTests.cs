@@ -346,7 +346,7 @@ namespace UniqueWeaponsUnbound.Tests
             //
             // Smoke test: existing planner invariants (demand met, at most
             // one CT pickup per trip) hold under the rotation. Detailed cost
-            // assertions belong in OptimalHaulPlannerTests once that planner
+            // assertions belong in ThoroughHaulPlannerTests once that planner
             // exists.
             var west = TestHelpers.MakeDef("TestWestDef");
             var east = TestHelpers.MakeDef("TestEastDef");

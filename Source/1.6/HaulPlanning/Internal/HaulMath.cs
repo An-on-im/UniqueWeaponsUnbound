@@ -6,7 +6,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning.Internal
 {
     /// <summary>
     /// Capacity and distance primitives shared by the haul planners. Pulled
-    /// out of SweepHaulPlanner so Sweep and Optimal agree exactly on the
+    /// out of SweepHaulPlanner so Sweep and Thorough agree exactly on the
     /// capacity model and geometry — a constant that drifted between them
     /// would make the two planners disagree about feasibility of the same
     /// trip, breaking the degradation ladder's "lower rung is laxer" property.

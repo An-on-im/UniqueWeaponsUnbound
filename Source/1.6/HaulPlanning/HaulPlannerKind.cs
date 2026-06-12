@@ -25,9 +25,9 @@ namespace UniqueWeaponsUnbound.HaulPlanning
         /// storage-grouped candidates: minimal-cover support enumeration, one
         /// shared all-subsets Held-Karp table, and a subset-partition DP.
         /// Returns null above its tractability guards so the caller's ladder
-        /// (Optimal -> Sweep -> Sequential) degrades to Sweep.
+        /// (Thorough -> Sweep -> Sequential) degrades to Sweep.
         /// </summary>
-        Optimal = 2,
+        Thorough = 2,
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
     {
         private static readonly IHaulPlanner sequential = new SequentialHaulPlanner();
         private static readonly IHaulPlanner sweep = new SweepHaulPlanner();
-        private static readonly IHaulPlanner optimal = new OptimalHaulPlanner();
+        private static readonly IHaulPlanner thorough = new ThoroughHaulPlanner();
 
         /// <summary>
         /// Returns the planner instance for the given kind. Unrecognized values
@@ -50,7 +50,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             switch (kind)
             {
                 case HaulPlannerKind.Sweep: return sweep;
-                case HaulPlannerKind.Optimal: return optimal;
+                case HaulPlannerKind.Thorough: return thorough;
                 case HaulPlannerKind.Sequential:
                 default: return sequential;
             }

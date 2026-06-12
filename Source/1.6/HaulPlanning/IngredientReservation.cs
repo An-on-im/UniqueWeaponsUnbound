@@ -133,19 +133,19 @@ namespace UniqueWeaponsUnbound.HaulPlanning
 
             HaulPlan plan = AttemptPlan(pawn, demand, workbenchPos, kind);
 
-            // Degradation ladder: Optimal -> Sweep -> Sequential. Each rung
+            // Degradation ladder: Thorough -> Sweep -> Sequential. Each rung
             // runs only when the rung above produced no plan (returned null or
             // threw — AttemptPlan normalizes both to null), and rebuilds the
             // pool with its own planner's parameters. Common (benign) causes:
             // a planner's pool cap excludes stacks a lower rung's pool would
-            // include, or Optimal's tractability guards trip. Each step is
+            // include, or Thorough's tractability guards trip. Each step is
             // logged at Message level so the dev console captures it for
             // diagnosis, but the player only sees a Messages.Message if the
             // final rung ALSO fails (PlanInfeasible below).
-            if (plan == null && kind == HaulPlannerKind.Optimal)
+            if (plan == null && kind == HaulPlannerKind.Thorough)
             {
                 Log.Message("[Unique Weapons Unbound] Configured haul planner "
-                    + "(Optimal) returned no plan; retrying with Sweep.");
+                    + "(Thorough) returned no plan; retrying with Sweep.");
                 plan = AttemptPlan(pawn, demand, workbenchPos, HaulPlannerKind.Sweep);
             }
             if (plan == null && kind != HaulPlannerKind.Sequential)

@@ -197,9 +197,9 @@ namespace UniqueWeaponsUnbound
                 enabled: true);
 
             DrawHaulPlannerOption(listing,
-                HaulPlannerKind.Optimal,
-                "UWU_HaulPlannerOptimal".Translate(),
-                "UWU_HaulPlannerOptimalDesc".Translate(),
+                HaulPlannerKind.Thorough,
+                "UWU_HaulPlannerThorough".Translate() + "UWU_ExperimentalSuffix".Translate(),
+                "UWU_HaulPlannerThoroughDesc".Translate(),
                 enabled: true);
 
             listing.Gap(24.0f);

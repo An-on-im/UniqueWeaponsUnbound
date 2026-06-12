@@ -10,22 +10,22 @@ using Xunit;
 namespace UniqueWeaponsUnbound.Tests
 {
     /// <summary>
-    /// Tests for OptimalHaulPlanner per the spec's TESTING NOTES: contract
+    /// Tests for ThoroughHaulPlanner per the spec's TESTING NOTES: contract
     /// invariants, guard behavior, grouping semantics, determinism, an
     /// exhaustive brute-force oracle on small instances (including plans that
     /// split a stack across trips), a comparative property against Sweep, and
     /// op-count performance asserts (wall-clock is flaky on the CI runner).
     /// </summary>
-    public class OptimalHaulPlannerTests
+    public class ThoroughHaulPlannerTests
     {
-        private static readonly OptimalHaulPlanner Planner = new OptimalHaulPlanner();
+        private static readonly ThoroughHaulPlanner Planner = new ThoroughHaulPlanner();
 
-        static OptimalHaulPlannerTests()
+        static ThoroughHaulPlannerTests()
         {
             // Verse.Log isn't usable under the bare xUnit runner; guard-trip
             // tests would otherwise crash on the log call instead of
             // asserting the null contract.
-            OptimalHaulPlanner.EmitGuardLogs = false;
+            ThoroughHaulPlanner.EmitGuardLogs = false;
         }
 
         // ------------------------------------------------------------------
@@ -296,10 +296,10 @@ namespace UniqueWeaponsUnbound.Tests
             var plan = Planner.Plan(fx.Request());
 
             AssertInvariants(fx, plan);
-            Assert.True(OptimalHaulPlanner.LastPlanPartitionSteps > 0,
+            Assert.True(ThoroughHaulPlanner.LastPlanPartitionSteps > 0,
                 "partition DP should have run");
-            Assert.True(OptimalHaulPlanner.LastPlanPartitionSteps < 100_000,
-                $"typical instance used {OptimalHaulPlanner.LastPlanPartitionSteps} DP steps");
+            Assert.True(ThoroughHaulPlanner.LastPlanPartitionSteps < 100_000,
+                $"typical instance used {ThoroughHaulPlanner.LastPlanPartitionSteps} DP steps");
         }
 
         // ------------------------------------------------------------------
@@ -501,7 +501,7 @@ namespace UniqueWeaponsUnbound.Tests
             }
 
             Assert.Null(Planner.Plan(fx.Request()));
-            Assert.Equal(0, OptimalHaulPlanner.LastPlanPartitionSteps);
+            Assert.Equal(0, ThoroughHaulPlanner.LastPlanPartitionSteps);
         }
 
         // ------------------------------------------------------------------
@@ -795,7 +795,7 @@ namespace UniqueWeaponsUnbound.Tests
         // ------------------------------------------------------------------
 
         [Fact]
-        public void Optimal_NeverCostsMoreThanSweep()
+        public void Thorough_NeverCostsMoreThanSweep()
         {
             // Singleton groups → zero representative-position error, so the
             // comparison needs no tolerance. Fresh fixtures per planner:
@@ -839,18 +839,18 @@ namespace UniqueWeaponsUnbound.Tests
                     return fx;
                 }
 
-                Fixture fxOptimal = Build();
+                Fixture fxThorough = Build();
                 Fixture fxSweep = Build();
-                var planOptimal = Planner.Plan(fxOptimal.Request());
+                var planThorough = Planner.Plan(fxThorough.Request());
                 var planSweep = sweep.Plan(fxSweep.Request());
 
-                Assert.NotNull(planOptimal);
+                Assert.NotNull(planThorough);
                 Assert.NotNull(planSweep);
-                AssertInvariants(fxOptimal, planOptimal);
-                int costOptimal = PlanCost(fxOptimal, planOptimal);
+                AssertInvariants(fxThorough, planThorough);
+                int costThorough = PlanCost(fxThorough, planThorough);
                 int costSweep = PlanCost(fxSweep, planSweep);
-                Assert.True(costOptimal <= costSweep,
-                    $"scenario {scenario}: Optimal cost {costOptimal} > Sweep cost {costSweep}");
+                Assert.True(costThorough <= costSweep,
+                    $"scenario {scenario}: Thorough cost {costThorough} > Sweep cost {costSweep}");
             }
         }
     }
