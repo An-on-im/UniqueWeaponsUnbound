@@ -25,6 +25,10 @@ namespace UniqueWeaponsUnbound.HaulPlanning
 
         public int CandidatePoolCap => int.MaxValue;
 
+        // Stack-level pool, untouched by the grouped-pool contract — keeps
+        // this planner's vanilla-equivalence intact.
+        public bool GroupPoolBySlotGroup => false;
+
         public HaulPlan Plan(HaulPlanRequest request)
         {
             if (request.Demand == null || request.Demand.Count == 0)

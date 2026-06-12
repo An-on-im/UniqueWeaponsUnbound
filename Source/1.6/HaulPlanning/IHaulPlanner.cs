@@ -31,8 +31,24 @@ namespace UniqueWeaponsUnbound.HaulPlanning
         /// <summary>
         /// Hard cap on the number of candidate stacks gathered per demanded
         /// ThingDef, regardless of multiplier. Prevents pool-size blowup when a
-        /// def has many on-map stacks (e.g. Steel in a large colony).
+        /// def has many on-map stacks (e.g. Steel in a large colony). When
+        /// <see cref="GroupPoolBySlotGroup"/> is true this cap applies to
+        /// distinct storage groups instead of individual stacks.
         /// </summary>
         int CandidatePoolCap { get; }
+
+        /// <summary>
+        /// When true, the caller's pool builder annotates each candidate with
+        /// the storage SlotGroup it sits in (<see cref="HaulCandidate.GroupId"/>)
+        /// and applies CandidatePoolMultiplier / CandidatePoolCap at the GROUP
+        /// level: gather nearest stacks until cumulative count reaches
+        /// multiplier * demand AND at least two distinct storage groups are
+        /// represented (when the map has that many), capped at CandidatePoolCap
+        /// groups per def. The floor matters: without it, one big stack
+        /// satisfies the count target and a sourcing optimizer receives exactly
+        /// one candidate — no choice at all. False keeps the legacy stack-level
+        /// pool (Sweep / Sequential), preserving their existing behavior.
+        /// </summary>
+        bool GroupPoolBySlotGroup { get; }
     }
 }

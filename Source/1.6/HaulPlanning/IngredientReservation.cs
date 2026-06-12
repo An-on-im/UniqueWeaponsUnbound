@@ -163,16 +163,14 @@ namespace UniqueWeaponsUnbound.HaulPlanning
 
         /// <summary>
         /// Builds the pool, request, and runs the configured planner. Returns
-        /// null on failure (planner returned null, stub planner threw
-        /// NotImplementedException, or planner threw any other exception).
+        /// null on failure (planner returned null or threw).
         /// </summary>
         private static HaulPlan AttemptPlan(
             Pawn pawn, Dictionary<ThingDef, int> demand, IntVec3 workbenchPos, HaulPlannerKind kind)
         {
             IHaulPlanner planner = HaulPlannerFactory.Get(kind);
 
-            Dictionary<ThingDef, List<HaulCandidate>> pool = BuildHaulPool(
-                pawn, demand, planner.CandidatePoolMultiplier, planner.CandidatePoolCap);
+            Dictionary<ThingDef, List<HaulCandidate>> pool = BuildHaulPool(pawn, demand, planner);
 
             var request = new HaulPlanRequest
             {
@@ -190,12 +188,6 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             try
             {
                 return planner.Plan(request);
-            }
-            catch (System.NotImplementedException)
-            {
-                Log.Warning($"[Unique Weapons Unbound] Selected haul planner "
-                    + $"({kind}) is not implemented; falling back to Sequential.");
-                return null;
             }
             catch (System.Exception ex)
             {
@@ -316,9 +308,11 @@ namespace UniqueWeaponsUnbound.HaulPlanning
         /// <summary>
         /// Gathers candidate stacks per demanded def for the planner. Each
         /// candidate has already passed CanPawnUseIngredient. The pool is
-        /// sized to <paramref name="multiplier"/> times demand, capped per def
-        /// at <paramref name="capPerDef"/>; richer pools give planners more
-        /// sourcing flexibility at the cost of build time.
+        /// sized to the planner's CandidatePoolMultiplier times demand, capped
+        /// per def by CandidatePoolCap; richer pools give planners more
+        /// sourcing flexibility at the cost of build time. Planners with
+        /// GroupPoolBySlotGroup get the group-level sizing rules and SlotGroup
+        /// annotations instead (see <see cref="GatherGroupLevel"/>).
         ///
         /// Sort key for "which stacks to keep when capping" is squared
         /// distance from the pawn, matching the existing one-stack-per-trip
@@ -326,47 +320,132 @@ namespace UniqueWeaponsUnbound.HaulPlanning
         /// re-sort the pool internally without losing candidates.
         /// </summary>
         private static Dictionary<ThingDef, List<HaulCandidate>> BuildHaulPool(
-            Pawn pawn, Dictionary<ThingDef, int> demand, float multiplier, int capPerDef)
+            Pawn pawn, Dictionary<ThingDef, int> demand, IHaulPlanner planner)
         {
             var pool = new Dictionary<ThingDef, List<HaulCandidate>>();
             IntVec3 origin = pawn.Position;
+
+            // SlotGroup -> per-request id table, shared across defs so a
+            // storage site holding several demanded defs gets one identity.
+            // Snapshotted here at pool-build time; the planner itself never
+            // queries world state.
+            Dictionary<SlotGroup, int> groupIds =
+                planner.GroupPoolBySlotGroup ? new Dictionary<SlotGroup, int>() : null;
 
             foreach (KeyValuePair<ThingDef, int> entry in demand)
             {
                 ThingDef def = entry.Key;
                 int needed = entry.Value;
-                int targetCount = Mathf.CeilToInt(needed * multiplier);
+                int targetCount = Mathf.CeilToInt(needed * planner.CandidatePoolMultiplier);
 
                 List<Thing> stacks = pawn.Map.listerThings.ThingsOfDef(def)
                     .Where(t => CanPawnUseIngredient(t, pawn))
                     .OrderBy(t => (t.Position - origin).LengthHorizontalSquared)
                     .ToList();
 
-                var candidates = new List<HaulCandidate>(stacks.Count);
-                int cumulative = 0;
-                foreach (Thing stack in stacks)
-                {
-                    if (candidates.Count >= capPerDef)
-                        break;
-                    candidates.Add(new HaulCandidate
-                    {
-                        Thing = stack,
-                        Position = stack.Position,
-                        AvailableCount = stack.stackCount,
-                        MassPerUnit = stack.GetStatValue(StatDefOf.Mass),
-                    });
-                    cumulative += stack.stackCount;
-                    // Stop once we have enough cumulative count to cover the
-                    // pool target. The last candidate may overshoot; that's
-                    // fine — the planner can partial-take it.
-                    if (cumulative >= targetCount)
-                        break;
-                }
-
-                pool[def] = candidates;
+                pool[def] = groupIds != null
+                    ? GatherGroupLevel(pawn.Map, stacks, targetCount, planner.CandidatePoolCap, groupIds)
+                    : GatherStackLevel(stacks, targetCount, planner.CandidatePoolCap);
             }
 
             return pool;
+        }
+
+        private static List<HaulCandidate> GatherStackLevel(
+            List<Thing> stacks, int targetCount, int capPerDef)
+        {
+            var candidates = new List<HaulCandidate>(stacks.Count);
+            int cumulative = 0;
+            foreach (Thing stack in stacks)
+            {
+                if (candidates.Count >= capPerDef)
+                    break;
+                candidates.Add(new HaulCandidate
+                {
+                    Thing = stack,
+                    Position = stack.Position,
+                    AvailableCount = stack.stackCount,
+                    MassPerUnit = stack.GetStatValue(StatDefOf.Mass),
+                    GroupId = -1,
+                });
+                cumulative += stack.stackCount;
+                // Stop once we have enough cumulative count to cover the
+                // pool target. The last candidate may overshoot; that's
+                // fine — the planner can partial-take it.
+                if (cumulative >= targetCount)
+                    break;
+            }
+            return candidates;
+        }
+
+        /// <summary>
+        /// Group-level gathering for GroupPoolBySlotGroup planners: walk
+        /// stacks nearest-first until cumulative count meets the target AND at
+        /// least two distinct storage groups are represented (when that many
+        /// exist for this def), capped at <paramref name="groupCap"/> distinct
+        /// groups. The two-group floor matters: without it, one big stack
+        /// satisfies the count target and the optimizer receives exactly one
+        /// sourcing option — no choice at all. Stacks outside storage (no
+        /// SlotGroup) are singleton groups with GroupId -1.
+        /// </summary>
+        private static List<HaulCandidate> GatherGroupLevel(
+            Map map, List<Thing> stacks, int targetCount, int groupCap,
+            Dictionary<SlotGroup, int> groupIds)
+        {
+            var slotGroups = new SlotGroup[stacks.Count];
+            var distinct = new HashSet<SlotGroup>();
+            int looseStacks = 0;
+            for (int i = 0; i < stacks.Count; i++)
+            {
+                slotGroups[i] = map.haulDestinationManager.SlotGroupAt(stacks[i].Position);
+                if (slotGroups[i] == null) looseStacks++;
+                else distinct.Add(slotGroups[i]);
+            }
+            int groupFloor = Mathf.Min(2, distinct.Count + looseStacks);
+
+            var candidates = new List<HaulCandidate>();
+            var included = new HashSet<SlotGroup>();
+            int representedGroups = 0;
+            int cumulative = 0;
+            for (int i = 0; i < stacks.Count; i++)
+            {
+                SlotGroup sg = slotGroups[i];
+                bool opensGroup = sg == null || !included.Contains(sg);
+                // Group cap: farther stacks may still top up groups that are
+                // already in the pool, but no new group past the cap.
+                if (opensGroup && representedGroups >= groupCap)
+                    continue;
+
+                int gid;
+                if (sg == null)
+                {
+                    gid = -1;
+                }
+                else if (!groupIds.TryGetValue(sg, out gid))
+                {
+                    gid = groupIds.Count;
+                    groupIds[sg] = gid;
+                }
+
+                Thing stack = stacks[i];
+                candidates.Add(new HaulCandidate
+                {
+                    Thing = stack,
+                    Position = stack.Position,
+                    AvailableCount = stack.stackCount,
+                    MassPerUnit = stack.GetStatValue(StatDefOf.Mass),
+                    GroupId = gid,
+                });
+                if (opensGroup)
+                {
+                    representedGroups++;
+                    if (sg != null) included.Add(sg);
+                }
+                cumulative += stack.stackCount;
+                if (cumulative >= targetCount && representedGroups >= groupFloor)
+                    break;
+            }
+            return candidates;
         }
     }
 }

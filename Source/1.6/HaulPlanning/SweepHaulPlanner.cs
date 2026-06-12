@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UniqueWeaponsUnbound.HaulPlanning.Internal;
 using UnityEngine;
 using Verse;
 
@@ -31,15 +32,10 @@ namespace UniqueWeaponsUnbound.HaulPlanning
 
         public int CandidatePoolCap => 6;
 
-        // 5% headroom on per-trip inventory mass — matches PUAH's stop-just-
-        // before-the-encumbrance-threshold pattern and absorbs float rounding.
-        private const float CapacityFactor = 0.95f;
-        private const float MassEpsilon = 1e-3f;
-        private const int MaxRepairRounds = 3;
+        // Stack-level pool — grouping is the Optimal planner's contract.
+        public bool GroupPoolBySlotGroup => false;
 
-        // Cap Held-Karp to keep dp[2^k][k] memory bounded. Spec says k typically
-        // 2..6 and never expected over ~10; 16 is a defensive ceiling.
-        private const int HeldKarpMaxNodes = 16;
+        private const int MaxRepairRounds = 3;
 
         public HaulPlan Plan(HaulPlanRequest request)
         {
@@ -53,7 +49,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             if (request.Pool == null)
                 return null;
 
-            float invBudget = (request.CapacityKg - request.CurrentEncumbranceKg) * CapacityFactor;
+            float invBudget = (request.CapacityKg - request.CurrentEncumbranceKg) * HaulMath.CapacityFactor;
             if (invBudget <= 0f)
                 return null;
 
@@ -182,7 +178,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                 if (heaviestIdx >= 0)
                 {
                     PlanPickup p = pending[heaviestIdx];
-                    int ctVolume = MaxStackSpaceEver(p.Thing.def, capacityKg);
+                    int ctVolume = HaulMath.MaxStackSpaceEver(p.Thing.def, capacityKg);
                     if (ctVolume > 0)
                     {
                         int ctTake = Mathf.Min(p.Count, ctVolume);
@@ -201,7 +197,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                         // the budget can absorb it; otherwise carries forward.
                         if (p.Count > 0 && p.MassPerUnit > 0f)
                         {
-                            int invMax = Mathf.FloorToInt((invBudget - invUsed + MassEpsilon) / p.MassPerUnit);
+                            int invMax = Mathf.FloorToInt((invBudget - invUsed + HaulMath.MassEpsilon) / p.MassPerUnit);
                             if (invMax > 0)
                             {
                                 int invTake = Mathf.Min(p.Count, invMax);
@@ -241,7 +237,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                         pending[i] = p;
                         continue;
                     }
-                    int invMax = Mathf.FloorToInt((invBudget - invUsed + MassEpsilon) / p.MassPerUnit);
+                    int invMax = Mathf.FloorToInt((invBudget - invUsed + HaulMath.MassEpsilon) / p.MassPerUnit);
                     if (invMax <= 0) continue;
                     int take = Mathf.Min(p.Count, invMax);
                     trip.Add(new PlanPickup
@@ -329,8 +325,8 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                     float massB = pb.Count * pb.MassPerUnit;
                     float newMassA = tripInvMass[t1] - massA + massB;
                     float newMassB = tripInvMass[t2] - massB + massA;
-                    if (newMassA > invBudget + MassEpsilon) continue;
-                    if (newMassB > invBudget + MassEpsilon) continue;
+                    if (newMassA > invBudget + HaulMath.MassEpsilon) continue;
+                    if (newMassB > invBudget + HaulMath.MassEpsilon) continue;
 
                     a[i] = pb;
                     b[j] = pa;
@@ -375,7 +371,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
 
                 float pMass = p.Count * p.MassPerUnit;
                 float newDstMass = tripInvMass[dstIdx] + pMass;
-                if (newDstMass > invBudget + MassEpsilon) continue;
+                if (newDstMass > invBudget + HaulMath.MassEpsilon) continue;
 
                 src.RemoveAt(i);
                 dst.Add(p);
@@ -398,18 +394,17 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             return improved;
         }
 
-        // Phase 3: reorder pickups within a trip via Held-Karp. Destination
-        // doesn't affect the geographic optimization — the pawn visits each
-        // pickup's position once regardless of carry-tracker vs inventory.
+        // Phase 3: reorder pickups within a trip via the shared Held-Karp
+        // solver. Destination doesn't affect the geographic optimization —
+        // the pawn visits each pickup's position once regardless of
+        // carry-tracker vs inventory, and the solver dedupes same-cell
+        // pickups (e.g. a CT/inventory split of one stack) into one node.
         private static void SequenceTrip(List<PlanPickup> trip, IntVec3 wb)
         {
             int k = trip.Count;
             if (k <= 2) return;
-            if (k > HeldKarpMaxNodes) return;
 
-            int[] order = HeldKarpOrder(trip, wb);
-            if (order == null) return;
-
+            int[] order = HeldKarp.Order(TripPositions(trip), wb);
             var reordered = new List<PlanPickup>(k);
             for (int s = 0; s < k; s++)
                 reordered.Add(trip[order[s]]);
@@ -417,153 +412,20 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             trip.AddRange(reordered);
         }
 
-        // Held-Karp DP. Returns the minimum tour cost (workbench → all nodes
-        // → workbench, Manhattan distance). Trivial fast paths for k <= 2.
-        // Falls back to a sweep-order cost when k exceeds the cap (degenerate;
-        // spec doesn't expect this to occur).
+        // Minimum tour cost (workbench → all pickups → workbench) via the
+        // shared solver; used by Repair to compare candidate partitions.
         private static int HeldKarpCost(List<PlanPickup> trip, IntVec3 wb)
         {
-            int k = trip.Count;
-            if (k == 0) return 0;
-            if (k == 1) return 2 * ManhattanDist(trip[0].Position, wb);
-            if (k == 2)
-            {
-                return ManhattanDist(wb, trip[0].Position)
-                    + ManhattanDist(trip[0].Position, trip[1].Position)
-                    + ManhattanDist(trip[1].Position, wb);
-            }
-            if (k > HeldKarpMaxNodes)
-                return SweepOrderCost(trip, wb);
-
-            int[,] d = new int[k, k];
-            int[] dWB = new int[k];
-            for (int i = 0; i < k; i++)
-            {
-                dWB[i] = ManhattanDist(trip[i].Position, wb);
-                for (int j = 0; j < k; j++)
-                    d[i, j] = ManhattanDist(trip[i].Position, trip[j].Position);
-            }
-
-            int size = 1 << k;
-            int[,] dp = new int[size, k];
-            for (int m = 0; m < size; m++)
-                for (int i = 0; i < k; i++)
-                    dp[m, i] = int.MaxValue;
-            for (int i = 0; i < k; i++)
-                dp[1 << i, i] = dWB[i];
-
-            for (int mask = 1; mask < size; mask++)
-            {
-                for (int i = 0; i < k; i++)
-                {
-                    if ((mask & (1 << i)) == 0) continue;
-                    int cur = dp[mask, i];
-                    if (cur == int.MaxValue) continue;
-                    for (int j = 0; j < k; j++)
-                    {
-                        if ((mask & (1 << j)) != 0) continue;
-                        int candidate = cur + d[i, j];
-                        int nm = mask | (1 << j);
-                        if (candidate < dp[nm, j])
-                            dp[nm, j] = candidate;
-                    }
-                }
-            }
-
-            int full = size - 1;
-            int best = int.MaxValue;
-            for (int i = 0; i < k; i++)
-            {
-                int total = dp[full, i];
-                if (total == int.MaxValue) continue;
-                total += dWB[i];
-                if (total < best) best = total;
-            }
-            return best;
+            if (trip.Count == 0) return 0;
+            return HeldKarp.Cost(TripPositions(trip), wb);
         }
 
-        // Same DP as HeldKarpCost but tracks parents to reconstruct the
-        // optimal node visitation order.
-        private static int[] HeldKarpOrder(List<PlanPickup> trip, IntVec3 wb)
+        private static List<IntVec3> TripPositions(List<PlanPickup> trip)
         {
-            int k = trip.Count;
-            int[,] d = new int[k, k];
-            int[] dWB = new int[k];
-            for (int i = 0; i < k; i++)
-            {
-                dWB[i] = ManhattanDist(trip[i].Position, wb);
-                for (int j = 0; j < k; j++)
-                    d[i, j] = ManhattanDist(trip[i].Position, trip[j].Position);
-            }
-
-            int size = 1 << k;
-            int[,] dp = new int[size, k];
-            int[,] parent = new int[size, k];
-            for (int m = 0; m < size; m++)
-            {
-                for (int i = 0; i < k; i++)
-                {
-                    dp[m, i] = int.MaxValue;
-                    parent[m, i] = -1;
-                }
-            }
-            for (int i = 0; i < k; i++)
-                dp[1 << i, i] = dWB[i];
-
-            for (int mask = 1; mask < size; mask++)
-            {
-                for (int i = 0; i < k; i++)
-                {
-                    if ((mask & (1 << i)) == 0) continue;
-                    int cur = dp[mask, i];
-                    if (cur == int.MaxValue) continue;
-                    for (int j = 0; j < k; j++)
-                    {
-                        if ((mask & (1 << j)) != 0) continue;
-                        int candidate = cur + d[i, j];
-                        int nm = mask | (1 << j);
-                        if (candidate < dp[nm, j])
-                        {
-                            dp[nm, j] = candidate;
-                            parent[nm, j] = i;
-                        }
-                    }
-                }
-            }
-
-            int full = size - 1;
-            int bestEnd = -1;
-            int bestCost = int.MaxValue;
-            for (int i = 0; i < k; i++)
-            {
-                int total = dp[full, i];
-                if (total == int.MaxValue) continue;
-                total += dWB[i];
-                if (total < bestCost) { bestCost = total; bestEnd = i; }
-            }
-            if (bestEnd < 0) return null;
-
-            int[] order = new int[k];
-            int curIdx = bestEnd;
-            int curMask = full;
-            for (int s = k - 1; s >= 0; s--)
-            {
-                order[s] = curIdx;
-                int prev = parent[curMask, curIdx];
-                curMask ^= 1 << curIdx;
-                if (prev < 0) break;
-                curIdx = prev;
-            }
-            return order;
-        }
-
-        private static int SweepOrderCost(List<PlanPickup> trip, IntVec3 wb)
-        {
-            int total = ManhattanDist(wb, trip[0].Position);
-            for (int i = 1; i < trip.Count; i++)
-                total += ManhattanDist(trip[i - 1].Position, trip[i].Position);
-            total += ManhattanDist(trip[trip.Count - 1].Position, wb);
-            return total;
+            var positions = new List<IntVec3>(trip.Count);
+            foreach (PlanPickup p in trip)
+                positions.Add(p.Position);
+            return positions;
         }
 
         private static void SortByAngle(List<HaulCandidate> candidates, IntVec3 wb)
@@ -574,8 +436,8 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                 float angleB = Mathf.Atan2(b.Position.z - wb.z, b.Position.x - wb.x);
                 int c = angleA.CompareTo(angleB);
                 if (c != 0) return c;
-                int distA = ManhattanDist(a.Position, wb);
-                int distB = ManhattanDist(b.Position, wb);
+                int distA = HaulMath.ManhattanDist(a.Position, wb);
+                int distB = HaulMath.ManhattanDist(b.Position, wb);
                 return distA.CompareTo(distB);
             });
         }
@@ -588,8 +450,8 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                 float angleB = Mathf.Atan2(b.Position.z - wb.z, b.Position.x - wb.x);
                 int c = angleA.CompareTo(angleB);
                 if (c != 0) return c;
-                int distA = ManhattanDist(a.Position, wb);
-                int distB = ManhattanDist(b.Position, wb);
+                int distA = HaulMath.ManhattanDist(a.Position, wb);
+                int distB = HaulMath.ManhattanDist(b.Position, wb);
                 return distA.CompareTo(distB);
             });
         }
@@ -630,7 +492,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                 if (angB < 0f) angB += 2f * Mathf.PI;
                 int c = angA.CompareTo(angB);
                 if (c != 0) return c;
-                return ManhattanDist(a.Position, wb).CompareTo(ManhattanDist(b.Position, wb));
+                return HaulMath.ManhattanDist(a.Position, wb).CompareTo(HaulMath.ManhattanDist(b.Position, wb));
             });
         }
 
@@ -652,22 +514,6 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             for (int i = 0; i < pickups.Count; i++)
                 if (pickups[i].Count > 0) return true;
             return false;
-        }
-
-        // Replicates Pawn_CarryTracker.MaxStackSpaceEver: the minimum of the
-        // def's stack limit and how many units fit under the pawn's carrying
-        // capacity by volume. The carry tracker doesn't enforce mass — only
-        // volume — so a pawn can over-carry on mass via this slot.
-        private static int MaxStackSpaceEver(ThingDef def, float capacityKg)
-        {
-            if (def.VolumePerUnit <= 0f) return def.stackLimit;
-            int volBound = Mathf.RoundToInt(capacityKg / def.VolumePerUnit);
-            return Mathf.Min(def.stackLimit, volBound);
-        }
-
-        private static int ManhattanDist(IntVec3 a, IntVec3 b)
-        {
-            return Math.Abs(a.x - b.x) + Math.Abs(a.z - b.z);
         }
 
         private static float SumInventoryMass(List<PlanPickup> trip)

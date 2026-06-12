@@ -124,7 +124,6 @@
   <UWU_RecommendedSuffix> (recommended)</UWU_RecommendedSuffix>
   <UWU_VanillaSuffix> (vanilla)</UWU_VanillaSuffix>
   <UWU_ExperimentalSuffix> (experimental)</UWU_ExperimentalSuffix>
-  <UWU_PlannedSuffix> (planned)</UWU_PlannedSuffix>
 
   <!-- Settings: Trait costs -->
   <UWU_TraitCostMultiplier>Trait cost multiplier: {0}%</UWU_TraitCostMultiplier>

@@ -198,9 +198,9 @@ namespace UniqueWeaponsUnbound
 
             DrawHaulPlannerOption(listing,
                 HaulPlannerKind.Optimal,
-                "UWU_HaulPlannerOptimal".Translate() + "UWU_PlannedSuffix".Translate(),
+                "UWU_HaulPlannerOptimal".Translate(),
                 "UWU_HaulPlannerOptimalDesc".Translate(),
-                enabled: false);
+                enabled: true);
 
             listing.Gap(24.0f);
 
@@ -262,7 +262,7 @@ namespace UniqueWeaponsUnbound
         /// Renders one row of the haul-planner radio group. Disabled options
         /// render darkened and ignore clicks. Selecting an enabled option
         /// flips Settings.haulPlannerKind to that value. The label is passed
-        /// in fully composed (including any "(default)" / "(planned)" suffix).
+        /// in fully composed (including any "(default)" / "(vanilla)" suffix).
         /// </summary>
         private static void DrawHaulPlannerOption(
             Listing_Standard listing,

@@ -25,8 +25,7 @@ namespace UniqueWeaponsUnbound.HaulPlanning
         /// storage-grouped candidates: minimal-cover support enumeration, one
         /// shared all-subsets Held-Karp table, and a subset-partition DP.
         /// Returns null above its tractability guards so the caller's ladder
-        /// (Optimal -> Sweep -> Sequential) degrades to Sweep. Planned, not
-        /// yet implemented.
+        /// (Optimal -> Sweep -> Sequential) degrades to Sweep.
         /// </summary>
         Optimal = 2,
     }

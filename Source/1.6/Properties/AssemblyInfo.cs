@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("UniqueWeaponsUnbound")]
@@ -11,6 +12,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]
+
+// Test access to HaulPlanning.Internal helpers and planner diagnostics
+// (op-count instrument, guard-log kill-switch).
+[assembly: InternalsVisibleTo("UniqueWeaponsUnbound.Tests")]
 
 [assembly: Guid("c1d2e3f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f")]
 

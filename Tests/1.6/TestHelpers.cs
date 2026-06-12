@@ -38,16 +38,29 @@ namespace UniqueWeaponsUnbound.Tests
             return def;
         }
 
+        // Thing.Equals/GetHashCode key on thingIDNumber (+ def), and an
+        // uninitialized Thing has id 0 — so without unique ids, every test
+        // Thing of one def is "equal" and Dictionary<Thing, ...> lookups (in
+        // planners and test fixtures alike) silently merge distinct stacks.
+        // In game ThingMaker assigns unique ids; mirror that here.
+        private static int nextThingId = 1;
+
         public static Thing MakeThing(ThingDef def, int stackCount)
         {
             var thing = (Thing)FormatterServices.GetUninitializedObject(typeof(Thing));
             thing.def = def;
             thing.stackCount = stackCount;
+            thing.thingIDNumber = nextThingId++;
             return thing;
         }
 
+        // groupId defaults to -1 ("not in storage"), which group-aware
+        // planners treat as a singleton group — the right default for tests
+        // that reason at stack granularity. Pass a shared non-negative id to
+        // model stacks in one stockpile/shelf.
         public static HaulCandidate MakeCandidate(
-            ThingDef def, IntVec3 position, int count, float massPerUnit)
+            ThingDef def, IntVec3 position, int count, float massPerUnit,
+            int groupId = -1)
         {
             return new HaulCandidate
             {
@@ -55,6 +68,7 @@ namespace UniqueWeaponsUnbound.Tests
                 Position = position,
                 AvailableCount = count,
                 MassPerUnit = massPerUnit,
+                GroupId = groupId,
             };
         }
 

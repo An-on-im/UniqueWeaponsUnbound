@@ -53,5 +53,19 @@ namespace UniqueWeaponsUnbound.HaulPlanning
         public IntVec3 Position;
         public int AvailableCount;
         public float MassPerUnit;
+
+        /// <summary>
+        /// Identity of the storage SlotGroup (stockpile zone, shelf, storage
+        /// building) this stack sits in, snapshotted at pool-build time.
+        /// Stacks in the same group share an id (>= 0); stacks outside storage
+        /// get -1 and are treated by group-aware planners as singleton groups.
+        /// Ids index the request's own group table — they are not stable
+        /// across requests. Only populated when the active planner sets
+        /// <see cref="IHaulPlanner.GroupPoolBySlotGroup"/>; planners without
+        /// grouping never read it. Deliberately keyed on SlotGroup rather than
+        /// StorageGroup (linked storage settings) — linked buildings can span
+        /// the map and share no locality; SlotGroup is the locality unit.
+        /// </summary>
+        public int GroupId;
     }
 }
