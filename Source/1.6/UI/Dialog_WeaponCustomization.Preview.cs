@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -11,16 +10,28 @@ namespace UniqueWeaponsUnbound
         private const int PreviewRTSize = 256;
         private const int TextureGridRTSize = 128;
 
-        // Cached preview render — rebuilt only when preview state changes
+        // Cached preview render — rebuilt only when preview state changes.
+        // The trait snapshot is part of the key because appearance is now
+        // trait-dependent: a trait can drive color two (or any override reachable
+        // through the thing's graphic), so toggling one must rebuild even when the
+        // def and color-one choice are unchanged.
         private RenderTexture previewRT;
         private int cachedPreviewTextureIndex = -1;
         private ColorDef cachedPreviewColor;
         private ThingDef cachedPreviewDef;
+        private List<WeaponTraitDef> cachedPreviewTraits;
 
-        // Cached texture variant grid previews — rebuilt when color/def changes
+        // One prospective Thing reused across rebuilds (re-made only on def change).
+        // ThingMaker.MakeThing mutates global sim state — Thing.PostMake draws a
+        // UniqueIDsManager id and PostPostMake rolls off the global Rand — so caching
+        // it bounds those draws to def changes instead of firing on every rebuild.
+        private Thing previewThing;
+
+        // Cached texture variant grid previews — rebuilt when color/def/traits change
         private RenderTexture[] textureVariantPreviews;
         private ColorDef cachedTextureGridColor;
         private ThingDef cachedTextureGridDef;
+        private List<WeaponTraitDef> cachedTextureGridTraits;
 
         // --- Left pane: weapon preview ---
 
@@ -237,7 +248,8 @@ namespace UniqueWeaponsUnbound
             bool needsRebuild = previewRT == null
                 || cachedPreviewTextureIndex != desiredTextureIndex
                 || cachedPreviewColor != effectiveColor
-                || cachedPreviewDef != resultDef;
+                || cachedPreviewDef != resultDef
+                || !SameTraits(cachedPreviewTraits, desiredTraits);
 
             // Rebuild during Layout to avoid disrupting Repaint's active rendering.
             // Graphics.Blit changes RenderTexture.active, which during Repaint would
@@ -248,6 +260,7 @@ namespace UniqueWeaponsUnbound
                 cachedPreviewTextureIndex = desiredTextureIndex;
                 cachedPreviewColor = effectiveColor;
                 cachedPreviewDef = resultDef;
+                cachedPreviewTraits = new List<WeaponTraitDef>(desiredTraits);
             }
 
             if (previewRT != null)
@@ -259,36 +272,106 @@ namespace UniqueWeaponsUnbound
         private void RebuildPreviewRT(ThingDef resultDef, ColorDef colorDef)
         {
             DestroyPreviewRT();
-            previewRT = BuildVariantPreview(resultDef, colorDef, desiredTextureIndex, PreviewRTSize);
+            Graphic topLevel = BuildPreviewGraphic(resultDef, colorDef);
+            previewRT = BuildVariantPreview(topLevel, desiredTextureIndex, PreviewRTSize);
         }
 
         /// <summary>
-        /// Builds a RenderTexture preview for a specific texture variant of the weapon.
-        /// Shared by the main preview icon and the texture variant grid.
+        /// Resolves the weapon's top-level (collection-level) graphic for a
+        /// <em>prospective</em> customization state — the desired def, color, and
+        /// trait set — by building a Thing in that state and asking it, rather than
+        /// predicting the appearance by hand.
+        ///
+        /// <para>We let the actual object describe itself: <c>Thing.Graphic</c>
+        /// resolves through <c>GraphicData.GraphicColoredFor</c> using the thing's
+        /// own <c>DrawColor</c>/<c>DrawColorTwo</c>, so the weapon's own Thing/Comp
+        /// graphic overrides run against the prospective trait list. That keeps the
+        /// preview decoupled from <em>how</em> a given weapon (vanilla or a
+        /// downstream mod) maps state to appearance — any override reachable through
+        /// the thing's graphic comes through for free, with no knowledge of its
+        /// mechanism here. (The one ceiling: an override that lives purely in a
+        /// draw-time patch and never changes the thing's graphic can't be
+        /// reconstructed by anything short of invoking that draw path.)</para>
+        ///
+        /// <para>Only the trait list and the comp's color field need setting:
+        /// color one is read live from <c>CompUniqueWeapon.ForceColor</c> (just that
+        /// field — no trait scan, no Setup() cache), and color two is derived from
+        /// the trait list (+ stuff) by the weapon's own <c>DrawColorTwo</c>.
+        /// Abilities/verbs don't affect appearance, so the heavier AddTrait wiring
+        /// is skipped — the list is replaced directly.</para>
+        ///
+        /// <para>Building a Thing mutates <em>global</em> sim state, which the old
+        /// graphic-only path never touched: <c>Thing.PostMake</c> pulls a
+        /// <c>UniqueIDsManager</c> id and <c>CompUniqueWeapon.PostPostMake</c> rolls
+        /// random traits/name/color off the global <c>Rand</c>. Two guards keep that
+        /// from leaking (a multiplayer desync risk, since rebuilds run during GUI
+        /// layout, off the synchronized tick): the make is wrapped in
+        /// <c>Rand.Push/PopState</c> so the throwaway rolls don't perturb the shared
+        /// Rand stream, and the Thing is cached on <see cref="previewThing"/> and
+        /// re-made only when the result def changes — so the id draw fires per
+        /// def, not per rebuild. Re-stamping traits/color below touches no global
+        /// state. Never spawned, the cached thing holds no global references and is
+        /// dropped with the dialog — no Destroy() needed.</para>
         /// </summary>
-        private RenderTexture BuildVariantPreview(
-            ThingDef resultDef, ColorDef colorDef, int textureIndex, int rtSize)
+        private Graphic BuildPreviewGraphic(ThingDef resultDef, ColorDef colorDef)
         {
-            Graphic graphic = resultDef.graphicData?.Graphic;
-            if (graphic == null)
+            if (resultDef?.graphicData == null)
                 return null;
 
-            // Recolor the top-level graphic exactly as the engine does for a Thing
-            // (GraphicData.GraphicColoredFor): hand its own shader, the prospective
-            // first color, and the weapon's own second color to GetColoredVersion.
-            // Dispatching on the top-level graphic runs the weapon's own graphic
-            // class (e.g. a Graphic_Random subclass that preserves colorTwo through
-            // the CutoutComplex green mask) — we invoke that recolor logic rather
-            // than reimplementing it, so any mod's color handling comes through for
-            // free within the engine's two-color contract. Shader and color two
-            // match in-game; only color one is the prospective dialog choice.
-            if (colorDef != null)
-                graphic = graphic.GetColoredVersion(
-                    graphic.Shader, colorDef.color, weapon?.DrawColorTwo ?? Color.white);
+            if (previewThing == null || previewThing.def != resultDef)
+            {
+                // Mirror WeaponDefConversion: carry the live weapon's material across
+                // (color two's stuff tint depends on it), falling back to the default
+                // so a stuffable target is never handed a null stuff.
+                ThingDef stuff = resultDef.MadeFromStuff
+                    ? (weapon.Stuff ?? GenStuff.DefaultStuffFor(resultDef))
+                    : null;
 
-            // Select the texture variant from the (recolored) graphic, mirroring
-            // Graphic_Random.SubGraphicFor at draw time. GetColoredVersion preserves
-            // the wrapper types, so unwrap rotation then index into the variants.
+                // Contain PostMake/PostPostMake's Rand draws — we overwrite the rolled
+                // state below, so the values don't matter, but the global stream must
+                // not advance (see method remarks).
+                Rand.PushState();
+                try
+                {
+                    previewThing = ThingMaker.MakeThing(resultDef, stuff);
+                }
+                finally
+                {
+                    Rand.PopState();
+                }
+            }
+
+            CompUniqueWeapon comp = previewThing.TryGetComp<CompUniqueWeapon>();
+            if (comp != null)
+            {
+                // Replace PostPostMake's random roll with the prospective trait set.
+                List<WeaponTraitDef> traits = comp.TraitsListForReading;
+                traits.Clear();
+                traits.AddRange(desiredTraits);
+
+                // Write color one and invalidate the cached graphic (SetColor fires
+                // Notify_ColorChanged), so Graphic rebuilds against the prospective
+                // state below. Color two is left to the thing's own DrawColorTwo.
+                WeaponModificationUtility.SetColor(previewThing, colorDef);
+            }
+
+            return previewThing.Graphic;
+        }
+
+        /// <summary>
+        /// Blits one texture variant of a prebuilt, already-colored top-level
+        /// graphic into a fresh RenderTexture. Shared by the main preview icon and
+        /// the texture variant grid (which reuses one graphic across all variants).
+        /// </summary>
+        private RenderTexture BuildVariantPreview(Graphic topLevel, int textureIndex, int rtSize)
+        {
+            if (topLevel == null)
+                return null;
+
+            // Select the texture variant, mirroring Graphic_Random.SubGraphicFor at
+            // draw time. The coloring preserves the wrapper types, so unwrap rotation
+            // then index into the variants.
+            Graphic graphic = topLevel;
             if (graphic is Graphic_RandomRotated rotated)
                 graphic = rotated.SubGraphic;
             if (graphic is Graphic_Random random)
@@ -325,7 +408,8 @@ namespace UniqueWeaponsUnbound
 
             bool needsRebuild = textureVariantPreviews == null
                 || cachedTextureGridColor != effectiveColor
-                || cachedTextureGridDef != resultDef;
+                || cachedTextureGridDef != resultDef
+                || !SameTraits(cachedTextureGridTraits, desiredTraits);
 
             if (!needsRebuild || Event.current.type != EventType.Layout)
                 return;
@@ -333,12 +417,36 @@ namespace UniqueWeaponsUnbound
             DestroyTextureVariantPreviews();
             textureVariantPreviews = new RenderTexture[textureVariantCount];
 
+            // The variants share def/color/traits and differ only by index, so
+            // build the prospective graphic once and index into it per tile.
+            Graphic topLevel = BuildPreviewGraphic(resultDef, effectiveColor);
             for (int i = 0; i < textureVariantCount; i++)
                 textureVariantPreviews[i] = BuildVariantPreview(
-                    resultDef, effectiveColor, i, TextureGridRTSize);
+                    topLevel, i, TextureGridRTSize);
 
             cachedTextureGridColor = effectiveColor;
             cachedTextureGridDef = resultDef;
+            cachedTextureGridTraits = new List<WeaponTraitDef>(desiredTraits);
+        }
+
+        /// <summary>
+        /// Ordered equality for the two preview caches' trait snapshots. Order
+        /// matters — color resolution is order-sensitive (e.g. "last forced color
+        /// wins" / "first body-color trait wins"). A null cached snapshot (first
+        /// build) never matches, forcing the initial rebuild.
+        /// </summary>
+        private static bool SameTraits(List<WeaponTraitDef> cached, List<WeaponTraitDef> current)
+        {
+            if (cached == null)
+                return false;
+            if (cached.Count != current.Count)
+                return false;
+            for (int i = 0; i < cached.Count; i++)
+            {
+                if (cached[i] != current[i])
+                    return false;
+            }
+            return true;
         }
 
         private void DestroyPreviewRT()

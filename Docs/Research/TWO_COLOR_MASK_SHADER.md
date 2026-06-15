@@ -143,8 +143,31 @@ author the **red** channel — color one comes from `CompUniqueWeapon`; they nev
 so `DrawColorTwo` stays at its white default. They live *inside* the clamp's assumption, so it is a
 silent no-op and they never trip the warning.
 
-For the preview that means: recoloring the **top-level** graphic (per `GraphicColoredFor`) and
-passing `weapon.DrawColorTwo` is correct for vanilla weapons (white → unchanged) *and* picks up any
-mod's `GetColoredVersion` override (e.g. a `colorTwo`-preserving `Graphic_Random` subclass) for free
-— no type coupling, within the engine's two-color contract. See
-`Dialog_WeaponCustomization.Preview.cs` → `BuildVariantPreview`.
+For the preview that means: don't *predict* the appearance, *ask a prospective object for it*. The
+preview builds a `Thing` in the desired state (the result def, the chosen color-one, and
+the desired **trait list**), then reads that thing's own `Graphic` — which resolves through
+`GraphicColoredFor` using the thing's own `DrawColor`/`DrawColorTwo`. This runs the weapon's own
+graphic class (a `colorTwo`-preserving `Graphic_Random` subclass) **and** its own color-two
+derivation, so a downstream mod that forces color two from a trait (UMW's `ForcedColorTwoExtension`,
+read in its `DrawColorTwo` override) comes through for free — no type coupling, and it generalizes to
+any override reachable through the thing's graphic. See `Dialog_WeaponCustomization.Preview.cs` →
+`BuildPreviewGraphic`.
+
+> **Why a prospective Thing rather than passing `weapon.DrawColorTwo`?** An earlier version recolored
+> the top-level graphic by hand and passed the *live* weapon's `DrawColorTwo`. That reads the
+> **committed** weapon, not the dialog's prospective trait edit — fine while color two was only the
+> (trait-independent) stuff tint, but it silently regressed the moment a downstream mod made color two
+> **trait-derived**: toggling such a trait in the dialog changed nothing the live weapon reported. The
+> hand-derived color one had the same blind spot — it only modeled vanilla's color-one `forcedColor`.
+> Building the object in the prospective state and letting it color itself removes both the staleness
+> and the per-mechanism coupling. The one ceiling: an override living purely in a draw-time patch
+> (never changing the thing's queryable `Graphic`) can't be reconstructed by any approach short of
+> invoking that draw path. Consequence: appearance is now trait-dependent, so the preview's render
+> cache keys on the trait set, not just def + color.
+>
+> **The cost of building a Thing:** unlike the old graphic-only path, `ThingMaker.MakeThing` mutates
+> *global* sim state — `Thing.PostMake` pulls a `UniqueIDsManager` id and `PostPostMake` rolls random
+> traits/name/color off the global `Rand`. Because preview rebuilds run during GUI layout (off the
+> synchronized tick), unguarded that is a multiplayer-desync hazard. Two guards contain it: the make
+> is wrapped in `Rand.Push/PopState` (the throwaway rolls don't perturb the shared Rand stream), and
+> the Thing is cached and re-made only on def change (the id draw fires per def, not per rebuild).
