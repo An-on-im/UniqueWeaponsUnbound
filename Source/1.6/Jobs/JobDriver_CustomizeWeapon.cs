@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using UnityEngine;
 using UniqueWeaponsUnbound.HaulPlanning;
 using Verse;
 using Verse.AI;
-using Verse.Sound;
 
 namespace UniqueWeaponsUnbound
 {
@@ -771,6 +769,15 @@ namespace UniqueWeaponsUnbound
                         "UWU_FinalizeColorFailed".Translate(WeaponLabel),
                         weapon, MessageTypeDefOf.NegativeEvent, historical: false);
                 }
+
+                // Refresh VEF / Alpha Armoury's trait-driven graphic override now the
+                // trait list (and color-one) are final. VEF only recomputes on
+                // equip/load, so without this a freshly added attachment texture
+                // wouldn't show — and a removed one wouldn't clear — until the next
+                // equip/drop. Self-guarding and self-catching: a no-op when VEF is
+                // absent, and a soft cosmetic catch-up that self-heals on next equip
+                // even if it fails, so no player-facing message.
+                VEFWeaponTraitGraphicsIntegration.RefreshTraitGraphic(weapon);
             };
             finalize.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return finalize;

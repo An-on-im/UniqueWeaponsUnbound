@@ -16,11 +16,14 @@ namespace UniqueWeaponsUnbound
     /// Alpha Armoury installed. The sibling kit defs (Converter / Remover / TabulaRasa)
     /// don't carry a trait and are intentionally ignored — only the <c>WeaponKit</c>
     /// class is recognised here. If Alpha Armoury is loaded but its API has drifted
-    /// (renamed type/field, unexpected field type), the static ctor logs a warning
-    /// — but only when progression-mode trait restriction is enabled, since kits
-    /// don't contribute anywhere else. Progression has long-term gameplay impact,
-    /// so an affected player will see the warning on later sessions even if the
-    /// setting flipped on after this one.
+    /// (renamed type/field, unexpected field type), the static ctor logs a warning.
+    /// ModInitializer forces that resolution at startup (by reading
+    /// <see cref="Available"/>), so drift surfaces during load — drift is
+    /// determinable from loaded assemblies alone, with no game-state dependency, so
+    /// it shouldn't wait for first use. Kit traits only feed progression-mode trait
+    /// restriction, so the warning says as much; but a player who enables that
+    /// setting in a later session still wants to know the integration is broken
+    /// before relying on it, which is why the warning no longer gates on it.
     /// </summary>
     internal static class AlphaArmouryIntegration
     {
@@ -53,24 +56,25 @@ namespace UniqueWeaponsUnbound
             }
             catch (Exception ex)
             {
-                if (ProgressionModeActive)
-                    Log.Warning("[Unique Weapons Unbound] Alpha Armoury reflection failed: " + ex);
+                Log.Warning("[Unique Weapons Unbound] Alpha Armoury reflection failed (kit traits "
+                    + "will be ignored; only affects progression-mode trait restriction): " + ex);
                 return;
             }
 
-            if (!Available && ModsConfig.IsActive(PackageId) && ProgressionModeActive)
+            // AA is present iff its packageId is active — a renamed top-level type
+            // would null WeaponKitType, so the packageId (not the type) is what
+            // proves AA is the cause. Warn whenever AA is active but the kit surface
+            // didn't resolve, regardless of the progression setting: the note tells
+            // unaffected players they can ignore it, while a player who enables
+            // progression later still learns the integration is broken.
+            if (!Available && ModsConfig.IsActive(PackageId))
             {
                 Log.Warning("[Unique Weapons Unbound] Alpha Armoury active but "
                     + WeaponKitTypeName + "." + TraitFieldName
-                    + " could not be resolved as WeaponTraitDef; kit traits will be ignored.");
+                    + " could not be resolved as WeaponTraitDef; kit traits will be ignored. "
+                    + "This only affects you if progression-mode trait restriction is enabled.");
             }
         }
-
-        // Kit traits only feed the progression pool, so a broken integration is
-        // a graceful no-op for players who never opt in. Gating the startup
-        // diagnostic on this setting keeps the log clean for the majority case.
-        private static bool ProgressionModeActive =>
-            UWU_Mod.Settings?.restrictTraitsToDiscovered == true;
 
         /// <summary>
         /// Returns true and emits the stored trait if <paramref name="thing"/> is an

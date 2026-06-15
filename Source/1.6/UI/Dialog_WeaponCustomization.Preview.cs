@@ -293,6 +293,14 @@ namespace UniqueWeaponsUnbound
         /// draw-time patch and never changes the thing's graphic can't be
         /// reconstructed by anything short of invoking that draw path.)</para>
         ///
+        /// <para>One override needs a nudge rather than coming through for free:
+        /// VEF / Alpha Armoury's trait-driven graphic swap <em>does</em> change the
+        /// thing's <c>graphicInt</c>, but only recomputes on equip/load, neither of
+        /// which fires here. <see cref="VEFWeaponTraitGraphicsIntegration.RefreshTraitGraphic"/> runs
+        /// that recompute against the prospective traits so it lands in
+        /// <c>graphicInt</c> before we read <c>Graphic</c> — still within the
+        /// "ask the object" contract, just triggering the resolution VEF defers.</para>
+        ///
         /// <para>Only the trait list and the comp's color field need setting:
         /// color one is read live from <c>CompUniqueWeapon.ForceColor</c> (just that
         /// field — no trait scan, no Setup() cache), and color two is derived from
@@ -354,6 +362,14 @@ namespace UniqueWeaponsUnbound
                 // state below. Color two is left to the thing's own DrawColorTwo.
                 WeaponModificationUtility.SetColor(previewThing, colorDef);
             }
+
+            // Drive VEF / Alpha Armoury's trait-driven graphic override against the
+            // prospective trait set, exactly as an equip would. It writes the
+            // resolved graphic into the thing's graphicInt (read via Graphic below);
+            // a no-op when VEF is absent or no trait overrides this def, leaving the
+            // vanilla graphic SetColor just invalidated. Must run after SetColor — it
+            // reads the comp's color-one to tint the override.
+            VEFWeaponTraitGraphicsIntegration.RefreshTraitGraphic(previewThing);
 
             return previewThing.Graphic;
         }
