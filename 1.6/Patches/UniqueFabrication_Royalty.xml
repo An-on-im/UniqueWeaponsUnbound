@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+  <!-- Techprints are a Royalty-only game system. Without Royalty, ResearchProjectDef.PostLoad
+       force-zeros techprintCount; the leftover heldByFactionCategoryTags then trips a config
+       error ("requires no techprints but has heldByFactionCategoryTags."). The Empire faction
+       category tag is also Royalty-defined. So the base def in Defs/ ships techprint-free and we
+       re-add the whole techprint mechanic here only when Royalty is active. -->
+  <Operation Class="PatchOperationFindMod">
+    <mods>
+      <li>Royalty</li>
+    </mods>
+    <match Class="PatchOperationAdd">
+      <xpath>/Defs/ResearchProjectDef[defName="UniqueFabrication"]</xpath>
+      <value>
+        <techprintCount>1</techprintCount>
+        <techprintCommonality>5</techprintCommonality>
+        <techprintMarketValue>1500</techprintMarketValue>
+        <heldByFactionCategoryTags>
+          <li>Empire</li>
+          <li>Outlander</li>
+          <li>TradersGuild</li>
+        </heldByFactionCategoryTags>
+      </value>
+    </match>
+  </Operation>
+
+</Patch>

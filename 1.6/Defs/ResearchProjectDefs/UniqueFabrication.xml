@@ -15,14 +15,9 @@
       <li>UniqueMachining</li>
       <li>Fabrication</li>
     </prerequisites>
-    <techprintCount>1</techprintCount>
-    <techprintCommonality>5</techprintCommonality>
-    <techprintMarketValue>1500</techprintMarketValue>
-    <heldByFactionCategoryTags>
-      <li>Empire</li>
-      <li>Outlander</li>
-      <li>TradersGuild</li>
-    </heldByFactionCategoryTags>
+    <!-- Techprint fields (techprintCount/Commonality/MarketValue + heldByFactionCategoryTags)
+         are a Royalty-only game system and live in Patches/UniqueFabrication_Royalty.xml so they
+         only apply when Royalty is active. See that file for the rationale. -->
     <researchViewX>20.00</researchViewX>
     <researchViewY>5.40</researchViewY>
     <customUnlockTexts>
