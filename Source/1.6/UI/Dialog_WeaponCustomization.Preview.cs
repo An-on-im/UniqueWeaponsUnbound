@@ -48,6 +48,13 @@ namespace UniqueWeaponsUnbound
                 iconSize);
             DrawPreviewIcon(iconRect);
 
+            // Added standard "i" button to open the vanilla stats dialog 
+            // for the previewed weapon, showing full final stats instead of just modifiers.
+            if (previewThing != null)
+            {
+                Widgets.InfoCardButton(iconRect.xMax - 24f, iconRect.y, previewThing);
+            }
+
             curY = iconRect.yMax + 8f;
 
             // Name input field
@@ -78,7 +85,7 @@ namespace UniqueWeaponsUnbound
                     Rect chipsInnerRect = new Rect(0f, 0f, innerWidth, chipsContentHeight);
 
                     Widgets.BeginScrollView(chipsOuterRect, ref desiredTraitsScroll, chipsInnerRect);
-
+                    
                     float chipY = 0f;
                     foreach (WeaponTraitDef trait in desiredTraits)
                     {
@@ -144,7 +151,7 @@ namespace UniqueWeaponsUnbound
 
                         chipY += chipStride;
                     }
-
+                    
                     Widgets.EndScrollView();
                 }
 
@@ -361,6 +368,18 @@ namespace UniqueWeaponsUnbound
                 // Notify_ColorChanged), so Graphic rebuilds against the prospective
                 // state below. Color two is left to the thing's own DrawColorTwo.
                 WeaponModificationUtility.SetColor(previewThing, colorDef);
+            }
+
+            // Copy the quality from the original weapon to the preview thing.
+            // ThingMaker.MakeThing creates a fresh item with default/random quality.
+            // We must explicitly copy it so the InfoCard shows correct quality-based stats.
+            if (weapon.TryGetQuality(out QualityCategory originalQuality))
+            {
+                CompQuality previewQualityComp = previewThing.TryGetComp<CompQuality>();
+                if (previewQualityComp != null)
+                {
+                    previewQualityComp.SetQuality(originalQuality, ArtGenerationContext.Colony);
+                }
             }
 
             // Drive VEF / Alpha Armoury's trait-driven graphic override against the
