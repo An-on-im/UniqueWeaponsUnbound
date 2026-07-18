@@ -48,6 +48,27 @@ namespace UniqueWeaponsUnbound
                 iconSize);
             DrawPreviewIcon(iconRect);
 
+            // Vanilla "i" stats button — opens the info card for the prospective
+            // weapon, so the player reads final stats rather than summing trait
+            // modifiers by hand. The thing's identity state is stamped when it's
+            // (re)built (see BuildPreviewGraphic); the desired name is stamped
+            // here instead because name edits never trigger a rebuild (they
+            // don't affect appearance). SetName also mirrors the name into
+            // CompArt.Title, matching what accepting the customization does.
+            //
+            // Placement: right edge flush with the pane itself, bottom flush
+            // with the right pane's tab headers — both panes share
+            // contentRect.y, and the tabs DrawControlsPanel hangs above its
+            // menu section bottom out at rect.y + 8f + TabBarHeight.
+            if (previewThing != null)
+            {
+                WeaponModificationUtility.SetName(previewThing, desiredName);
+                Widgets.InfoCardButton(
+                    rect.xMax - InfoCardButtonSize,
+                    rect.y + 8f + TabBarHeight - InfoCardButtonSize,
+                    previewThing);
+            }
+
             curY = iconRect.yMax + 8f;
 
             // Name input field
@@ -301,12 +322,18 @@ namespace UniqueWeaponsUnbound
         /// <c>graphicInt</c> before we read <c>Graphic</c> — still within the
         /// "ask the object" contract, just triggering the resolution VEF defers.</para>
         ///
-        /// <para>Only the trait list and the comp's color field need setting:
-        /// color one is read live from <c>CompUniqueWeapon.ForceColor</c> (just that
-        /// field — no trait scan, no Setup() cache), and color two is derived from
-        /// the trait list (+ stuff) by the weapon's own <c>DrawColorTwo</c>.
-        /// Abilities/verbs don't affect appearance, so the heavier AddTrait wiring
-        /// is skipped — the list is replaced directly.</para>
+        /// <para>For appearance, only the trait list and the comp's color field
+        /// need setting: color one is read live from
+        /// <c>CompUniqueWeapon.ForceColor</c> (just that field — no trait scan, no
+        /// Setup() cache), and color two is derived from the trait list (+ stuff)
+        /// by the weapon's own <c>DrawColorTwo</c>. Abilities/verbs don't affect
+        /// appearance, so the heavier AddTrait wiring is skipped — the list is
+        /// replaced directly. Beyond appearance, the thing also backs the
+        /// preview's info card, so when it is (re)made the original weapon's
+        /// identity state (quality, hitpoints, biocoding, art, relic status) is
+        /// stamped on via <see cref="WeaponDefConversion"/>'s copy helpers — copy
+        /// semantics, not the conversion pipeline's ownership transfers, so the
+        /// live weapon's state is never disturbed.</para>
         ///
         /// <para>Building a Thing mutates <em>global</em> sim state, which the old
         /// graphic-only path never touched: <c>Thing.PostMake</c> pulls a
@@ -318,8 +345,14 @@ namespace UniqueWeaponsUnbound
         /// Rand stream, and the Thing is cached on <see cref="previewThing"/> and
         /// re-made only when the result def changes — so the id draw fires per
         /// def, not per rebuild. Re-stamping traits/color below touches no global
-        /// state. Never spawned, the cached thing holds no global references and is
-        /// dropped with the dialog — no Destroy() needed.</para>
+        /// state. The cached thing is never spawned, never scribed, and never
+        /// destroyed — simply dropped with the dialog. That lifecycle is also
+        /// what makes the identity stamp's shared references (art TaleReference,
+        /// relic precept, coded pawn) safe: the destroy and save paths, the only
+        /// places a shared reference could tear down or fork state the real
+        /// weapon still owns, never run. Destroy() must NOT be added here — it
+        /// would fire CompArt.PostDestroy / Notify_ThingLost against the live
+        /// weapon's tale and precept.</para>
         /// </summary>
         private Graphic BuildPreviewGraphic(ThingDef resultDef, ColorDef colorDef)
         {
@@ -347,6 +380,24 @@ namespace UniqueWeaponsUnbound
                 {
                     Rand.PopState();
                 }
+
+                // Mirror ConvertWeaponDef's identity handling so the info card
+                // opened from the preview reads as the customized weapon will:
+                // scrub PostPostMake's rolled unique state, then stamp the
+                // original's quality (null art source — no InitializeArt roll),
+                // hitpoint percentage, biocoding, art, and relic status. These
+                // are the copy-semantics halves of the conversion transfers —
+                // the original keeps ownership of the shared references (art
+                // TaleReference, relic precept), which the preview thing's
+                // lifecycle makes safe (see method remarks). None of it touches
+                // global state, so no Rand guard is needed. Once per make:
+                // everything stamped here is immutable while the dialog is open.
+                WeaponModificationUtility.ClearAutoGeneratedUniqueState(previewThing);
+                WeaponDefConversion.CopyQuality(weapon, previewThing);
+                WeaponDefConversion.CopyHitPointsPercent(weapon, previewThing);
+                WeaponDefConversion.CopyBiocodeState(weapon, previewThing);
+                WeaponDefConversion.CopyArt(weapon, previewThing);
+                WeaponDefConversion.CopyRelicStatus(weapon, previewThing);
             }
 
             CompUniqueWeapon comp = previewThing.TryGetComp<CompUniqueWeapon>();
@@ -362,6 +413,16 @@ namespace UniqueWeaponsUnbound
                 // state below. Color two is left to the thing's own DrawColorTwo.
                 WeaponModificationUtility.SetColor(previewThing, colorDef);
             }
+
+            // Keep the thing-side texture variant in step with the preview. The
+            // dialog renders variants by indexing into the graphic directly, but
+            // the info card's icon resolves through the thing (Widgets.ThingIcon
+            // → ExtractInnerGraphicFor → Graphic_Random.SubGraphicFor), which
+            // without an override falls back to hashing the throwaway
+            // thingIDNumber — a random variant, not the desired one. Runs every
+            // rebuild because the desired index is preview state, unlike the
+            // stamped identity above.
+            WeaponModificationUtility.SetTextureIndex(previewThing, desiredTextureIndex);
 
             // Drive VEF / Alpha Armoury's trait-driven graphic override against the
             // prospective trait set, exactly as an equip would. It writes the

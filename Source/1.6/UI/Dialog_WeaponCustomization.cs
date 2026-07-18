@@ -129,6 +129,10 @@ namespace UniqueWeaponsUnbound
         private const float ArrowButtonWidth = 28f;
         private const float RandomButtonWidth = 85f;
         private const float TabBarHeight = 32f;
+
+        // Vanilla Widgets.InfoCardButton edge length (hardcoded 24f in Widgets;
+        // no public constant to reference).
+        private const float InfoCardButtonSize = 24f;
         private const float ColorSwatchSize = 36f;
         private const float ColorSwatchGap = 8f;
         private const float TextureCellSize = 152f;
@@ -702,6 +706,21 @@ namespace UniqueWeaponsUnbound
             Rect titleRect = new Rect(inRect.x, inRect.y, inRect.width, TitleHeight);
             string titleLabel = "UWU_CustomizeWeapon".Translate(weapon.LabelShortCap);
             Widgets.Label(titleRect, titleLabel);
+
+            // "i" button for the ORIGINAL weapon, right after the title text —
+            // the preview pane's button (DrawWeaponPreview) covers the
+            // prospective weapon, so together the player can compare before and
+            // after stats without closing the dialog to reach the vanilla card.
+            // Measured while Medium is still active so the width matches the
+            // label just drawn; centered on the text's cap height. Clamped to
+            // the window edge — names run to 60 chars plus biocode/quality
+            // decorations, which can outgrow the title row.
+            Vector2 titleSize = Text.CalcSize(titleLabel);
+            Widgets.InfoCardButton(
+                Mathf.Min(titleRect.x + titleSize.x + 8f,
+                    titleRect.xMax - InfoCardButtonSize),
+                titleRect.y + (titleSize.y - InfoCardButtonSize) / 2f,
+                weapon);
             Text.Font = GameFont.Small;
 
             // Content area between title and footer
