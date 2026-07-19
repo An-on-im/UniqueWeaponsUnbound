@@ -7,11 +7,9 @@ using Verse.AI;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Workbench tier classification (smithy / machining / fabrication),
-    /// VEF recipe-inheritance expansion, and runtime workbench search
-    /// for weapon customization.
-    /// </summary>
+    // Workbench tier classification (smithy / machining / fabrication), VEF
+    // recipe-inheritance expansion, and runtime workbench search for weapon
+    // customization.
     public static class WorkbenchUtility
     {
         private static HashSet<ThingDef> smithyDefs;
@@ -22,13 +20,11 @@ namespace UniqueWeaponsUnbound
         private static string machiningLabel;
         private static string fabricationLabel;
 
-        /// <summary>
-        /// Initializes workbench tier sets and the weapon-workbench registry.
-        /// Must be called during StaticConstructorOnStartup (after all defs
-        /// are loaded). A non-null <paramref name="report"/> absorbs any fatal
-        /// exception so the rest of the mod can still initialize; passing null
-        /// preserves the throwing contract for direct callers.
-        /// </summary>
+        // Initializes workbench tier sets and the weapon-workbench registry.
+        // Must be called during StaticConstructorOnStartup (after all defs are
+        // loaded). A non-null report absorbs any fatal exception so the rest of
+        // the mod can still initialize; passing null preserves the throwing
+        // contract for direct callers.
         public static void Initialize(InitDiagnostics report = null)
         {
             try
@@ -56,10 +52,8 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        /// <summary>
-        /// Result of searching for a valid workbench to customize a weapon at.
-        /// Either contains a workbench or the highest-priority rejection reason.
-        /// </summary>
+        // Result of searching for a valid workbench to customize a weapon at.
+        // Either contains a workbench or the highest-priority rejection reason.
         public struct WorkbenchSearchResult
         {
             public Building_WorkTable Workbench;
@@ -67,11 +61,9 @@ namespace UniqueWeaponsUnbound
             public bool Found => Workbench != null;
         }
 
-        /// <summary>
-        /// Finds the closest valid colonist workbench for customizing the specified weapon.
-        /// Pawn-specific overload: checks reachability via the pawn's pathfinder and
-        /// forbidden status relative to the pawn.
-        /// </summary>
+        // Finds the closest valid colonist workbench for customizing the
+        // specified weapon. Pawn-specific overload: checks reachability via the
+        // pawn's pathfinder and forbidden status relative to the pawn.
         public static WorkbenchSearchResult FindBestWorkbench(
             Pawn pawn, ThingDef baseDef, ThingDef uniqueDef, TechLevel weaponTechLevel,
             IntVec3 distanceOrigin)
@@ -87,12 +79,11 @@ namespace UniqueWeaponsUnbound
                 });
         }
 
-        /// <summary>
-        /// Finds the closest valid colonist workbench for customizing the specified weapon.
-        /// Pawn-independent overload: checks generic reachability from a map position and
-        /// forbidden status relative to the player faction. Used for gizmo enabled/disabled
-        /// state where no specific pawn is known yet.
-        /// </summary>
+        // Finds the closest valid colonist workbench for customizing the
+        // specified weapon. Pawn-independent overload: checks generic
+        // reachability from a map position and forbidden status relative to the
+        // player faction. Used for gizmo enabled/disabled state where no
+        // specific pawn is known yet.
         public static WorkbenchSearchResult FindBestWorkbench(
             Map map, ThingDef baseDef, ThingDef uniqueDef, TechLevel weaponTechLevel,
             IntVec3 distanceOrigin)
@@ -110,12 +101,11 @@ namespace UniqueWeaponsUnbound
                 });
         }
 
-        /// <summary>
-        /// Common core for workbench search. Iterates colonist workbenches, applies tier
-        /// and operational checks, then delegates reachability/forbidden checks to the
-        /// caller-provided predicate. Returns the closest valid workbench or the
-        /// highest-priority rejection reason.
-        /// </summary>
+        // Common core for workbench search. Iterates colonist workbenches,
+        // applies tier and operational checks, then delegates
+        // reachability/forbidden checks to the caller-provided predicate.
+        // Returns the closest valid workbench or the highest-priority rejection
+        // reason.
         private static WorkbenchSearchResult FindBestWorkbenchCore(
             Map map, ThingDef baseDef, ThingDef uniqueDef, TechLevel weaponTechLevel,
             IntVec3 distanceOrigin, Pawn pawn,
@@ -216,21 +206,18 @@ namespace UniqueWeaponsUnbound
             return result;
         }
 
-        /// <summary>
-        /// Whether the workbench has at least one recipe that produces a weapon,
-        /// making it eligible to show the customization float menu option.
-        /// </summary>
+        // Whether the workbench has at least one recipe that produces a weapon,
+        // making it eligible to show the customization float menu option.
         public static bool IsCustomizationWorkbench(Building_WorkTable workbench)
         {
             return weaponWorkbenchDefs.Contains(workbench.def);
         }
 
-        /// <summary>
-        /// Whether the given workbench supports customizing the specified weapon.
-        /// First checks if the bench has a recipe for the weapon (base or unique def).
-        /// Falls back to tech-level tier matching (vanilla anchors + VEF inheritance).
-        /// Returns AcceptanceReport with the required workbench name when the tier is too low.
-        /// </summary>
+        // Whether the given workbench supports customizing the specified
+        // weapon. First checks if the bench has a recipe for the weapon (base
+        // or unique def). Falls back to tech-level tier matching (vanilla
+        // anchors + VEF inheritance). Returns AcceptanceReport with the
+        // required workbench name when the tier is too low.
         public static AcceptanceReport CanCustomizeAtWorkbench(
             ThingDef baseDef, ThingDef uniqueDef, TechLevel weaponTechLevel,
             Building_WorkTable workbench)
@@ -267,10 +254,9 @@ namespace UniqueWeaponsUnbound
             return true;
         }
 
-        /// <summary>
-        /// Whether the workbench is operational (powered and/or fueled as required).
-        /// Returns AcceptanceReport with a rejection reason if not operational.
-        /// </summary>
+        // Whether the workbench is operational (powered and/or fueled as
+        // required). Returns AcceptanceReport with a rejection reason if not
+        // operational.
         public static AcceptanceReport GetWorkbenchOperationalReport(Building_WorkTable workbench)
         {
             CompPowerTrader power = workbench.TryGetComp<CompPowerTrader>();
@@ -284,9 +270,8 @@ namespace UniqueWeaponsUnbound
             return true;
         }
 
-        /// <summary>
-        /// Resolves an array of defNames into a set of ThingDefs, silently skipping any that don't exist.
-        /// </summary>
+        // Resolves an array of defNames into a set of ThingDefs, silently
+        // skipping any that don't exist.
         private static HashSet<ThingDef> ResolveDefSet(params string[] defNames)
         {
             var set = new HashSet<ThingDef>();
@@ -299,11 +284,10 @@ namespace UniqueWeaponsUnbound
             return set;
         }
 
-        /// <summary>
-        /// Resolves a display label for a set of workbench defNames by finding the
-        /// common suffix of their labels. For a single def, returns its label directly.
-        /// This handles cases like "fueled smithy" / "electric smithy" → "smithy".
-        /// </summary>
+        // Resolves a display label for a set of workbench defNames by finding
+        // the common suffix of their labels. For a single def, returns its
+        // label directly. This handles cases like "fueled smithy" / "electric
+        // smithy" → "smithy".
         private static string ResolveWorkbenchLabel(HashSet<ThingDef> defs)
         {
             List<string> labels = new List<string>();
@@ -345,13 +329,12 @@ namespace UniqueWeaponsUnbound
             return labels[0];
         }
 
-        /// <summary>
-        /// Expands workbench tier sets by walking VEF's RecipeInheritanceExtension.
-        /// Benches that inherit recipes from a vanilla anchor are classified at the
-        /// highest tier of their inheritance sources. No-op when VEF is not loaded
-        /// or its integration surface has drifted (the integration class logs the
-        /// drift warning once at static-ctor time).
-        /// </summary>
+        // Expands workbench tier sets by walking VEF's
+        // RecipeInheritanceExtension. Benches that inherit recipes from a
+        // vanilla anchor are classified at the highest tier of their
+        // inheritance sources. No-op when VEF is not loaded or its integration
+        // surface has drifted (the integration class logs the drift warning
+        // once at static-ctor time).
         private static void ExpandTiersFromVEF()
         {
             if (!VEFRecipeInheritanceIntegration.Available)
@@ -404,10 +387,9 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        /// <summary>
-        /// Builds the set of all Building_WorkTable defs that have at least one recipe
-        /// producing a weapon. Used as the visibility gate for the customization float menu.
-        /// </summary>
+        // Builds the set of all Building_WorkTable defs that have at least one
+        // recipe producing a weapon. Used as the visibility gate for the
+        // customization float menu.
         private static void InitializeWeaponWorkbenches()
         {
             weaponWorkbenchDefs = new HashSet<ThingDef>();
@@ -449,9 +431,8 @@ namespace UniqueWeaponsUnbound
             return false;
         }
 
-        /// <summary>
-        /// Whether the workbench def has a recipe that produces the given base or unique weapon def.
-        /// </summary>
+        // Whether the workbench def has a recipe that produces the given base
+        // or unique weapon def.
         private static bool WorkbenchHasRecipeFor(ThingDef benchDef, ThingDef baseDef, ThingDef uniqueDef)
         {
             List<RecipeDef> recipes = benchDef.AllRecipes;

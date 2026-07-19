@@ -258,12 +258,10 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        /// <summary>
-        /// Renders one row of the haul-planner radio group. Disabled options
-        /// render darkened and ignore clicks. Selecting an enabled option
-        /// flips Settings.haulPlannerKind to that value. The label is passed
-        /// in fully composed (including any "(default)" / "(vanilla)" suffix).
-        /// </summary>
+        // Renders one row of the haul-planner radio group. Disabled options
+        // render darkened and ignore clicks. Selecting an enabled option flips
+        // Settings.haulPlannerKind to that value. The label is passed in fully
+        // composed (including any "(default)" / "(vanilla)" suffix).
         private static void DrawHaulPlannerOption(
             Listing_Standard listing,
             HaulPlannerKind kind,

@@ -5,11 +5,9 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Defines a trait cost rule that participates in the cost calculation pipeline.
-    /// Rules are executed in priority order (lower first). Each rule has a worker class
-    /// that performs the actual cost transformation.
-    /// </summary>
+    // Defines a trait cost rule that participates in the cost calculation
+    // pipeline. Rules are executed in priority order (lower first). Each rule
+    // has a worker class that performs the actual cost transformation.
     public class TraitCostRuleDef : Def
     {
         public Type workerClass;

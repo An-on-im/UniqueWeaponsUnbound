@@ -297,63 +297,59 @@ namespace UniqueWeaponsUnbound
             previewRT = BuildVariantPreview(topLevel, desiredTextureIndex, PreviewRTSize);
         }
 
-        /// <summary>
-        /// Resolves the weapon's top-level (collection-level) graphic for a
-        /// <em>prospective</em> customization state — the desired def, color, and
-        /// trait set — by building a Thing in that state and asking it, rather than
-        /// predicting the appearance by hand.
-        ///
-        /// <para>We let the actual object describe itself: <c>Thing.Graphic</c>
-        /// resolves through <c>GraphicData.GraphicColoredFor</c> using the thing's
-        /// own <c>DrawColor</c>/<c>DrawColorTwo</c>, so the weapon's own Thing/Comp
-        /// graphic overrides run against the prospective trait list. That keeps the
-        /// preview decoupled from <em>how</em> a given weapon (vanilla or a
-        /// downstream mod) maps state to appearance — any override reachable through
-        /// the thing's graphic comes through for free, with no knowledge of its
-        /// mechanism here. (The one ceiling: an override that lives purely in a
-        /// draw-time patch and never changes the thing's graphic can't be
-        /// reconstructed by anything short of invoking that draw path.)</para>
-        ///
-        /// <para>One override needs a nudge rather than coming through for free:
-        /// VEF / Alpha Armoury's trait-driven graphic swap <em>does</em> change the
-        /// thing's <c>graphicInt</c>, but only recomputes on equip/load, neither of
-        /// which fires here. <see cref="VEFWeaponTraitGraphicsIntegration.RefreshTraitGraphic"/> runs
-        /// that recompute against the prospective traits so it lands in
-        /// <c>graphicInt</c> before we read <c>Graphic</c> — still within the
-        /// "ask the object" contract, just triggering the resolution VEF defers.</para>
-        ///
-        /// <para>For appearance, only the trait list and the comp's color field
-        /// need setting: color one is read live from
-        /// <c>CompUniqueWeapon.ForceColor</c> (just that field — no trait scan, no
-        /// Setup() cache), and color two is derived from the trait list (+ stuff)
-        /// by the weapon's own <c>DrawColorTwo</c>. Abilities/verbs don't affect
-        /// appearance, so the heavier AddTrait wiring is skipped — the list is
-        /// replaced directly. Beyond appearance, the thing also backs the
-        /// preview's info card, so when it is (re)made the original weapon's
-        /// identity state (quality, hitpoints, biocoding, art, relic status) is
-        /// stamped on via <see cref="WeaponDefConversion"/>'s copy helpers — copy
-        /// semantics, not the conversion pipeline's ownership transfers, so the
-        /// live weapon's state is never disturbed.</para>
-        ///
-        /// <para>Building a Thing mutates <em>global</em> sim state, which the old
-        /// graphic-only path never touched: <c>Thing.PostMake</c> pulls a
-        /// <c>UniqueIDsManager</c> id and <c>CompUniqueWeapon.PostPostMake</c> rolls
-        /// random traits/name/color off the global <c>Rand</c>. Two guards keep that
-        /// from leaking (a multiplayer desync risk, since rebuilds run during GUI
-        /// layout, off the synchronized tick): the make is wrapped in
-        /// <c>Rand.Push/PopState</c> so the throwaway rolls don't perturb the shared
-        /// Rand stream, and the Thing is cached on <see cref="previewThing"/> and
-        /// re-made only when the result def changes — so the id draw fires per
-        /// def, not per rebuild. Re-stamping traits/color below touches no global
-        /// state. The cached thing is never spawned, never scribed, and never
-        /// destroyed — simply dropped with the dialog. That lifecycle is also
-        /// what makes the identity stamp's shared references (art TaleReference,
-        /// relic precept, coded pawn) safe: the destroy and save paths, the only
-        /// places a shared reference could tear down or fork state the real
-        /// weapon still owns, never run. Destroy() must NOT be added here — it
-        /// would fire CompArt.PostDestroy / Notify_ThingLost against the live
-        /// weapon's tale and precept.</para>
-        /// </summary>
+        // Resolves the weapon's top-level (collection-level) graphic for a
+        // prospective customization state — the desired def, color, and trait
+        // set — by building a Thing in that state and asking it, rather than
+        // predicting the appearance by hand.
+        //
+        // We let the actual object describe itself: Thing.Graphic resolves
+        // through GraphicData.GraphicColoredFor using the thing's own
+        // DrawColor/DrawColorTwo, so the weapon's own Thing/Comp graphic
+        // overrides run against the prospective trait list. That keeps the
+        // preview decoupled from how a given weapon (vanilla or a downstream
+        // mod) maps state to appearance — any override reachable through the
+        // thing's graphic comes through for free, with no knowledge of its
+        // mechanism here. (The one ceiling: an override that lives purely in a
+        // draw-time patch and never changes the thing's graphic can't be
+        // reconstructed by anything short of invoking that draw path.)
+        //
+        // One override needs a nudge rather than coming through for free: VEF /
+        // Alpha Armoury's trait-driven graphic swap does change the thing's
+        // graphicInt, but only recomputes on equip/load, neither of which fires
+        // here. VEFWeaponTraitGraphicsIntegration.RefreshTraitGraphic runs that
+        // recompute against the prospective traits so it lands in graphicInt
+        // before we read Graphic — still within the "ask the object" contract,
+        // just triggering the resolution VEF defers.
+        //
+        // For appearance, only the trait list and the comp's color field need
+        // setting: color one is read live from CompUniqueWeapon.ForceColor
+        // (just that field — no trait scan, no Setup() cache), and color two is
+        // derived from the trait list (+ stuff) by the weapon's own
+        // DrawColorTwo. Abilities/verbs don't affect appearance, so the heavier
+        // AddTrait wiring is skipped — the list is replaced directly. Beyond
+        // appearance, the thing also backs the preview's info card, so when it
+        // is (re)made the original weapon's identity state (quality, hitpoints,
+        // biocoding, art, relic status) is stamped on via WeaponDefConversion's
+        // copy helpers — copy semantics, not the conversion pipeline's
+        // ownership transfers, so the live weapon's state is never disturbed.
+        //
+        // Building a Thing mutates global sim state, which the old graphic-only
+        // path never touched: Thing.PostMake pulls a UniqueIDsManager id and
+        // CompUniqueWeapon.PostPostMake rolls random traits/name/color off the
+        // global Rand. Two guards keep that from leaking (a multiplayer desync
+        // risk, since rebuilds run during GUI layout, off the synchronized
+        // tick): the make is wrapped in Rand.Push/PopState so the throwaway
+        // rolls don't perturb the shared Rand stream, and the Thing is cached
+        // on previewThing and re-made only when the result def changes — so the
+        // id draw fires per def, not per rebuild. Re-stamping traits/color
+        // below touches no global state. The cached thing is never spawned,
+        // never scribed, and never destroyed — simply dropped with the dialog.
+        // That lifecycle is also what makes the identity stamp's shared
+        // references (art TaleReference, relic precept, coded pawn) safe: the
+        // destroy and save paths, the only places a shared reference could tear
+        // down or fork state the real weapon still owns, never run. Destroy()
+        // must NOT be added here — it would fire CompArt.PostDestroy /
+        // Notify_ThingLost against the live weapon's tale and precept.
         private Graphic BuildPreviewGraphic(ThingDef resultDef, ColorDef colorDef)
         {
             if (resultDef?.graphicData == null)
@@ -435,11 +431,10 @@ namespace UniqueWeaponsUnbound
             return previewThing.Graphic;
         }
 
-        /// <summary>
-        /// Blits one texture variant of a prebuilt, already-colored top-level
-        /// graphic into a fresh RenderTexture. Shared by the main preview icon and
-        /// the texture variant grid (which reuses one graphic across all variants).
-        /// </summary>
+        // Blits one texture variant of a prebuilt, already-colored top-level
+        // graphic into a fresh RenderTexture. Shared by the main preview icon
+        // and the texture variant grid (which reuses one graphic across all
+        // variants).
         private RenderTexture BuildVariantPreview(Graphic topLevel, int textureIndex, int rtSize)
         {
             if (topLevel == null)
@@ -506,12 +501,10 @@ namespace UniqueWeaponsUnbound
             cachedTextureGridTraits = new List<WeaponTraitDef>(desiredTraits);
         }
 
-        /// <summary>
-        /// Ordered equality for the two preview caches' trait snapshots. Order
-        /// matters — color resolution is order-sensitive (e.g. "last forced color
-        /// wins" / "first body-color trait wins"). A null cached snapshot (first
-        /// build) never matches, forcing the initial rebuild.
-        /// </summary>
+        // Ordered equality for the two preview caches' trait snapshots. Order
+        // matters — color resolution is order-sensitive (e.g. "last forced
+        // color wins" / "first body-color trait wins"). A null cached snapshot
+        // (first build) never matches, forcing the initial rebuild.
         private static bool SameTraits(List<WeaponTraitDef> cached, List<WeaponTraitDef> current)
         {
             if (cached == null)

@@ -4,11 +4,9 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Prunes the cost list to at most 3 material types by removing the cheapest
-    /// entries (by unit market value) until the limit is met. Prevents UI overflow
-    /// from too many cost icons.
-    /// </summary>
+    // Prunes the cost list to at most 3 material types by removing the cheapest
+    // entries (by unit market value) until the limit is met. Prevents UI
+    // overflow from too many cost icons.
     public class CostPruneWorker : TraitCostRuleWorker
     {
         private const int MaxMaterialTypes = 3;

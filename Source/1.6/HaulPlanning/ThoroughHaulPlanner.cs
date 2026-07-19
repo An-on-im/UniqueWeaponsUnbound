@@ -250,14 +250,12 @@ namespace UniqueWeaponsUnbound.HaulPlanning
     ============================================================================
     */
 
-    /// <summary>
-    /// Top-tier planner: jointly optimizes sourcing, trip partitioning, and
-    /// in-trip routing over storage-grouped candidates — minimal-cover
-    /// support enumeration, one shared all-subsets Held-Karp table, and a
-    /// subset-partition DP. Exact over the dominant decision dimensions (see
-    /// the spec comment above); returns null when a tractability guard trips
-    /// so the caller's ladder degrades to Sweep.
-    /// </summary>
+    // Top-tier planner: jointly optimizes sourcing, trip partitioning, and
+    // in-trip routing over storage-grouped candidates — minimal-cover support
+    // enumeration, one shared all-subsets Held-Karp table, and a
+    // subset-partition DP. Exact over the dominant decision dimensions (see the
+    // spec comment above); returns null when a tractability guard trips so the
+    // caller's ladder degrades to Sweep.
     public class ThoroughHaulPlanner : IHaulPlanner
     {
         // Group-level pool sizing (GroupPoolBySlotGroup): gather nearest
@@ -281,18 +279,14 @@ namespace UniqueWeaponsUnbound.HaulPlanning
         // that adding a tour cost can never overflow int.
         private const int Infeasible = int.MaxValue / 4;
 
-        /// <summary>
-        /// Elementary partition-DP steps consumed by the most recent Plan()
-        /// call. Diagnostics only (op-count performance asserts in tests —
-        /// wall-clock asserts are flaky on CI); planner behavior never reads
-        /// it, so the planner stays effectively stateless.
-        /// </summary>
+        // Elementary partition-DP steps consumed by the most recent Plan()
+        // call. Diagnostics only (op-count performance asserts in tests —
+        // wall-clock asserts are flaky on CI); planner behavior never reads it,
+        // so the planner stays effectively stateless.
         internal static long LastPlanPartitionSteps;
 
-        /// <summary>
-        /// Test kill-switch for guard-trip logging: Verse.Log isn't usable
-        /// under the bare xUnit runner. Always true in game.
-        /// </summary>
+        // Test kill-switch for guard-trip logging: Verse.Log isn't usable under
+        // the bare xUnit runner. Always true in game.
         internal static bool EmitGuardLogs = true;
 
         public HaulPlan Plan(HaulPlanRequest request)

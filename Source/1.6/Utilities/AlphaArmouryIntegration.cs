@@ -5,26 +5,24 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Optional integration with Alpha Armoury (packageId sarg.alphaarmoury).
-    /// Alpha Armoury's <c>WeaponKit</c> item stores a single <see cref="WeaponTraitDef"/>
-    /// in a public <c>trait</c> field; using the kit applies that trait to a compatible
-    /// unique weapon. For progression-mode trait visibility we treat kits as
-    /// player-discoverable sources alongside actual unique weapons.
-    ///
-    /// All access goes through reflection so this mod compiles and runs without
-    /// Alpha Armoury installed. The sibling kit defs (Converter / Remover / TabulaRasa)
-    /// don't carry a trait and are intentionally ignored — only the <c>WeaponKit</c>
-    /// class is recognised here. If Alpha Armoury is loaded but its API has drifted
-    /// (renamed type/field, unexpected field type), the static ctor logs a warning.
-    /// ModInitializer forces that resolution at startup (by reading
-    /// <see cref="Available"/>), so drift surfaces during load — drift is
-    /// determinable from loaded assemblies alone, with no game-state dependency, so
-    /// it shouldn't wait for first use. Kit traits only feed progression-mode trait
-    /// restriction, so the warning says as much; but a player who enables that
-    /// setting in a later session still wants to know the integration is broken
-    /// before relying on it, which is why the warning no longer gates on it.
-    /// </summary>
+    // Optional integration with Alpha Armoury (packageId sarg.alphaarmoury).
+    // Alpha Armoury's WeaponKit item stores a single WeaponTraitDef in a public
+    // trait field; using the kit applies that trait to a compatible unique
+    // weapon. For progression-mode trait visibility we treat kits as
+    // player-discoverable sources alongside actual unique weapons.
+    //
+    // All access goes through reflection so this mod compiles and runs without
+    // Alpha Armoury installed. The sibling kit defs (Converter / Remover /
+    // TabulaRasa) don't carry a trait and are intentionally ignored — only the
+    // WeaponKit class is recognised here. If Alpha Armoury is loaded but its
+    // API has drifted (renamed type/field, unexpected field type), the static
+    // ctor logs a warning. ModInitializer forces that resolution at startup (by
+    // reading Available), so drift surfaces during load — drift is determinable
+    // from loaded assemblies alone, with no game-state dependency, so it
+    // shouldn't wait for first use. Kit traits only feed progression-mode trait
+    // restriction, so the warning says as much; but a player who enables that
+    // setting in a later session still wants to know the integration is broken
+    // before relying on it, which is why the warning no longer gates on it.
     internal static class AlphaArmouryIntegration
     {
         private const string PackageId = "sarg.alphaarmoury";
@@ -76,11 +74,10 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        /// <summary>
-        /// Returns true and emits the stored trait if <paramref name="thing"/> is an
-        /// Alpha Armoury weapon kit carrying a non-null trait. Returns false for any
-        /// non-kit thing, kits with a null trait, or when the integration is unavailable.
-        /// </summary>
+        // Returns true and emits the stored trait if thing is an Alpha Armoury
+        // weapon kit carrying a non-null trait. Returns false for any non-kit
+        // thing, kits with a null trait, or when the integration is
+        // unavailable.
         public static bool TryGetKitTrait(Thing thing, out WeaponTraitDef trait)
         {
             trait = null;

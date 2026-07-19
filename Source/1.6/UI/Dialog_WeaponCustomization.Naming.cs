@@ -13,13 +13,12 @@ namespace UniqueWeaponsUnbound
 
         private const int NameRegenMaxAttempts = 3;
 
-        /// <summary>
-        /// Generates a random weapon name using vanilla's grammar system
-        /// (NameGenerator + RulePackDefOf.NamerUniqueWeapon), matching the same
-        /// code path used by CompUniqueWeapon.PostPostMake() for initial generation.
-        /// Returns null if generation fails after <see cref="NameRegenMaxAttempts"/>
-        /// attempts; callers should leave the name field unchanged in that case.
-        /// </summary>
+        // Generates a random weapon name using vanilla's grammar system
+        // (NameGenerator + RulePackDefOf.NamerUniqueWeapon), matching the same
+        // code path used by CompUniqueWeapon.PostPostMake() for initial
+        // generation. Returns null if generation fails after
+        // NameRegenMaxAttempts attempts; callers should leave the name field
+        // unchanged in that case.
         private string GenerateWeaponName()
         {
             Exception lastException = null;
@@ -82,14 +81,12 @@ namespace UniqueWeaponsUnbound
             return NameGenerator.GenerateName(request, null, false, "r_weapon_name").StripTags();
         }
 
-        /// <summary>
-        /// Builds a diagnostic message pointing the user toward the most likely
-        /// source of the failure: a malformed translation of the vanilla
-        /// NamerUniqueWeapon rule pack. The original raw rule string is discarded
-        /// by Rule_String when its regex parse fails, so we report the count of
-        /// rules whose keyword ended up null/empty alongside the active language
-        /// and the rule pack's owning mod.
-        /// </summary>
+        // Builds a diagnostic message pointing the user toward the most likely
+        // source of the failure: a malformed translation of the vanilla
+        // NamerUniqueWeapon rule pack. The original raw rule string is
+        // discarded by Rule_String when its regex parse fails, so we report the
+        // count of rules whose keyword ended up null/empty alongside the active
+        // language and the rule pack's owning mod.
         private static string BuildNameRegenFailureMessage(int attempt, Exception ex)
         {
             string langName = LanguageDatabase.activeLanguage?.FriendlyNameNative

@@ -4,11 +4,9 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Replaces costs with the weapon's actual crafting recipe ingredients.
-    /// Only acts when the weapon has a craftable base def with recipe costs;
-    /// otherwise leaves the tech-level fallback costs in place.
-    /// </summary>
+    // Replaces costs with the weapon's actual crafting recipe ingredients. Only
+    // acts when the weapon has a craftable base def with recipe costs;
+    // otherwise leaves the tech-level fallback costs in place.
     public class BaseCostFromRecipeWorker : TraitCostRuleWorker
     {
         public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)

@@ -82,12 +82,10 @@ namespace UniqueWeaponsUnbound
             return options;
         }
 
-        /// <summary>
-        /// Builds the option for one weapon and appends on success. Per-weapon
-        /// failures are isolated and logged so a single broken weapon (modded
-        /// stuff/quality throw, upstream cache NRE, etc.) can't suppress the
-        /// other entries.
-        /// </summary>
+        // Builds the option for one weapon and appends on success. Per-weapon
+        // failures are isolated and logged so a single broken weapon (modded
+        // stuff/quality throw, upstream cache NRE, etc.) can't suppress the
+        // other entries.
         private static void TryAddOption(
             List<FloatMenuOption> options, Pawn pawn, Thing weapon, Building_WorkTable workbench)
         {
@@ -170,11 +168,9 @@ namespace UniqueWeaponsUnbound
                 pawn, workbench);
         }
 
-        /// <summary>
-        /// Click-delegate handler. Wrapped in try/catch so a missing JobDef or
-        /// any other unexpected failure surfaces as a player-visible message
-        /// rather than a silent no-op on the order.
-        /// </summary>
+        // Click-delegate handler. Wrapped in try/catch so a missing JobDef or
+        // any other unexpected failure surfaces as a player-visible message
+        // rather than a silent no-op on the order.
         internal static void TryQueueCustomizeJob(
             Pawn pawn, Thing weapon, Building_WorkTable workbench)
         {

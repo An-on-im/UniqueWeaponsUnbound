@@ -4,17 +4,15 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Transforms a weapon Thing into a different ThingDef while preserving
-    /// identity-bearing properties: stuff (material), quality, hitpoint
-    /// percentage, texture override, biocoding, authored/relic art, and (when
-    /// applicable) Ideology relic status. Used during customization at the 0↔1
-    /// trait boundary to swap between a weapon's base def and its unique
-    /// counterpart. The customization dialog's preview reuses the
-    /// copy-semantics halves (CopyQuality/CopyHitPointsPercent/
-    /// CopyBiocodeState/CopyArt/CopyRelicStatus) to stamp the original's
-    /// identity onto the preview thing without disturbing the original.
-    /// </summary>
+    // Transforms a weapon Thing into a different ThingDef while preserving
+    // identity-bearing properties: stuff (material), quality, hitpoint
+    // percentage, texture override, biocoding, authored/relic art, and (when
+    // applicable) Ideology relic status. Used during customization at the 0↔1
+    // trait boundary to swap between a weapon's base def and its unique
+    // counterpart. The customization dialog's preview reuses the copy-semantics
+    // halves (CopyQuality/CopyHitPointsPercent/
+    // CopyBiocodeState/CopyArt/CopyRelicStatus) to stamp the original's
+    // identity onto the preview thing without disturbing the original.
     [StaticConstructorOnStartup]
     public static class WeaponDefConversion
     {
@@ -83,17 +81,15 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        /// <summary>
-        /// Creates a new weapon Thing from targetDef, copying stuff, quality,
-        /// hitpoints, texture, and biocoding from oldWeapon. If targetDef has
-        /// CompUniqueWeapon (base→unique conversion), clears the auto-generated
-        /// traits/name/color from PostPostMake(). Returns the new weapon.
-        ///
-        /// Does NOT destroy oldWeapon, and does NOT transfer art or relic status:
-        /// both move a reference whose teardown must be sequenced against the old
-        /// weapon's Destroy(), so the caller invokes <see cref="TransferArt"/> and
-        /// <see cref="TransferRelicStatus"/> before destroying oldWeapon.
-        /// </summary>
+        // Creates a new weapon Thing from targetDef, copying stuff, quality,
+        // hitpoints, texture, and biocoding from oldWeapon. If targetDef has
+        // CompUniqueWeapon (base→unique conversion), clears the auto-generated
+        // traits/name/color from PostPostMake(). Returns the new weapon.
+        //
+        // Does NOT destroy oldWeapon, and does NOT transfer art or relic
+        // status: both move a reference whose teardown must be sequenced
+        // against the old weapon's Destroy(), so the caller invokes TransferArt
+        // and TransferRelicStatus before destroying oldWeapon.
         public static Thing ConvertWeaponDef(Thing oldWeapon, ThingDef targetDef)
         {
             // Carry the material across when the target is stuffable. Passing the
@@ -130,26 +126,22 @@ namespace UniqueWeaponsUnbound
             return newWeapon;
         }
 
-        /// <summary>
-        /// Copies quality from oldWeapon to newWeapon (no-op when either side
-        /// lacks CompQuality). Passes a null art source so SetQuality does NOT
-        /// run CompArt.InitializeArt — that would roll a fresh random
-        /// title/tale on the new weapon, advancing the global Rand stream and
-        /// claiming a TaleManager reference that is never released. Authored
-        /// art is carried separately: moved by <see cref="TransferArt"/>
-        /// during conversion, copied by <see cref="CopyArt"/> for the preview.
-        /// </summary>
+        // Copies quality from oldWeapon to newWeapon (no-op when either side
+        // lacks CompQuality). Passes a null art source so SetQuality does NOT
+        // run CompArt.InitializeArt — that would roll a fresh random title/tale
+        // on the new weapon, advancing the global Rand stream and claiming a
+        // TaleManager reference that is never released. Authored art is carried
+        // separately: moved by TransferArt during conversion, copied by CopyArt
+        // for the preview.
         public static void CopyQuality(Thing oldWeapon, Thing newWeapon)
         {
             if (oldWeapon.TryGetQuality(out QualityCategory quality))
                 newWeapon.TryGetComp<CompQuality>()?.SetQuality(quality, null);
         }
 
-        /// <summary>
-        /// Copies hitpoints across as a percentage of max (floored at 1), so
-        /// the damage fraction survives a MaxHitPoints difference from def or
-        /// stuff. No-op when either side reports a non-positive MaxHitPoints.
-        /// </summary>
+        // Copies hitpoints across as a percentage of max (floored at 1), so the
+        // damage fraction survives a MaxHitPoints difference from def or stuff.
+        // No-op when either side reports a non-positive MaxHitPoints.
         public static void CopyHitPointsPercent(Thing oldWeapon, Thing newWeapon)
         {
             if (oldWeapon.MaxHitPoints <= 0 || newWeapon.MaxHitPoints <= 0)
@@ -161,17 +153,15 @@ namespace UniqueWeaponsUnbound
                 newWeapon.HitPoints = 1;
         }
 
-        /// <summary>
-        /// Copies CompBiocodable state (biocoded flag, coded-pawn label, coded-pawn
-        /// reference) from oldWeapon to newWeapon. No-op if either weapon lacks the
-        /// comp or the old weapon isn't biocoded.
-        ///
-        /// Copies the scribed fields directly rather than calling CodeFor(pawn):
-        /// CodeFor dereferences pawn.Name (NREs on the owner-discarded, label-only
-        /// biocode that survives a save/load), and re-runs OnCodedFor side effects
-        /// on a freshly created weapon. A faithful state transfer mirrors what
-        /// Scribe persists, which is exactly these three fields.
-        /// </summary>
+        // Copies CompBiocodable state (biocoded flag, coded-pawn label,
+        // coded-pawn reference) from oldWeapon to newWeapon. No-op if either
+        // weapon lacks the comp or the old weapon isn't biocoded.
+        //
+        // Copies the scribed fields directly rather than calling CodeFor(pawn):
+        // CodeFor dereferences pawn.Name (NREs on the owner-discarded,
+        // label-only biocode that survives a save/load), and re-runs OnCodedFor
+        // side effects on a freshly created weapon. A faithful state transfer
+        // mirrors what Scribe persists, which is exactly these three fields.
         public static void CopyBiocodeState(Thing oldWeapon, Thing newWeapon)
         {
             CompBiocodable oldBio = oldWeapon.TryGetComp<CompBiocodable>();
@@ -188,23 +178,20 @@ namespace UniqueWeaponsUnbound
             BiocodedPawnField.SetValue(newBio, BiocodedPawnField.GetValue(oldBio));
         }
 
-        /// <summary>
-        /// Copies authored/relic art state (author, title, and the backing
-        /// TaleReference that produces the art description) from oldWeapon
-        /// onto newWeapon, leaving oldWeapon intact — afterwards BOTH things
-        /// point at the same TaleReference. That share is only safe while at
-        /// most one side can ever scribe or destroy it: either hand ownership
-        /// off immediately (<see cref="TransferArt"/> nulls the old side
-        /// before the old weapon is destroyed), or the destination must be a
-        /// transient thing that is never spawned, scribed, or destroyed (the
-        /// customization preview). A double-destroy would decrement the
-        /// tale's reference count twice; a double-scribe would fork the
-        /// reference on load.
-        ///
-        /// Returns true when art state was copied (both comps present and the
-        /// reflection fields resolved), so TransferArt knows an ownership
-        /// handoff is pending; false on the no-op paths.
-        /// </summary>
+        // Copies authored/relic art state (author, title, and the backing
+        // TaleReference that produces the art description) from oldWeapon onto
+        // newWeapon, leaving oldWeapon intact — afterwards BOTH things point at
+        // the same TaleReference. That share is only safe while at most one
+        // side can ever scribe or destroy it: either hand ownership off
+        // immediately (TransferArt nulls the old side before the old weapon is
+        // destroyed), or the destination must be a transient thing that is
+        // never spawned, scribed, or destroyed (the customization preview). A
+        // double-destroy would decrement the tale's reference count twice; a
+        // double-scribe would fork the reference on load.
+        //
+        // Returns true when art state was copied (both comps present and the
+        // reflection fields resolved), so TransferArt knows an ownership
+        // handoff is pending; false on the no-op paths.
         public static bool CopyArt(Thing oldWeapon, Thing newWeapon)
         {
             CompArt oldArt = oldWeapon.TryGetComp<CompArt>();
@@ -236,18 +223,15 @@ namespace UniqueWeaponsUnbound
             return true;
         }
 
-        /// <summary>
-        /// Transfers authored/relic art from oldWeapon to newWeapon: copies
-        /// the state via <see cref="CopyArt"/>, then hands ownership of the
-        /// TaleReference to the new weapon by nulling the old side's pointer.
-        ///
-        /// Must be called BEFORE destroying oldWeapon: the handoff is what
-        /// stops CompArt.PostDestroy from calling
-        /// TaleReference.ReferenceDestroyed() on the tale the new weapon now
-        /// owns (which would decrement the tale's reference count and could
-        /// free a tale still in use). Same before-destroy contract as
-        /// <see cref="TransferRelicStatus"/>.
-        /// </summary>
+        // Transfers authored/relic art from oldWeapon to newWeapon: copies the
+        // state via CopyArt, then hands ownership of the TaleReference to the
+        // new weapon by nulling the old side's pointer.
+        //
+        // Must be called BEFORE destroying oldWeapon: the handoff is what stops
+        // CompArt.PostDestroy from calling TaleReference.ReferenceDestroyed()
+        // on the tale the new weapon now owns (which would decrement the tale's
+        // reference count and could free a tale still in use). Same
+        // before-destroy contract as TransferRelicStatus.
         public static void TransferArt(Thing oldWeapon, Thing newWeapon)
         {
             if (!CopyArt(oldWeapon, newWeapon))
@@ -258,22 +242,20 @@ namespace UniqueWeaponsUnbound
             ArtTaleRefField.SetValue(oldWeapon.TryGetComp<CompArt>(), null);
         }
 
-        /// <summary>
-        /// Copies Ideology relic/style presentation from oldWeapon onto
-        /// newWeapon: the CompStyleable styleDef/everSeenByPlayer fields and
-        /// the StyleSourcePrecept pointer. Thing-side (forward) references
-        /// only — the precept's private generatedRelic back-pointer is never
-        /// touched here, so the precept keeps recognizing exactly one thing
-        /// (the original) as the relic; <see cref="TransferRelicStatus"/> is
-        /// the only place that pointer moves. Sharing the precept pointer is
-        /// safe while at most one holder is ever spawned, scribed, or
-        /// destroyed — Thing.Destroy on a precept-styled thing fires
-        /// Precept_Relic.Notify_ThingLost (RelicDestroyed events, mood
-        /// debuffs) — and the SourcePrecept setter itself is local-only: it
-        /// writes the comp's own styleDef/cache from a read-only ideo lookup.
-        ///
-        /// No-op if Ideology is not active or oldWeapon is not precept-styled.
-        /// </summary>
+        // Copies Ideology relic/style presentation from oldWeapon onto
+        // newWeapon: the CompStyleable styleDef/everSeenByPlayer fields and the
+        // StyleSourcePrecept pointer. Thing-side (forward) references only —
+        // the precept's private generatedRelic back-pointer is never touched
+        // here, so the precept keeps recognizing exactly one thing (the
+        // original) as the relic; TransferRelicStatus is the only place that
+        // pointer moves. Sharing the precept pointer is safe while at most one
+        // holder is ever spawned, scribed, or destroyed — Thing.Destroy on a
+        // precept-styled thing fires Precept_Relic.Notify_ThingLost
+        // (RelicDestroyed events, mood debuffs) — and the SourcePrecept setter
+        // itself is local-only: it writes the comp's own styleDef/cache from a
+        // read-only ideo lookup.
+        //
+        // No-op if Ideology is not active or oldWeapon is not precept-styled.
         public static void CopyRelicStatus(Thing oldWeapon, Thing newWeapon)
         {
             if (!ModsConfig.IdeologyActive)
@@ -311,19 +293,17 @@ namespace UniqueWeaponsUnbound
             newWeapon.StyleSourcePrecept = precept;
         }
 
-        /// <summary>
-        /// Transfers Ideology relic status from the old weapon to the new weapon.
-        /// Must be called BEFORE destroying the old weapon — clears the old weapon's
-        /// StyleSourcePrecept so that Thing.Destroy() does not fire Notify_ThingLost,
-        /// which would trigger RelicDestroyed events, mood debuffs, and permanently
-        /// orphan the relic precept.
-        ///
-        /// Updates both sides of the bidirectional reference:
-        ///   Thing.StyleSourcePrecept → Precept_Relic (via <see cref="CopyRelicStatus"/>)
-        ///   Precept_Relic.generatedRelic → Thing (via reflection)
-        ///
-        /// No-op if Ideology is not active or the weapon is not a relic.
-        /// </summary>
+        // Transfers Ideology relic status from the old weapon to the new
+        // weapon. Must be called BEFORE destroying the old weapon — clears the
+        // old weapon's StyleSourcePrecept so that Thing.Destroy() does not fire
+        // Notify_ThingLost, which would trigger RelicDestroyed events, mood
+        // debuffs, and permanently orphan the relic precept.
+        //
+        // Updates both sides of the bidirectional reference:
+        //   Thing.StyleSourcePrecept → Precept_Relic (via CopyRelicStatus)
+        //   Precept_Relic.generatedRelic → Thing (via reflection)
+        //
+        // No-op if Ideology is not active or the weapon is not a relic.
         public static void TransferRelicStatus(Thing oldWeapon, Thing newWeapon)
         {
             if (!ModsConfig.IdeologyActive)

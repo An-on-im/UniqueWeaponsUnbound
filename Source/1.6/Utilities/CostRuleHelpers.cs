@@ -6,10 +6,9 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Static helper methods and material caches used by trait cost rule workers.
-    /// Extracted from TraitCostUtility to be accessible to the worker class hierarchy.
-    /// </summary>
+    // Static helper methods and material caches used by trait cost rule
+    // workers. Extracted from TraitCostUtility to be accessible to the worker
+    // class hierarchy.
     public static class CostRuleHelpers
     {
         // Material lookup caches
@@ -30,10 +29,9 @@ namespace UniqueWeaponsUnbound
         public static ThingDef Thrumbofur { get; private set; }
         public static ThingDef Silver { get; private set; }
 
-        /// <summary>
-        /// Builds the raw resource and material label caches and resolves ThingDefs.
-        /// Must be called during StaticConstructorOnStartup (after all defs are loaded).
-        /// </summary>
+        // Builds the raw resource and material label caches and resolves
+        // ThingDefs. Must be called during StaticConstructorOnStartup (after
+        // all defs are loaded).
         public static void Initialize()
         {
             materialsByLabel = new Dictionary<string, ThingDef>();
@@ -95,11 +93,10 @@ namespace UniqueWeaponsUnbound
                 materialsByLabel[defName] = def;
         }
 
-        /// <summary>
-        /// Splits a trait label into a word set containing both the full space-delimited
-        /// words and the hyphen-delimited parts of any hyphenated words.
-        /// E.g. "crypto-coated rails" → {"crypto-coated", "rails", "crypto", "coated"}.
-        /// </summary>
+        // Splits a trait label into a word set containing both the full
+        // space-delimited words and the hyphen-delimited parts of any
+        // hyphenated words. E.g. "crypto-coated rails" → {"crypto-coated",
+        // "rails", "crypto", "coated"}.
         public static HashSet<string> SplitLabelWords(string label)
         {
             var words = new HashSet<string>();
@@ -122,11 +119,9 @@ namespace UniqueWeaponsUnbound
             return words;
         }
 
-        /// <summary>
-        /// If components exist in the cost list, replace them with multiplier * count
-        /// of the replacement material. Otherwise, split off a fraction of wood/steel/plasteel
-        /// and convert by market value.
-        /// </summary>
+        // If components exist in the cost list, replace them with multiplier *
+        // count of the replacement material. Otherwise, split off a fraction of
+        // wood/steel/plasteel and convert by market value.
         public static void ApplyComponentSwapOrSplit(
             List<ThingDefCountClass> costs, ThingDef replacement, int componentMultiplier, float splitFraction)
         {
@@ -149,10 +144,8 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        /// <summary>
-        /// Split off a fraction of wood/steel/plasteel and convert to the
-        /// replacement material by market value.
-        /// </summary>
+        // Split off a fraction of wood/steel/plasteel and convert to the
+        // replacement material by market value.
         public static void ApplyValueSplit(
             List<ThingDefCountClass> costs, ThingDef replacement, float splitFraction)
         {
@@ -164,10 +157,8 @@ namespace UniqueWeaponsUnbound
                 AddOrMerge(costs, replacement, Mathf.CeilToInt(splitValue / replacement.BaseMarketValue));
         }
 
-        /// <summary>
-        /// Swap a fraction of source material count directly to
-        /// the replacement material (1:1 by count).
-        /// </summary>
+        // Swap a fraction of source material count directly to the replacement
+        // material (1:1 by count).
         public static void ApplyPartialSwapByCount(
             List<ThingDefCountClass> costs, ThingDef source, ThingDef replacement, float fraction)
         {
@@ -183,9 +174,8 @@ namespace UniqueWeaponsUnbound
             AddOrMerge(costs, replacement, swapAmount);
         }
 
-        /// <summary>
-        /// Convert all non-spacer-component costs into spacer components by market value (rounded up).
-        /// </summary>
+        // Convert all non-spacer-component costs into spacer components by
+        // market value (rounded up).
         public static void ApplyConvertAllToSpacer(List<ThingDefCountClass> costs)
         {
             if (ComponentSpacer == null || ComponentSpacer.BaseMarketValue <= 0f)
@@ -212,9 +202,7 @@ namespace UniqueWeaponsUnbound
                 costs.Add(new ThingDefCountClass(ComponentSpacer, totalCount));
         }
 
-        /// <summary>
-        /// Replaces all costs with a single flat entry.
-        /// </summary>
+        // Replaces all costs with a single flat entry.
         public static void ApplyFlatCost(List<ThingDefCountClass> costs, ThingDef material, int count)
         {
             if (material == null)
@@ -224,19 +212,15 @@ namespace UniqueWeaponsUnbound
             costs.Add(new ThingDefCountClass(material, count));
         }
 
-        /// <summary>
-        /// Multiplies all cost counts by the given factor (rounded up).
-        /// </summary>
+        // Multiplies all cost counts by the given factor (rounded up).
         public static void ApplyCostMultiplier(List<ThingDefCountClass> costs, float multiplier)
         {
             foreach (ThingDefCountClass cost in costs)
                 cost.count = Mathf.CeilToInt(cost.count * multiplier);
         }
 
-        /// <summary>
-        /// Removes a fraction of wood, steel, and plasteel from the cost list and returns
-        /// the total market value of what was removed.
-        /// </summary>
+        // Removes a fraction of wood, steel, and plasteel from the cost list
+        // and returns the total market value of what was removed.
         public static float SplitBaseMaterials(List<ThingDefCountClass> costs, float fraction)
         {
             float splitValue = 0f;
@@ -257,9 +241,8 @@ namespace UniqueWeaponsUnbound
             return splitValue;
         }
 
-        /// <summary>
-        /// Adds count to an existing entry for the given ThingDef, or creates a new entry.
-        /// </summary>
+        // Adds count to an existing entry for the given ThingDef, or creates a
+        // new entry.
         public static void AddOrMerge(List<ThingDefCountClass> costs, ThingDef def, int count)
         {
             ThingDefCountClass existing = costs.Find(c => c.thingDef == def);
@@ -269,9 +252,7 @@ namespace UniqueWeaponsUnbound
                 costs.Add(new ThingDefCountClass(def, count));
         }
 
-        /// <summary>
-        /// Removes all entries matching the given ThingDefs from the cost list.
-        /// </summary>
+        // Removes all entries matching the given ThingDefs from the cost list.
         public static void RemoveMaterials(List<ThingDefCountClass> costs, params ThingDef[] materials)
         {
             costs.RemoveAll(c =>
@@ -285,9 +266,8 @@ namespace UniqueWeaponsUnbound
             });
         }
 
-        /// <summary>
-        /// Converts half (by count, floored) of every cost entry into the replacement material.
-        /// </summary>
+        // Converts half (by count, floored) of every cost entry into the
+        // replacement material.
         public static void ConvertHalfByCount(List<ThingDefCountClass> costs, ThingDef replacement)
         {
             if (replacement == null)
@@ -307,10 +287,9 @@ namespace UniqueWeaponsUnbound
                 AddOrMerge(costs, replacement, totalReplacement);
         }
 
-        /// <summary>
-        /// Returns the material override ThingDef if the trait label contains a known
-        /// raw resource name (e.g., "gold inlay" matches Gold). Returns null otherwise.
-        /// </summary>
+        // Returns the material override ThingDef if the trait label contains a
+        // known raw resource name (e.g., "gold inlay" matches Gold). Returns
+        // null otherwise.
         public static ThingDef GetMaterialOverride(WeaponTraitDef trait)
         {
             if (materialsByLabel == null || materialsByLabel.Count == 0)
@@ -323,10 +302,8 @@ namespace UniqueWeaponsUnbound
             return TryMatchWords(SplitPascalCase(trait.defName));
         }
 
-        /// <summary>
-        /// Sums all raw resource costs and replaces them with the override material.
-        /// Non-raw costs (e.g. components) pass through unchanged.
-        /// </summary>
+        // Sums all raw resource costs and replaces them with the override
+        // material. Non-raw costs (e.g. components) pass through unchanged.
         public static void ApplyMaterialOverride(
             List<ThingDefCountClass> costs, ThingDef overrideMaterial)
         {
@@ -348,9 +325,8 @@ namespace UniqueWeaponsUnbound
             costs.AddRange(result);
         }
 
-        /// <summary>
-        /// Returns true if the given ThingDef is a raw resource (stuff or in ResourcesRaw category).
-        /// </summary>
+        // Returns true if the given ThingDef is a raw resource (stuff or in
+        // ResourcesRaw category).
         public static bool IsRawResource(ThingDef def)
         {
             return rawResources != null && rawResources.Contains(def);

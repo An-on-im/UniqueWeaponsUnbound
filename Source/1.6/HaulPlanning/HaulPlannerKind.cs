@@ -1,50 +1,38 @@
 namespace UniqueWeaponsUnbound.HaulPlanning
 {
-    /// <summary>
-    /// Identifies the haul planner algorithm selected in mod settings. Stored
-    /// in the settings file by name (Scribe), so renaming a value is a save
-    /// migration; add new values at the end to preserve backward compatibility.
-    /// </summary>
+    // Identifies the haul planner algorithm selected in mod settings. Stored in
+    // the settings file by name (Scribe), so renaming a value is a save
+    // migration; add new values at the end to preserve backward compatibility.
     public enum HaulPlannerKind
     {
-        /// <summary>
-        /// Original behavior: one stack picked up per trip, sorted by distance
-        /// from the pawn. Always available; bedrock fallback for stub planners
-        /// or planners that fail to produce a satisfying plan.
-        /// </summary>
+        // Original behavior: one stack picked up per trip, sorted by distance
+        // from the pawn. Always available; bedrock fallback for stub planners
+        // or planners that fail to produce a satisfying plan.
         Sequential = 0,
 
-        /// <summary>
-        /// Polar-sweep clustering around the workbench, bin-packed into trips
-        /// up to encumbrance, with Held-Karp TSP within each trip. Default.
-        /// </summary>
+        // Polar-sweep clustering around the workbench, bin-packed into trips up
+        // to encumbrance, with Held-Karp TSP within each trip. Default.
         Sweep = 1,
 
-        /// <summary>
-        /// Joint sourcing + trip-partition + routing optimization over
-        /// storage-grouped candidates: minimal-cover support enumeration, one
-        /// shared all-subsets Held-Karp table, and a subset-partition DP.
-        /// Returns null above its tractability guards so the caller's ladder
-        /// (Thorough -> Sweep -> Sequential) degrades to Sweep.
-        /// </summary>
+        // Joint sourcing + trip-partition + routing optimization over
+        // storage-grouped candidates: minimal-cover support enumeration, one
+        // shared all-subsets Held-Karp table, and a subset-partition DP.
+        // Returns null above its tractability guards so the caller's ladder
+        // (Thorough -> Sweep -> Sequential) degrades to Sweep.
         Thorough = 2,
     }
 
-    /// <summary>
-    /// Resolves a HaulPlannerKind to a singleton planner instance. Planners
-    /// are stateless, so a single instance per kind is reused across calls.
-    /// </summary>
+    // Resolves a HaulPlannerKind to a singleton planner instance. Planners are
+    // stateless, so a single instance per kind is reused across calls.
     public static class HaulPlannerFactory
     {
         private static readonly IHaulPlanner sequential = new SequentialHaulPlanner();
         private static readonly IHaulPlanner sweep = new SweepHaulPlanner();
         private static readonly IHaulPlanner thorough = new ThoroughHaulPlanner();
 
-        /// <summary>
-        /// Returns the planner instance for the given kind. Unrecognized values
-        /// fall back to Sequential — defensive against settings corruption or
-        /// downgrading to an older mod version that doesn't know newer kinds.
-        /// </summary>
+        // Returns the planner instance for the given kind. Unrecognized values
+        // fall back to Sequential — defensive against settings corruption or
+        // downgrading to an older mod version that doesn't know newer kinds.
         public static IHaulPlanner Get(HaulPlannerKind kind)
         {
             switch (kind)

@@ -72,11 +72,10 @@ namespace UniqueWeaponsUnbound
         private Building_WorkTable Workbench =>
             (Building_WorkTable)job.GetTarget(WorkbenchIndex).Thing;
 
-        /// <summary>
-        /// Best label for the weapon: the live Thing if we have one, otherwise the
-        /// job target (still labelled even if despawned), otherwise a fallback.
-        /// Stays valid through every bail path including pre-acquire failures.
-        /// </summary>
+        // Best label for the weapon: the live Thing if we have one, otherwise
+        // the job target (still labelled even if despawned), otherwise a
+        // fallback. Stays valid through every bail path including pre-acquire
+        // failures.
         private string WeaponLabel
         {
             get
@@ -90,22 +89,19 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        /// <summary>
-        /// Records the first bail reason. Subsequent calls are ignored so a primary
-        /// failure isn't overwritten by a downstream cascade. The recorded text is
-        /// surfaced as a top-left Messages.Message when the finish action runs.
-        /// </summary>
+        // Records the first bail reason. Subsequent calls are ignored so a
+        // primary failure isn't overwritten by a downstream cascade. The
+        // recorded text is surfaced as a top-left Messages.Message when the
+        // finish action runs.
         private void SetBailMessage(string text)
         {
             if (string.IsNullOrEmpty(bailMessage))
                 bailMessage = text;
         }
 
-        /// <summary>
-        /// Records the standard "ingredients lost mid-customization" bail message
-        /// for the given trait. Used by the precheck toil and by the per-op consume
-        /// paths in <see cref="ApplyOperation"/>.
-        /// </summary>
+        // Records the standard "ingredients lost mid-customization" bail
+        // message for the given trait. Used by the precheck toil and by the
+        // per-op consume paths in ApplyOperation.
         private void RecordShortfallBail(WeaponTraitDef trait)
         {
             string traitLabel = trait?.LabelCap ?? "";
@@ -157,24 +153,20 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        /// <summary>
-        /// Called by Dialog_WeaponCustomization at confirm time, while the
-        /// dialog's forcePause still holds the game still. Writes the spec to
-        /// the scribed field directly so a save/reload taken in the one-tick
-        /// gap between Close() and the consumeSpec toil round-trips a
-        /// confirmed customization correctly.
-        /// </summary>
+        // Called by Dialog_WeaponCustomization at confirm time, while the
+        // dialog's forcePause still holds the game still. Writes the spec to
+        // the scribed field directly so a save/reload taken in the one-tick gap
+        // between Close() and the consumeSpec toil round-trips a confirmed
+        // customization correctly.
         public void SetSpec(CustomizationSpec s)
         {
             spec = s;
         }
 
-        /// <summary>
-        /// Called by IngredientReservation after a plan is committed. Stores
-        /// the execution strategy so MakeNewToils builds the right haul chain,
-        /// plus per-pickup destination and trip-boundary flags in lockstep
-        /// with job.targetQueueA / countQueue (used by the hybrid path only).
-        /// </summary>
+        // Called by IngredientReservation after a plan is committed. Stores the
+        // execution strategy so MakeNewToils builds the right haul chain, plus
+        // per-pickup destination and trip-boundary flags in lockstep with
+        // job.targetQueueA / countQueue (used by the hybrid path only).
         public void SetHaulPickupMetadata(
             HaulPlanExecutionStrategy strategy,
             List<int> destinations,
@@ -185,20 +177,18 @@ namespace UniqueWeaponsUnbound
             pickupLastInTrip = lastInTripFlags;
         }
 
-        /// <summary>
-        /// Passively heal orphaned ability caches at the earliest hook the
-        /// JobDriver lifecycle exposes — fires once when the pawn starts the
-        /// job, before <c>SetupToils</c>. A player who notices a phantom gizmo
-        /// (e.g. LaunchSmokeShell carried over from a pre-fix base→unique
-        /// conversion in an older save) just has to initiate customization on
-        /// the affected weapon; the heal fires immediately, no need to wait
-        /// for the pawn to walk anywhere, open the dialog, or confirm changes.
-        /// Idempotent and a no-op when nothing's orphaned.
-        ///
-        /// The driver's <c>weapon</c> field isn't set until <c>acquireWeapon</c>
-        /// runs, so we pull from the job target directly. <c>HealOrphanedAbility</c>
-        /// null-checks and handles destroyed/non-unique weapons internally.
-        /// </summary>
+        // Passively heal orphaned ability caches at the earliest hook the
+        // JobDriver lifecycle exposes — fires once when the pawn starts the
+        // job, before SetupToils. A player who notices a phantom gizmo (e.g.
+        // LaunchSmokeShell carried over from a pre-fix base→unique conversion
+        // in an older save) just has to initiate customization on the affected
+        // weapon; the heal fires immediately, no need to wait for the pawn to
+        // walk anywhere, open the dialog, or confirm changes. Idempotent and a
+        // no-op when nothing's orphaned.
+        //
+        // The driver's weapon field isn't set until acquireWeapon runs, so we
+        // pull from the job target directly. HealOrphanedAbility null-checks
+        // and handles destroyed/non-unique weapons internally.
         public override void Notify_Starting()
         {
             base.Notify_Starting();

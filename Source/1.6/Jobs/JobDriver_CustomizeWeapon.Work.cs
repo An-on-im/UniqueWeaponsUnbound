@@ -17,11 +17,9 @@ namespace UniqueWeaponsUnbound
     // depend on a refund credit that never materialised).
     public partial class JobDriver_CustomizeWeapon
     {
-        /// <summary>
-        /// Consumes resources from the tracked placedIngredients list rather than
-        /// scanning nearby cells. Mirrors vanilla's pattern of consuming from
-        /// job.placedThings. Destroyed stacks are removed from the list.
-        /// </summary>
+        // Consumes resources from the tracked placedIngredients list rather
+        // than scanning nearby cells. Mirrors vanilla's pattern of consuming
+        // from job.placedThings. Destroyed stacks are removed from the list.
         private bool ConsumeFromPlacedIngredients(List<ThingDefCountClass> costs)
         {
             foreach (ThingDefCountClass cost in costs)
@@ -58,10 +56,8 @@ namespace UniqueWeaponsUnbound
             return true;
         }
 
-        /// <summary>
-        /// Returns the total reservable count of <paramref name="thingDef"/> across all
-        /// currently placed ingredient stacks, ignoring destroyed/despawned ones.
-        /// </summary>
+        // Returns the total reservable count of thingDef across all currently
+        // placed ingredient stacks, ignoring destroyed/despawned ones.
         private int CountInPlaced(ThingDef thingDef)
         {
             int available = 0;
@@ -75,12 +71,10 @@ namespace UniqueWeaponsUnbound
             return available;
         }
 
-        /// <summary>
-        /// Returns true if an op's cost could currently be paid from the refund
-        /// ledger plus placed ingredients, without committing any state. Used as a
-        /// pre-flight check before starting an op's work cycle so the pawn doesn't
-        /// waste 1000 ticks of work on an op we already know will abort.
-        /// </summary>
+        // Returns true if an op's cost could currently be paid from the refund
+        // ledger plus placed ingredients, without committing any state. Used as
+        // a pre-flight check before starting an op's work cycle so the pawn
+        // doesn't waste 1000 ticks of work on an op we already know will abort.
         private bool CanAffordOpCost(List<ThingDefCountClass> opCost)
         {
             if (opCost == null || opCost.Count == 0)
@@ -97,14 +91,13 @@ namespace UniqueWeaponsUnbound
             return true;
         }
 
-        /// <summary>
-        /// Pays an op's cost: debits the refund ledger first, then consumes the
-        /// remainder from placed ingredient stacks at the workbench. Pre-checks
-        /// availability and only commits if the cost can be fully paid, so a
-        /// shortfall (e.g. ingredients destroyed by fire/explosion/deterioration)
-        /// leaves the ledger and the weapon untouched. Returns false on shortfall —
-        /// caller should notify the player and abort the job.
-        /// </summary>
+        // Pays an op's cost: debits the refund ledger first, then consumes the
+        // remainder from placed ingredient stacks at the workbench. Pre-checks
+        // availability and only commits if the cost can be fully paid, so a
+        // shortfall (e.g. ingredients destroyed by
+        // fire/explosion/deterioration) leaves the ledger and the weapon
+        // untouched. Returns false on shortfall — caller should notify the
+        // player and abort the job.
         private bool TryConsumeOpCost(List<ThingDefCountClass> opCost)
         {
             if (opCost == null || opCost.Count == 0)
@@ -167,15 +160,13 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        /// <summary>
-        /// Records a structured log line plus a translated, op-type-specific
-        /// bail message for an unexpected throw inside ApplyOperation. The log
-        /// names the op index, op type, trait defName, and weapon defName so
-        /// post-mortem triage doesn't have to reconstruct the failing op from
-        /// the surrounding toil context. The bail message is routed through
-        /// the first-set-wins <see cref="SetBailMessage"/> channel so a cascade
-        /// failure can't overwrite the original cause.
-        /// </summary>
+        // Records a structured log line plus a translated, op-type-specific
+        // bail message for an unexpected throw inside ApplyOperation. The log
+        // names the op index, op type, trait defName, and weapon defName so
+        // post-mortem triage doesn't have to reconstruct the failing op from
+        // the surrounding toil context. The bail message is routed through the
+        // first-set-wins SetBailMessage channel so a cascade failure can't
+        // overwrite the original cause.
         private void RecordOpFailureBail(CustomizationOp op, Exception ex)
         {
             string opDescr;
@@ -311,12 +302,10 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        /// <summary>
-        /// Converts the weapon to a different ThingDef in-place (base↔unique).
-        /// Destroys the current weapon, spawns a new one at the same position,
-        /// and updates reservations. Called atomically within an ApplyOperation
-        /// step when a trait change crosses the 0↔1 boundary.
-        /// </summary>
+        // Converts the weapon to a different ThingDef in-place (base↔unique).
+        // Destroys the current weapon, spawns a new one at the same position,
+        // and updates reservations. Called atomically within an ApplyOperation
+        // step when a trait change crosses the 0↔1 boundary.
         private void ConvertWeaponInPlace(ThingDef targetDef)
         {
             Thing newWeapon = WeaponDefConversion.ConvertWeaponDef(weapon, targetDef);

@@ -8,16 +8,13 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Passive recorder for Initialize-phase failures and the printer for the
-    /// startup summary. Each subsystem's Initialize method wraps its own work
-    /// and calls <see cref="RecordFailure"/> when it catches an exception, so
-    /// a single failed subsystem (e.g. a modded def breaking one Initialize)
-    /// doesn't prevent the rest of the mod from coming online with degraded
-    /// functionality. <see cref="LogSummary"/> surfaces failed phases
-    /// alongside the per-mod def counts so the player sees one diagnostic
-    /// line per startup.
-    /// </summary>
+    // Passive recorder for Initialize-phase failures and the printer for the
+    // startup summary. Each subsystem's Initialize method wraps its own work
+    // and calls RecordFailure when it catches an exception, so a single failed
+    // subsystem (e.g. a modded def breaking one Initialize) doesn't prevent the
+    // rest of the mod from coming online with degraded functionality.
+    // LogSummary surfaces failed phases alongside the per-mod def counts so the
+    // player sees one diagnostic line per startup.
     public sealed class InitDiagnostics
     {
         private readonly List<string> failedPhases = new List<string>();

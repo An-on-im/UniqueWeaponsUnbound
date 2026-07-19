@@ -5,9 +5,8 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Applies the cost fraction (0.5x base recipe) and quality-based multiplier.
-    /// </summary>
+    // Applies the cost fraction (0.5x base recipe) and quality-based
+    // multiplier.
     public class QualityMultiplierWorker : TraitCostRuleWorker
     {
         private const float CostFraction = 0.5f;

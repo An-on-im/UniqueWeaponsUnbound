@@ -4,36 +4,30 @@ using Verse;
 
 namespace UniqueWeaponsUnbound.HaulPlanning.Internal
 {
-    /// <summary>
-    /// Held-Karp dynamic programming over Manhattan distances (Held &amp; Karp
-    /// 1962). Two entry points: the single-trip solver both planners use to
-    /// cost and sequence a trip's pickups, and <see cref="SubsetTourTable"/>,
-    /// the all-subsets table the Thorough planner queries during its partition
-    /// DP. Costs stay int throughout — Manhattan distance is integral, and
-    /// float ties would threaten determinism.
-    ///
-    /// Both entry points dedupe by position: callers may pass the same cell
-    /// several times (a carry-tracker/inventory split of one stack, co-located
-    /// stacks of different defs) and same-cell entries are solved as a single
-    /// TSP node, then kept adjacent in first-occurrence order on output.
-    /// </summary>
+    // Held-Karp dynamic programming over Manhattan distances (Held & Karp
+    // 1962). Two entry points: the single-trip solver both planners use to cost
+    // and sequence a trip's pickups, and SubsetTourTable, the all-subsets table
+    // the Thorough planner queries during its partition DP. Costs stay int
+    // throughout — Manhattan distance is integral, and float ties would
+    // threaten determinism.
+    //
+    // Both entry points dedupe by position: callers may pass the same cell
+    // several times (a carry-tracker/inventory split of one stack, co-located
+    // stacks of different defs) and same-cell entries are solved as a single
+    // TSP node, then kept adjacent in first-occurrence order on output.
     internal static class HeldKarp
     {
-        /// <summary>
-        /// Cap on unique positions per exact solve — keeps the dp[2^k * k]
-        /// table bounded. Above the cap the solver degrades to first-
-        /// occurrence order (deterministic, never wrong, just not optimal).
-        /// Planners are expected to guard well below this.
-        /// </summary>
+        // Cap on unique positions per exact solve — keeps the dp[2^k * k] table
+        // bounded. Above the cap the solver degrades to first-occurrence order
+        // (deterministic, never wrong, just not optimal). Planners are expected
+        // to guard well below this.
         internal const int MaxUniquePositions = 16;
 
         internal const int Unreached = int.MaxValue;
 
-        /// <summary>
-        /// Cost of the cheapest closed tour: depot → every unique position in
-        /// <paramref name="positions"/> → depot. Duplicate cells cost nothing
-        /// extra (the pawn is already standing there).
-        /// </summary>
+        // Cost of the cheapest closed tour: depot → every unique position in
+        // positions → depot. Duplicate cells cost nothing extra (the pawn is
+        // already standing there).
         internal static int Cost(List<IntVec3> positions, IntVec3 depot)
         {
             List<IntVec3> unique = Dedupe(positions, null);
@@ -66,13 +60,11 @@ namespace UniqueWeaponsUnbound.HaulPlanning.Internal
             return best;
         }
 
-        /// <summary>
-        /// Visit order for a trip's pickups, as indices into
-        /// <paramref name="positions"/>: unique positions sequenced exactly,
-        /// entries sharing a cell kept adjacent in input order. Trivial sizes
-        /// (≤ 2 unique cells, where every order costs the same) and above-cap
-        /// inputs return the first-occurrence grouping unchanged.
-        /// </summary>
+        // Visit order for a trip's pickups, as indices into positions: unique
+        // positions sequenced exactly, entries sharing a cell kept adjacent in
+        // input order. Trivial sizes (≤ 2 unique cells, where every order costs
+        // the same) and above-cap inputs return the first-occurrence grouping
+        // unchanged.
         internal static int[] Order(List<IntVec3> positions, IntVec3 depot)
         {
             int n = positions.Count;
@@ -104,14 +96,12 @@ namespace UniqueWeaponsUnbound.HaulPlanning.Internal
             return order;
         }
 
-        /// <summary>
-        /// Core DP shared by the single-trip solver and the subset table:
-        /// dp[mask * m + i] = cheapest path that leaves the depot, visits
-        /// exactly the positions in mask, and ends at position i. Forward
-        /// relaxation with strict less-than, so ties resolve to the lowest
-        /// (mask, i) found — deterministic. <paramref name="parent"/> may be
-        /// null when only costs are needed.
-        /// </summary>
+        // Core DP shared by the single-trip solver and the subset table:
+        // dp[mask * m + i] = cheapest path that leaves the depot, visits
+        // exactly the positions in mask, and ends at position i. Forward
+        // relaxation with strict less-than, so ties resolve to the lowest
+        // (mask, i) found — deterministic. parent may be null when only costs
+        // are needed.
         internal static void RunDp(
             List<IntVec3> pts, IntVec3 depot, int[] dp, int[] parent, int[] dWB)
         {
@@ -221,13 +211,11 @@ namespace UniqueWeaponsUnbound.HaulPlanning.Internal
         }
     }
 
-    /// <summary>
-    /// One Held-Karp pass over a set of unique positions, queryable for the
-    /// closed-tour cost of ANY position subset: tour(mask) = min over ends i
-    /// in mask of dp[mask][i] + dist(i, depot). Built in O(2^M * M^2); each
-    /// query is an array read. This is what lets the Thorough planner's
-    /// partition DP evaluate every candidate trip without per-subset solves.
-    /// </summary>
+    // One Held-Karp pass over a set of unique positions, queryable for the
+    // closed-tour cost of ANY position subset: tour(mask) = min over ends i in
+    // mask of dp[mask][i] + dist(i, depot). Built in O(2^M * M^2); each query
+    // is an array read. This is what lets the Thorough planner's partition DP
+    // evaluate every candidate trip without per-subset solves.
     internal sealed class SubsetTourTable
     {
         private readonly int[] tourCost;

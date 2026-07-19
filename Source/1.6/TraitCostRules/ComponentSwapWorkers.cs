@@ -4,10 +4,9 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Base class for workers that replace components with a thematic material,
-    /// falling back to a value-based split of base materials when no components exist.
-    /// </summary>
+    // Base class for workers that replace components with a thematic material,
+    // falling back to a value-based split of base materials when no components
+    // exist.
     public abstract class ComponentSwapOrSplitWorker : TraitCostRuleWorker
     {
         protected abstract ThingDef Replacement { get; }
@@ -21,20 +20,17 @@ namespace UniqueWeaponsUnbound
         }
     }
 
-    /// <summary>
-    /// Replaces components with herbal medicine (3x count) for toxic/paralytic traits.
-    /// </summary>
+    // Replaces components with herbal medicine (3x count) for toxic/paralytic
+    // traits.
     public class ToxSwapWorker : ComponentSwapOrSplitWorker
     {
         protected override ThingDef Replacement => CostRuleHelpers.HerbalMedicine;
         protected override int ComponentMultiplier => 3;
     }
 
-    /// <summary>
-    /// Replaces components with chemfuel (10x count) for incendiary/blast traits.
-    /// Folds spacer components into industrial before swapping so all components
-    /// are captured in a single pass.
-    /// </summary>
+    // Replaces components with chemfuel (10x count) for incendiary/blast
+    // traits. Folds spacer components into industrial before swapping so all
+    // components are captured in a single pass.
     public class IncendiarySwapWorker : ComponentSwapOrSplitWorker
     {
         protected override ThingDef Replacement => CostRuleHelpers.Chemfuel;

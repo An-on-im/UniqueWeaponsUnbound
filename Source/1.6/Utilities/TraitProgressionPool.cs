@@ -6,21 +6,22 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Snapshot of which weapon traits exist on player-discoverable unique weapons,
-    /// classified by whether any source weapon is held by a non-hostile actor.
-    ///
-    /// Sources counted:
-    ///   - Ground weapons on any loaded map, on tiles not currently fogged.
-    ///   - Weapons equipped/inventoried/carried by spawned pawns on those maps.
-    ///   - Weapons equipped/inventoried/carried by pawns in player-faction caravans.
-    ///   - Alpha Armoury weapon kits (when that mod is loaded) on the ground or in
-    ///     pawn inventory/carry trackers. Each kit stores one applicable trait.
-    /// Weapons inside non-spawned ThingHolders (caskets, ancient containers) are
-    /// excluded automatically because they don't appear in <see cref="ListerThings"/>.
-    ///
-    /// Built once at dialog construction; treat as immutable thereafter.
-    /// </summary>
+    // Snapshot of which weapon traits exist on player-discoverable unique
+    // weapons, classified by whether any source weapon is held by a non-hostile
+    // actor.
+    //
+    // Sources counted:
+    //   - Ground weapons on any loaded map, on tiles not currently fogged.
+    //   - Weapons equipped/inventoried/carried by spawned pawns on those maps.
+    //   - Weapons equipped/inventoried/carried by pawns in player-faction
+    //     caravans.
+    //   - Alpha Armoury weapon kits (when that mod is loaded) on the ground or
+    //     in pawn inventory/carry trackers. Each kit stores one applicable
+    //     trait.
+    // Weapons inside non-spawned ThingHolders (caskets, ancient containers) are
+    // excluded automatically because they don't appear in ListerThings.
+    //
+    // Built once at dialog construction; treat as immutable thereafter.
     public sealed class TraitProgressionPool
     {
         // Per-trait counts. nonHostile = sources NOT held by a hostile pawn
@@ -36,26 +37,21 @@ namespace UniqueWeaponsUnbound
             hostileCount = hostile;
         }
 
-        /// <summary>
-        /// True if at least one player-discoverable weapon (anywhere) carries this trait.
-        /// Traits failing this should be hidden entirely from the customization dialog.
-        /// </summary>
+        // True if at least one player-discoverable weapon (anywhere) carries
+        // this trait. Traits failing this should be hidden entirely from the
+        // customization dialog.
         public bool IsVisible(WeaponTraitDef trait)
             => nonHostileCount.ContainsKey(trait) || hostileCount.ContainsKey(trait);
 
-        /// <summary>
-        /// True if at least one source for this trait is NOT held by a hostile pawn.
-        /// Traits visible but failing this should appear in the dialog as disabled
-        /// with a "only on hostile" rejection reason.
-        /// </summary>
+        // True if at least one source for this trait is NOT held by a hostile
+        // pawn. Traits visible but failing this should appear in the dialog as
+        // disabled with a "only on hostile" rejection reason.
         public bool HasNonHostileSource(WeaponTraitDef trait)
             => nonHostileCount.TryGetValue(trait, out int n) && n > 0;
 
-        /// <summary>
-        /// True when removing the given weapon's contribution would leave no other
-        /// non-hostile source for this trait. Used to flag "last copy" traits in
-        /// the LHS chip list with a yellow warning.
-        /// </summary>
+        // True when removing the given weapon's contribution would leave no
+        // other non-hostile source for this trait. Used to flag "last copy"
+        // traits in the LHS chip list with a yellow warning.
         public bool IsLastNonHostileSource(WeaponTraitDef trait, IList<WeaponTraitDef> weaponTraits)
         {
             if (!nonHostileCount.TryGetValue(trait, out int total))
@@ -64,10 +60,9 @@ namespace UniqueWeaponsUnbound
             return total - contribution <= 0;
         }
 
-        /// <summary>
-        /// Builds the pool by scanning all loaded maps and player-faction caravans.
-        /// Errors during scan are logged and the partially-built pool is returned.
-        /// </summary>
+        // Builds the pool by scanning all loaded maps and player-faction
+        // caravans. Errors during scan are logged and the partially-built pool
+        // is returned.
         public static TraitProgressionPool Build()
         {
             var nonHostile = new Dictionary<WeaponTraitDef, int>();

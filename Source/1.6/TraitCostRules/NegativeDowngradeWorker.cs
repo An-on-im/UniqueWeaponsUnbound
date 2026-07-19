@@ -4,11 +4,9 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Downgrades cost materials by one tech level for negative traits when adding.
-    /// Skipped for removal — removing a negative trait requires proper-tier materials
-    /// to restore the weapon to standard quality.
-    /// </summary>
+    // Downgrades cost materials by one tech level for negative traits when
+    // adding. Skipped for removal — removing a negative trait requires
+    // proper-tier materials to restore the weapon to standard quality.
     public class NegativeDowngradeWorker : TraitCostRuleWorker
     {
         private static Dictionary<ThingDef, ThingDef> downgrades;
