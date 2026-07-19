@@ -76,11 +76,14 @@ namespace UniqueWeaponsUnbound
 
         /// <summary>
         /// Returns true if the trait is "negative" (undesirable), detected by a
-        /// MarketValue stat factor below 1.0. Negative traits have inverted costs:
-        /// cheaper to add (RefundRate), and cost RefundRate to remove.
+        /// MarketValue stat factor below 1.0 or a negative marketValueOffset.
+        /// Negative traits have inverted costs: cheaper to add (RefundRate), and
+        /// cost RefundRate to remove.
         /// </summary>
         public static bool IsNegativeTrait(WeaponTraitDef trait)
         {
+            if (trait.marketValueOffset < 0f)
+                return true;
             if (trait.statFactors == null)
                 return false;
             for (int i = 0; i < trait.statFactors.Count; i++)

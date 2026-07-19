@@ -2,9 +2,11 @@
 
 ## Features
 
-- Blood-soaked trait rule requiring hemogen if biotech and UMW are installed
-- Optional reinforced barrel replacement rule for underbarrel traits?
+- Replace xml doc comments with regular strings
+- git blame ignore for the xml doc comment replacement commit
 
+- Blood-soaked trait rule requiring hemogen if biotech and UMW are installed?
+- Optional reinforced barrel replacement rule for underbarrel traits?
 - Random button?
 - Mod setting to disable trait customization?
 - Dev mode mod settings page button to copy settings to clipboard?
