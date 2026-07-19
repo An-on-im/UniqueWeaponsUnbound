@@ -69,6 +69,8 @@ Source/1.6/
 
 **Namespace Convention:** Use `*Patches` suffix for patch namespaces to avoid RimWorld type conflicts.
 
+**Comments:** Plain `//` comments only — never XML doc comments (`///` with `<summary>` etc.). No tooling consumes the doc XML in this project, so the tag scaffolding is noise.
+
 **Serialized Fields:** Use camelCase for fields serialized via `Scribe_Values.Look` to match save file XML element names (per .editorconfig). PascalCase for all other public members.
 
 **Settings Triple Invariant (`UWU_Settings.cs`):** Every settings field must appear in three places with matching defaults: (1) field declaration, (2) `ResetToDefaults()`, (3) `ExposeData()`'s `Scribe_Values.Look` default. Missing a spot fails silently — drops from save, skips reset, or drifts from declared default. All three lists are kept in the UI's display order (the section ordering from `UWU_Mod.DoSettingsWindowContents`) with section comments, so a diff across the three blocks lines up row-for-row. When adding/removing/renaming a setting, update all three and slot it into its UI section.
