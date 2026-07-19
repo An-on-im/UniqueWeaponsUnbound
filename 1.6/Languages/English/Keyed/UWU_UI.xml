@@ -1,176 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
-  <!-- Float menu / Gizmo -->
-  <UWU_CustomizeWeapon>Customize {0}</UWU_CustomizeWeapon>
-  <UWU_RequiresResearch>requires {0}</UWU_RequiresResearch>
-  <UWU_RequiresWorkbench>requires {0}</UWU_RequiresWorkbench>
-  <UWU_NoSuitableWorkbench>no suitable workbench</UWU_NoSuitableWorkbench>
-  <UWU_RequiresMinimumQuality>requires {0} quality or better</UWU_RequiresMinimumQuality>
-  <UWU_CustomizeGizmoLabel>Customize</UWU_CustomizeGizmoLabel>
-  <UWU_CustomizeGizmoDesc>Select a colonist to customize this weapon at a nearby workbench.</UWU_CustomizeGizmoDesc>
-
-  <!-- Dev-mode diagnostic reasons (surfaced when Prefs.DevMode is on, otherwise hidden) -->
-  <UWU_DevNoUniqueVariant>no unique variant</UWU_DevNoUniqueVariant>
-  <UWU_DevDefConversionDisabled>base variant upgrades disabled</UWU_DevDefConversionDisabled>
-  <UWU_DevTechLevelBeyondComprehension>{0} is beyond comprehension</UWU_DevTechLevelBeyondComprehension>
-
-  <!-- Dialog: Buttons -->
-  <UWU_Cancel>Cancel</UWU_Cancel>
-  <UWU_Reset>Reset</UWU_Reset>
-  <UWU_Confirm>Confirm</UWU_Confirm>
-  <UWU_Randomize>Randomize</UWU_Randomize>
-  <UWU_ResetToDefaults>Reset to defaults</UWU_ResetToDefaults>
-
-  <!-- Dialog: Tabs -->
-  <UWU_TabTraits>Traits</UWU_TabTraits>
-  <UWU_TabTexture>Texture</UWU_TabTexture>
-  <UWU_TabColor>Color</UWU_TabColor>
-
-  <!-- Dialog: Controls -->
-  <UWU_RelicNameTooltip>This weapon is an ideology relic. Its name can only be changed when forming or reforming an ideoligion.</UWU_RelicNameTooltip>
-  <UWU_SelectTraitFirst>Select at least one trait first</UWU_SelectTraitFirst>
-  <UWU_AutoRegenName>Auto-regenerate name when traits change</UWU_AutoRegenName>
-  <UWU_HideNegativeTraits>Hide negative traits</UWU_HideNegativeTraits>
-
-  <!-- Dialog: Disabled-state messages -->
-  <UWU_SelectTraitsForTexture>Select traits to customize texture</UWU_SelectTraitsForTexture>
-  <UWU_SelectTraitsForColor>Select traits to customize color</UWU_SelectTraitsForColor>
-  <UWU_ColorDeterminedBy>Color determined by {0}</UWU_ColorDeterminedBy>
-
-  <!-- Dialog: Color sections -->
-  <UWU_WeaponColors>Weapon colors</UWU_WeaponColors>
-  <UWU_IdeologyColors>Ideology colors</UWU_IdeologyColors>
-  <UWU_StructureColors>Structure colors</UWU_StructureColors>
-
-  <!-- Dialog: Cost display -->
-  <UWU_NetRefund>Net refund: </UWU_NetRefund>
-  <UWU_RefundNone>None</UWU_RefundNone>
-  <UWU_NetCost>Net cost: </UWU_NetCost>
-  <UWU_CostFree>Free</UWU_CostFree>
-  <UWU_MissingResources>Missing resources</UWU_MissingResources>
-  <UWU_NotEnoughMaterials>Required materials are insufficient, forbidden, reserved by another pawn, or unreachable from this pawn's position.</UWU_NotEnoughMaterials>
-  <UWU_CouldNotStartPlanInfeasible>Could not customize {0}: no viable haul plan.</UWU_CouldNotStartPlanInfeasible>
-  <UWU_CouldNotStartReservationConflict>Could not customize {0}: failed to reserve {1} x{2}.</UWU_CouldNotStartReservationConflict>
-  <UWU_CouldNotStartReservationConflictHeldBy>Could not customize {0}: failed to reserve {1} x{2} (held by {3}).</UWU_CouldNotStartReservationConflictHeldBy>
-  <UWU_CouldNotStartInternalError>Could not customize {0}: internal error. See log.</UWU_CouldNotStartInternalError>
-
-  <!-- Trait tooltips -->
-  <UWU_Effects>Effects:</UWU_Effects>
-  <UWU_DamageType>Damage type</UWU_DamageType>
-  <UWU_ExtraDamage>Extra damage</UWU_ExtraDamage>
-  <UWU_BurstSpeed>Burst speed</UWU_BurstSpeed>
-  <UWU_BurstCount>Burst count</UWU_BurstCount>
-  <UWU_StoppingPower>Stopping power</UWU_StoppingPower>
-  <UWU_IgnoresAccuracyPenalties>Ignores accuracy penalties</UWU_IgnoresAccuracyPenalties>
-
-  <!-- Trait validation -->
-  <UWU_AlreadyApplied>Already applied</UWU_AlreadyApplied>
-  <UWU_MaxTraitsReached>Maximum traits reached</UWU_MaxTraitsReached>
-  <UWU_ConflictsWith>Conflicts with {0}</UWU_ConflictsWith>
-  <UWU_CannotBeOnlyTrait>Cannot be the only trait</UWU_CannotBeOnlyTrait>
-  <UWU_TraitCannotBeOnlyTrait>{0} cannot be the only trait</UWU_TraitCannotBeOnlyTrait>
-  <UWU_OnlyOnHostiles>Must disarm from hostile</UWU_OnlyOnHostiles>
-  <UWU_LastTraitSourceWarning>Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons.</UWU_LastTraitSourceWarning>
-  <UWU_NoTraitsMatchSearch>No traits match your search.</UWU_NoTraitsMatchSearch>
-  <UWU_NoTraitsDiscovered>No traits available yet.\n\nRecover unique weapons via quests or world loot\nto unlock their traits for customization.</UWU_NoTraitsDiscovered>
-  <UWU_NoTraitsAfterHideNegative>All available traits for this weapon are negative. Disable "Hide negative traits" below to view them.</UWU_NoTraitsAfterHideNegative>
-  <UWU_NoTraitsAvailable>No traits are compatible with this weapon.</UWU_NoTraitsAvailable>
-
-  <!-- Fallbacks -->
-  <UWU_WeaponFallback>weapon</UWU_WeaponFallback>
-  <UWU_WeaponTypeFallback>Weapon</UWU_WeaponTypeFallback>
-  <UWU_ColorFallback>blue</UWU_ColorFallback>
-
-  <!-- Jobs -->
-  <UWU_CustomizingWeapon>Customizing {0}</UWU_CustomizingWeapon>
-  <UWU_AddingTrait>Adding {0} to {1}</UWU_AddingTrait>
-  <UWU_RemovingTrait>Removing {0} from {1}</UWU_RemovingTrait>
-  <UWU_ApplyingCosmetics>Customizing appearance of {0}</UWU_ApplyingCosmetics>
-  <UWU_PlacingWeapon>Placing {0} on {1}</UWU_PlacingWeapon>
-  <UWU_GatheringMaterials>Gathering materials for {0}</UWU_GatheringMaterials>
-  <UWU_AdmiringWork>Admiring work</UWU_AdmiringWork>
-  <UWU_InsufficientResources>Not enough resources to customize this weapon.</UWU_InsufficientResources>
-  <UWU_IngredientShortfall>{0} customization interrupted: ingredients lost before {1} could be applied.</UWU_IngredientShortfall>
-  <UWU_BailWorkbenchUnavailable>{0} customization interrupted: workbench is no longer available.</UWU_BailWorkbenchUnavailable>
-  <UWU_BailWorkbenchUnreachable>{0} customization interrupted: workbench became unreachable.</UWU_BailWorkbenchUnreachable>
-  <UWU_BailWorkbenchInactive>{0} customization interrupted: workbench has no power or fuel.</UWU_BailWorkbenchInactive>
-  <UWU_BailWeaponLost>{0} customization interrupted: weapon was lost.</UWU_BailWeaponLost>
-  <UWU_BailWeaponInaccessible>{0} customization interrupted: weapon is no longer accessible.</UWU_BailWeaponInaccessible>
-  <UWU_BailIngredientLost>{0} customization interrupted: an ingredient was lost while hauling.</UWU_BailIngredientLost>
-  <UWU_BailIngredientUnreachable>{0} customization interrupted: a required ingredient became unreachable.</UWU_BailIngredientUnreachable>
-  <UWU_BailIngredientPlacementFailed>{0} customization interrupted: no room near the workbench to place an ingredient.</UWU_BailIngredientPlacementFailed>
-  <UWU_BailCarryStartFailed>{0} customization interrupted: could not pick up the weapon.</UWU_BailCarryStartFailed>
-  <UWU_BailOpAddTraitFailed>{0} customization interrupted: an error occurred while adding {1}.</UWU_BailOpAddTraitFailed>
-  <UWU_BailOpRemoveTraitFailed>{0} customization interrupted: an error occurred while removing {1}.</UWU_BailOpRemoveTraitFailed>
-  <UWU_BailOpCosmeticsFailed>{0} customization interrupted: an error occurred while applying cosmetic changes.</UWU_BailOpCosmeticsFailed>
-  <UWU_BailUnexpected>{0} customization failed unexpectedly.</UWU_BailUnexpected>
-  <UWU_BailDialogOpenFailed>{0} customization interrupted: the customization dialog could not be opened. See log.</UWU_BailDialogOpenFailed>
-  <UWU_DialogErrored>{0} customization dialog errored and was closed. See log.</UWU_DialogErrored>
-  <UWU_FinalizeAbilitySyncFailed>{0} customized, but ability state could not be reconciled. See log.</UWU_FinalizeAbilitySyncFailed>
-  <UWU_FinalizeColorFailed>{0} customized, but the final color could not be applied. See log.</UWU_FinalizeColorFailed>
-  <UWU_RelicIdeoColorTip>{0}'s ideoligion color. This weapon is a relic of the {1} ideoligion.</UWU_RelicIdeoColorTip>
-
-  <!-- Settings: Section headers -->
-  <UWU_SettingsCategory>Unique Weapons Unbound</UWU_SettingsCategory>
-  <UWU_SettingsProgression>Progression</UWU_SettingsProgression>
-  <UWU_SettingsTraitCosts>Trait costs</UWU_SettingsTraitCosts>
-  <UWU_SettingsPrerequisites>Prerequisites</UWU_SettingsPrerequisites>
-  <UWU_SettingsHaulPlanner>Ingredient hauling</UWU_SettingsHaulPlanner>
-  <UWU_SettingsMiscellaneous>Miscellaneous</UWU_SettingsMiscellaneous>
-
-  <!-- Settings: Reusable label suffixes (each includes a leading space) -->
-  <UWU_DefaultSuffix> (default)</UWU_DefaultSuffix>
-  <UWU_RecommendedSuffix> (recommended)</UWU_RecommendedSuffix>
-  <UWU_VanillaSuffix> (vanilla)</UWU_VanillaSuffix>
-  <UWU_ExperimentalSuffix> (experimental)</UWU_ExperimentalSuffix>
-
-  <!-- Settings: Trait costs -->
-  <UWU_TraitCostMultiplier>Trait cost multiplier: {0}%</UWU_TraitCostMultiplier>
-  <UWU_TraitRefundRate>Trait refund rate: {0}%</UWU_TraitRefundRate>
-  <UWU_RefundRateNoEffect>Trait refund rate has no effect while trait cost multiplier is 0%.</UWU_RefundRateNoEffect>
-  <UWU_UseRecipeBaseCost>Derive base cost from crafting recipe</UWU_UseRecipeBaseCost>
-  <UWU_UseRecipeBaseCostDesc>When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs.</UWU_UseRecipeBaseCostDesc>
-
-  <!-- Settings: Prerequisites -->
-  <UWU_MinimumQuality>Minimum weapon quality: {0}</UWU_MinimumQuality>
-  <UWU_MinimumQualityDesc>Restrict customization to weapons of at least this quality. Awful imposes no restriction. Weapons below the minimum will still show the customization option, but it will be disabled with an explanation.</UWU_MinimumQualityDesc>
-  <UWU_RequireCustomizationResearch>Require customization research</UWU_RequireCustomizationResearch>
-  <UWU_RequireCustomizationResearchDesc>Require the completion of the Unique Smithing, Unique Machining, or Unique Fabrication research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree.</UWU_RequireCustomizationResearchDesc>
-  <UWU_RequireRecipeResearch>Require weapon crafting research</UWU_RequireRecipeResearch>
-  <UWU_RequireRecipeResearchDesc>Require the completion of any research that would enable crafting the weapon. For example, customizing a charge rifle would require Pulse-charged munitions.</UWU_RequireRecipeResearchDesc>
-  <UWU_RequireWorkbench>Require appropriate workbench</UWU_RequireWorkbench>
-  <UWU_RequireWorkbenchDesc>Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons.</UWU_RequireWorkbenchDesc>
-  <UWU_AllowUncraftable>Allow customizing uncraftable weapons</UWU_AllowUncraftable>
-  <UWU_AllowUncraftableDesc>Allow customization of weapons that have no crafting recipe.</UWU_AllowUncraftableDesc>
-  <UWU_AllowUltratech>Allow customizing ultratech-level weapons</UWU_AllowUltratech>
-  <UWU_AllowUltratechDesc>Allow customization of ultratech weapons, requiring Advanced Weapon Customization research.</UWU_AllowUltratechDesc>
-  <UWU_AllowUltratechImpliedDesc>Automatically enabled because "Allow customizing archotech-level weapons" is on. Both tiers share the same research gate.</UWU_AllowUltratechImpliedDesc>
-  <UWU_AllowArchotech>Allow customizing archotech-level weapons</UWU_AllowArchotech>
-  <UWU_AllowArchotechDesc>Allow customization of archotech weapons, requiring Advanced Weapon Customization research.</UWU_AllowArchotechDesc>
-
-  <!-- Settings: Miscellaneous -->
-  <UWU_AllowDefConversion>Allow weapon def conversion</UWU_AllowDefConversion>
-  <UWU_AllowDefConversionDesc>Allow weapons to convert between base and unique defs during customization. When disabled, only already-unique weapons can be customized, and removing all traits keeps the weapon as a zero-trait unique instead of reverting to its base weapon.</UWU_AllowDefConversionDesc>
-  <UWU_EnableIdeoColors>Enable Ideology color options</UWU_EnableIdeoColors>
-  <UWU_EnableIdeoColorsDesc>Show Ideology and miscellaneous color palettes in the weapon customization color picker.</UWU_EnableIdeoColorsDesc>
-  <UWU_EnableStructureColors>Enable structure color options</UWU_EnableStructureColors>
-  <UWU_EnableStructureColorsDesc>Show structure color palette in the weapon customization color picker.</UWU_EnableStructureColorsDesc>
-  <UWU_EnforceMaxTraitLimit>Enforce trait count limit</UWU_EnforceMaxTraitLimit>
-  <UWU_EnforceMaxTraitLimitDesc>Vanilla unique weapons generate with no more than three traits. Enable this to enforce the same limit during customization. Disable to allow any number of traits (other rules such as category and exclusion restrictions still apply).</UWU_EnforceMaxTraitLimitDesc>
-  <UWU_EnforceSoleTrait>Enforce sole-trait restrictions</UWU_EnforceSoleTrait>
-  <UWU_EnforceSoleTraitDesc>Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization.</UWU_EnforceSoleTraitDesc>
-  <UWU_RestrictTraitsToDiscovered>Restrict available traits to discovered weapons</UWU_RestrictTraitsToDiscovered>
-  <UWU_RestrictTraitsToDiscoveredDesc>Lightweight progression system. When enabled, the customization dialog only offers traits found on unique weapons currently visible to the colony: on a loaded map (not fogged, sealed, or possessed by hostiles) or in a player-faction caravan. No persistent state is added to saves; toggling this off restores the full trait list immediately.</UWU_RestrictTraitsToDiscoveredDesc>
-  <UWU_EnableGroundCustomization>Enable ground weapon right-click menu</UWU_EnableGroundCustomization>
-  <UWU_EnableGroundCustomizationDesc>Show "Customize" options when right-clicking weapons on the ground. Disable this to reduce float menu clutter, especially with storage mods that stack items in the same cell. Weapons can still be customized by selecting them and using the gizmo button.</UWU_EnableGroundCustomizationDesc>
-
-  <!-- Settings: Haul planner -->
-  <UWU_HaulPlannerSequential>Sequential</UWU_HaulPlannerSequential>
-  <UWU_HaulPlannerSequentialDesc>Vanilla behavior. Pawns carry up to one ingredient stack at a time, always grabbing the nearest first. Simple and predictable, but means lots of short trips for resource-heavy customizations.</UWU_HaulPlannerSequentialDesc>
-  <UWU_HaulPlannerSweep>Sweep</UWU_HaulPlannerSweep>
-  <UWU_HaulPlannerSweepDesc>Pawns plan ahead and use spare inventory space to carry more at once, while also routing more efficiently between pickups. Much fewer trips than Sequential, with negligible planning overhead.</UWU_HaulPlannerSweepDesc>
-  <UWU_HaulPlannerThorough>Thorough</UWU_HaulPlannerThorough>
-  <UWU_HaulPlannerThoroughDesc>Like Sweep, but also weighs which stacks to draw from when the map has multiple candidates, rather than always taking the closest. Slower to plan, but usually finds the shortest runs when ingredients are scattered or carrying capacity is tight. Falls back to Sweep for hauls too complex to fully analyze.</UWU_HaulPlannerThoroughDesc>
-
+	<!-- Float menu / Gizmo -->
+	<UWU_CustomizeWeapon>Customize {0}</UWU_CustomizeWeapon>
+	<UWU_RequiresResearch>requires {0}</UWU_RequiresResearch>
+	<UWU_RequiresWorkbench>requires {0}</UWU_RequiresWorkbench>
+	<UWU_NoSuitableWorkbench>no suitable workbench</UWU_NoSuitableWorkbench>
+	<UWU_RequiresMinimumQuality>requires {0} quality or better</UWU_RequiresMinimumQuality>
+	<UWU_CustomizeGizmoLabel>Customize</UWU_CustomizeGizmoLabel>
+	<UWU_CustomizeGizmoDesc>Select a colonist to customize this weapon at a nearby workbench.</UWU_CustomizeGizmoDesc>
+	<!-- Dev-mode diagnostic reasons (surfaced when Prefs.DevMode is on, otherwise hidden) -->
+	<UWU_DevNoUniqueVariant>no unique variant</UWU_DevNoUniqueVariant>
+	<UWU_DevDefConversionDisabled>base variant upgrades disabled</UWU_DevDefConversionDisabled>
+	<UWU_DevTechLevelBeyondComprehension>{0} is beyond comprehension</UWU_DevTechLevelBeyondComprehension>
+	<!-- Dialog: Buttons -->
+	<UWU_Cancel>Cancel</UWU_Cancel>
+	<UWU_Reset>Reset</UWU_Reset>
+	<UWU_Confirm>Confirm</UWU_Confirm>
+	<UWU_Randomize>Randomize</UWU_Randomize>
+	<UWU_ResetToDefaults>Reset to defaults</UWU_ResetToDefaults>
+	<!-- Dialog: Tabs -->
+	<UWU_TabTraits>Traits</UWU_TabTraits>
+	<UWU_TabTexture>Texture</UWU_TabTexture>
+	<UWU_TabColor>Color</UWU_TabColor>
+	<!-- Dialog: Controls -->
+	<UWU_RelicNameTooltip>This weapon is an ideology relic. Its name can only be changed when forming or reforming an ideoligion.</UWU_RelicNameTooltip>
+	<UWU_SelectTraitFirst>Select at least one trait first</UWU_SelectTraitFirst>
+	<UWU_AutoRegenName>Auto-regenerate name when traits change</UWU_AutoRegenName>
+	<UWU_HideNegativeTraits>Hide negative traits</UWU_HideNegativeTraits>
+	<!-- Dialog: Disabled-state messages -->
+	<UWU_SelectTraitsForTexture>Select traits to customize texture</UWU_SelectTraitsForTexture>
+	<UWU_SelectTraitsForColor>Select traits to customize color</UWU_SelectTraitsForColor>
+	<UWU_ColorDeterminedBy>Color determined by {0}</UWU_ColorDeterminedBy>
+	<!-- Dialog: Color sections -->
+	<UWU_WeaponColors>Weapon colors</UWU_WeaponColors>
+	<UWU_IdeologyColors>Ideology colors</UWU_IdeologyColors>
+	<UWU_StructureColors>Structure colors</UWU_StructureColors>
+	<!-- Dialog: Cost display -->
+	<UWU_NetRefund>Net refund: </UWU_NetRefund>
+	<UWU_RefundNone>None</UWU_RefundNone>
+	<UWU_NetCost>Net cost: </UWU_NetCost>
+	<UWU_CostFree>Free</UWU_CostFree>
+	<UWU_MissingResources>Missing resources</UWU_MissingResources>
+	<UWU_NotEnoughMaterials>Required materials are insufficient, forbidden, reserved by another pawn, or unreachable from this pawn's position.</UWU_NotEnoughMaterials>
+	<UWU_CouldNotStartPlanInfeasible>Could not customize {0}: no viable haul plan.</UWU_CouldNotStartPlanInfeasible>
+	<UWU_CouldNotStartReservationConflict>Could not customize {0}: failed to reserve {1} x{2}.</UWU_CouldNotStartReservationConflict>
+	<UWU_CouldNotStartReservationConflictHeldBy>Could not customize {0}: failed to reserve {1} x{2} (held by {3}).</UWU_CouldNotStartReservationConflictHeldBy>
+	<UWU_CouldNotStartInternalError>Could not customize {0}: internal error. See log.</UWU_CouldNotStartInternalError>
+	<!-- Trait tooltips -->
+	<UWU_Effects>Effects:</UWU_Effects>
+	<UWU_DamageType>Damage type</UWU_DamageType>
+	<UWU_ExtraDamage>Extra damage</UWU_ExtraDamage>
+	<UWU_BurstSpeed>Burst speed</UWU_BurstSpeed>
+	<UWU_BurstCount>Burst count</UWU_BurstCount>
+	<UWU_StoppingPower>Stopping power</UWU_StoppingPower>
+	<UWU_IgnoresAccuracyPenalties>Ignores accuracy penalties</UWU_IgnoresAccuracyPenalties>
+	<!-- Trait validation -->
+	<UWU_AlreadyApplied>Already applied</UWU_AlreadyApplied>
+	<UWU_MaxTraitsReached>Maximum traits reached</UWU_MaxTraitsReached>
+	<UWU_ConflictsWith>Conflicts with {0}</UWU_ConflictsWith>
+	<UWU_CannotBeOnlyTrait>Cannot be the only trait</UWU_CannotBeOnlyTrait>
+	<UWU_TraitCannotBeOnlyTrait>{0} cannot be the only trait</UWU_TraitCannotBeOnlyTrait>
+	<UWU_OnlyOnHostiles>Must disarm from hostile</UWU_OnlyOnHostiles>
+	<UWU_LastTraitSourceWarning>Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons.</UWU_LastTraitSourceWarning>
+	<UWU_NoTraitsMatchSearch>No traits match your search.</UWU_NoTraitsMatchSearch>
+	<UWU_NoTraitsDiscovered>No traits available yet.\n\nRecover unique weapons via quests or world loot\nto unlock their traits for customization.</UWU_NoTraitsDiscovered>
+	<UWU_NoTraitsAfterHideNegative>All available traits for this weapon are negative. Disable "Hide negative traits" below to view them.</UWU_NoTraitsAfterHideNegative>
+	<UWU_NoTraitsAvailable>No traits are compatible with this weapon.</UWU_NoTraitsAvailable>
+	<!-- Fallbacks -->
+	<UWU_WeaponFallback>weapon</UWU_WeaponFallback>
+	<UWU_WeaponTypeFallback>Weapon</UWU_WeaponTypeFallback>
+	<UWU_ColorFallback>blue</UWU_ColorFallback>
+	<!-- Jobs -->
+	<UWU_CustomizingWeapon>Customizing {0}</UWU_CustomizingWeapon>
+	<UWU_AddingTrait>Adding {0} to {1}</UWU_AddingTrait>
+	<UWU_RemovingTrait>Removing {0} from {1}</UWU_RemovingTrait>
+	<UWU_ApplyingCosmetics>Customizing appearance of {0}</UWU_ApplyingCosmetics>
+	<UWU_PlacingWeapon>Placing {0} on {1}</UWU_PlacingWeapon>
+	<UWU_GatheringMaterials>Gathering materials for {0}</UWU_GatheringMaterials>
+	<UWU_AdmiringWork>Admiring work</UWU_AdmiringWork>
+	<UWU_InsufficientResources>Not enough resources to customize this weapon.</UWU_InsufficientResources>
+	<UWU_IngredientShortfall>{0} customization interrupted: ingredients lost before {1} could be applied.</UWU_IngredientShortfall>
+	<UWU_BailWorkbenchUnavailable>{0} customization interrupted: workbench is no longer available.</UWU_BailWorkbenchUnavailable>
+	<UWU_BailWorkbenchUnreachable>{0} customization interrupted: workbench became unreachable.</UWU_BailWorkbenchUnreachable>
+	<UWU_BailWorkbenchInactive>{0} customization interrupted: workbench has no power or fuel.</UWU_BailWorkbenchInactive>
+	<UWU_BailWeaponLost>{0} customization interrupted: weapon was lost.</UWU_BailWeaponLost>
+	<UWU_BailWeaponInaccessible>{0} customization interrupted: weapon is no longer accessible.</UWU_BailWeaponInaccessible>
+	<UWU_BailIngredientLost>{0} customization interrupted: an ingredient was lost while hauling.</UWU_BailIngredientLost>
+	<UWU_BailIngredientUnreachable>{0} customization interrupted: a required ingredient became unreachable.</UWU_BailIngredientUnreachable>
+	<UWU_BailIngredientPlacementFailed>{0} customization interrupted: no room near the workbench to place an ingredient.</UWU_BailIngredientPlacementFailed>
+	<UWU_BailCarryStartFailed>{0} customization interrupted: could not pick up the weapon.</UWU_BailCarryStartFailed>
+	<UWU_BailOpAddTraitFailed>{0} customization interrupted: an error occurred while adding {1}.</UWU_BailOpAddTraitFailed>
+	<UWU_BailOpRemoveTraitFailed>{0} customization interrupted: an error occurred while removing {1}.</UWU_BailOpRemoveTraitFailed>
+	<UWU_BailOpCosmeticsFailed>{0} customization interrupted: an error occurred while applying cosmetic changes.</UWU_BailOpCosmeticsFailed>
+	<UWU_BailUnexpected>{0} customization failed unexpectedly.</UWU_BailUnexpected>
+	<UWU_BailDialogOpenFailed>{0} customization interrupted: the customization dialog could not be opened. See log.</UWU_BailDialogOpenFailed>
+	<UWU_DialogErrored>{0} customization dialog errored and was closed. See log.</UWU_DialogErrored>
+	<UWU_FinalizeAbilitySyncFailed>{0} customized, but ability state could not be reconciled. See log.</UWU_FinalizeAbilitySyncFailed>
+	<UWU_FinalizeColorFailed>{0} customized, but the final color could not be applied. See log.</UWU_FinalizeColorFailed>
+	<UWU_RelicIdeoColorTip>{0}'s ideoligion color. This weapon is a relic of the {1} ideoligion.</UWU_RelicIdeoColorTip>
+	<!-- Settings: Section headers -->
+	<UWU_SettingsCategory>Unique Weapons Unbound</UWU_SettingsCategory>
+	<UWU_SettingsProgression>Progression</UWU_SettingsProgression>
+	<UWU_SettingsTraitCosts>Trait costs</UWU_SettingsTraitCosts>
+	<UWU_SettingsPrerequisites>Prerequisites</UWU_SettingsPrerequisites>
+	<UWU_SettingsHaulPlanner>Ingredient hauling</UWU_SettingsHaulPlanner>
+	<UWU_SettingsMiscellaneous>Miscellaneous</UWU_SettingsMiscellaneous>
+	<!-- Settings: Reusable label suffixes (each includes a leading space) -->
+	<UWU_DefaultSuffix> (default)</UWU_DefaultSuffix>
+	<UWU_RecommendedSuffix> (recommended)</UWU_RecommendedSuffix>
+	<UWU_VanillaSuffix> (vanilla)</UWU_VanillaSuffix>
+	<UWU_ExperimentalSuffix> (experimental)</UWU_ExperimentalSuffix>
+	<!-- Settings: Trait costs -->
+	<UWU_TraitCostMultiplier>Trait cost multiplier: {0}%</UWU_TraitCostMultiplier>
+	<UWU_TraitRefundRate>Trait refund rate: {0}%</UWU_TraitRefundRate>
+	<UWU_RefundRateNoEffect>Trait refund rate has no effect while trait cost multiplier is 0%.</UWU_RefundRateNoEffect>
+	<UWU_UseRecipeBaseCost>Derive base cost from crafting recipe</UWU_UseRecipeBaseCost>
+	<UWU_UseRecipeBaseCostDesc>When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs.</UWU_UseRecipeBaseCostDesc>
+	<!-- Settings: Prerequisites -->
+	<UWU_MinimumQuality>Minimum weapon quality: {0}</UWU_MinimumQuality>
+	<UWU_MinimumQualityDesc>Restrict customization to weapons of at least this quality. Awful imposes no restriction. Weapons below the minimum will still show the customization option, but it will be disabled with an explanation.</UWU_MinimumQualityDesc>
+	<UWU_RequireCustomizationResearch>Require customization research</UWU_RequireCustomizationResearch>
+	<UWU_RequireCustomizationResearchDesc>Require the completion of the {0}, {1}, or {2} research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree.</UWU_RequireCustomizationResearchDesc>
+	<UWU_RequireRecipeResearch>Require weapon crafting research</UWU_RequireRecipeResearch>
+	<UWU_RequireRecipeResearchDesc>Require the completion of any research that would enable crafting the weapon. For example, customizing a charge rifle would require {0}.</UWU_RequireRecipeResearchDesc>
+	<UWU_RequireWorkbench>Require appropriate workbench</UWU_RequireWorkbench>
+	<UWU_RequireWorkbenchDesc>Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons.</UWU_RequireWorkbenchDesc>
+	<UWU_AllowUncraftable>Allow customizing uncraftable weapons</UWU_AllowUncraftable>
+	<UWU_AllowUncraftableDesc>Allow customization of weapons that have no crafting recipe.</UWU_AllowUncraftableDesc>
+	<UWU_AllowUltratech>Allow customizing ultratech-level weapons</UWU_AllowUltratech>
+	<UWU_AllowUltratechDesc>Allow customization of ultratech weapons, requiring {0} research.</UWU_AllowUltratechDesc>
+	<UWU_AllowUltratechImpliedDesc>Automatically enabled because "Allow customizing archotech-level weapons" is on. Both tiers share the same research gate.</UWU_AllowUltratechImpliedDesc>
+	<UWU_AllowArchotech>Allow customizing archotech-level weapons</UWU_AllowArchotech>
+	<UWU_AllowArchotechDesc>Allow customization of archotech weapons, requiring {0} research.</UWU_AllowArchotechDesc>
+	<!-- Settings: Miscellaneous -->
+	<UWU_AllowDefConversion>Allow weapon def conversion</UWU_AllowDefConversion>
+	<UWU_AllowDefConversionDesc>Allow weapons to convert between base and unique defs during customization. When disabled, only already-unique weapons can be customized, and removing all traits keeps the weapon as a zero-trait unique instead of reverting to its base weapon.</UWU_AllowDefConversionDesc>
+	<UWU_EnableIdeoColors>Enable Ideology color options</UWU_EnableIdeoColors>
+	<UWU_EnableIdeoColorsDesc>Show Ideology and miscellaneous color palettes in the weapon customization color picker.</UWU_EnableIdeoColorsDesc>
+	<UWU_EnableStructureColors>Enable structure color options</UWU_EnableStructureColors>
+	<UWU_EnableStructureColorsDesc>Show structure color palette in the weapon customization color picker.</UWU_EnableStructureColorsDesc>
+	<UWU_EnforceMaxTraitLimit>Enforce trait count limit</UWU_EnforceMaxTraitLimit>
+	<UWU_EnforceMaxTraitLimitDesc>Vanilla unique weapons generate with no more than three traits. Enable this to enforce the same limit during customization. Disable to allow any number of traits (other rules such as category and exclusion restrictions still apply).</UWU_EnforceMaxTraitLimitDesc>
+	<UWU_EnforceSoleTrait>Enforce sole-trait restrictions</UWU_EnforceSoleTrait>
+	<UWU_EnforceSoleTraitDesc>Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization.</UWU_EnforceSoleTraitDesc>
+	<UWU_RestrictTraitsToDiscovered>Restrict available traits to discovered weapons</UWU_RestrictTraitsToDiscovered>
+	<UWU_RestrictTraitsToDiscoveredDesc>Lightweight progression system. When enabled, the customization dialog only offers traits found on unique weapons currently visible to the colony: on a loaded map (not fogged, sealed, or possessed by hostiles) or in a player-faction caravan. No persistent state is added to saves; toggling this off restores the full trait list immediately.</UWU_RestrictTraitsToDiscoveredDesc>
+	<UWU_EnableGroundCustomization>Enable ground weapon right-click menu</UWU_EnableGroundCustomization>
+	<UWU_EnableGroundCustomizationDesc>Show "Customize" options when right-clicking weapons on the ground. Disable this to reduce float menu clutter, especially with storage mods that stack items in the same cell. Weapons can still be customized by selecting them and using the gizmo button.</UWU_EnableGroundCustomizationDesc>
+	<!-- Settings: Haul planner -->
+	<UWU_HaulPlannerSequential>Sequential</UWU_HaulPlannerSequential>
+	<UWU_HaulPlannerSequentialDesc>Vanilla behavior. Pawns carry up to one ingredient stack at a time, always grabbing the nearest first. Simple and predictable, but means lots of short trips for resource-heavy customizations.</UWU_HaulPlannerSequentialDesc>
+	<UWU_HaulPlannerSweep>Sweep</UWU_HaulPlannerSweep>
+	<UWU_HaulPlannerSweepDesc>Pawns plan ahead and use spare inventory space to carry more at once, while also routing more efficiently between pickups. Much fewer trips than Sequential, with negligible planning overhead.</UWU_HaulPlannerSweepDesc>
+	<UWU_HaulPlannerThorough>Thorough</UWU_HaulPlannerThorough>
+	<UWU_HaulPlannerThoroughDesc>Like Sweep, but also weighs which stacks to draw from when the map has multiple candidates, rather than always taking the closest. Slower to plan, but usually finds the shortest runs when ingredients are scattered or carrying capacity is tight. Falls back to Sweep for hauls too complex to fully analyze.</UWU_HaulPlannerThoroughDesc>
 </LanguageData>

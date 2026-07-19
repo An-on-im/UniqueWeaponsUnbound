@@ -8,7 +8,7 @@ namespace UniqueWeaponsUnbound
     public class UWU_Mod : Mod
     {
         public static UWU_Settings Settings { get; private set; }
-
+        
         private Vector2 settingsScroll;
         private float settingsHeight;
 
@@ -25,17 +25,17 @@ namespace UniqueWeaponsUnbound
             float buttonGap = 10f;
             Rect viewRect = new Rect(inRect.x, inRect.y, inRect.width, inRect.height - buttonHeight - buttonGap);
             Rect buttonRect = new Rect(inRect.x, inRect.yMax - buttonHeight, 200f, buttonHeight);
-
+            
             float innerWidth = viewRect.width - 16f;
             Rect innerRect = new Rect(0f, 0f, innerWidth, Mathf.Max(settingsHeight, viewRect.height));
             Widgets.BeginScrollView(viewRect, ref settingsScroll, innerRect);
-
+            
             Listing_Standard listing = new Listing_Standard();
             listing.Begin(new Rect(0f, 0f, innerWidth - 8f, 99999f));
             GameFont prev = Text.Font;
 
             listing.Gap();
-
+            
             Text.Font = GameFont.Medium;
             listing.Label("UWU_SettingsProgression".Translate());
             Text.Font = GameFont.Small;
@@ -47,7 +47,7 @@ namespace UniqueWeaponsUnbound
                 "UWU_RestrictTraitsToDiscoveredDesc".Translate());
 
             listing.Gap(18.0f);
-
+            
             Text.Font = GameFont.Medium;
             listing.Label("UWU_SettingsTraitCosts".Translate());
             Text.Font = GameFont.Small;
@@ -57,7 +57,7 @@ namespace UniqueWeaponsUnbound
                 "UWU_UseRecipeBaseCost".Translate(),
                 ref Settings.useRecipeBaseCost,
                 "UWU_UseRecipeBaseCostDesc".Translate());
-
+           
             listing.Gap();
 
             string costPct = (Settings.traitCostMultiplier * 100f).ToString("F0");
@@ -114,20 +114,25 @@ namespace UniqueWeaponsUnbound
                 "UWU_AllowDefConversion".Translate(),
                 ref Settings.allowDefConversion,
                 "UWU_AllowDefConversionDesc".Translate());
-
+                
             listing.Gap();
 
+            // Use placeholders for dynamic research names
             listing.CheckboxLabeled(
                 "UWU_RequireCustomizationResearch".Translate(),
                 ref Settings.requireCustomizationResearch,
-                "UWU_RequireCustomizationResearchDesc".Translate());
-
+                "UWU_RequireCustomizationResearchDesc".Translate(
+                    UWU_ResearchDefOf.UniqueSmithing.label,
+                    UWU_ResearchDefOf.UniqueMachining.label,
+                    UWU_ResearchDefOf.UniqueFabrication.label));
             listing.Gap();
 
+            // Use placeholders for dynamic research names
+            string pulseResearchLabel = DefDatabase<ResearchProjectDef>.GetNamedSilentFail("PulseChargedMunitions")?.label ?? "Pulse-charged munitions";
             listing.CheckboxLabeled(
                 "UWU_RequireRecipeResearch".Translate(),
                 ref Settings.requireRecipeResearch,
-                "UWU_RequireRecipeResearchDesc".Translate());
+                "UWU_RequireRecipeResearchDesc".Translate(pulseResearchLabel));
 
             listing.Gap();
 
@@ -164,18 +169,20 @@ namespace UniqueWeaponsUnbound
             }
             else
             {
+                // Use placeholders for dynamic research names
                 listing.CheckboxLabeled(
                     "UWU_AllowUltratech".Translate(),
                     ref Settings.allowUltratechCustomization,
-                    "UWU_AllowUltratechDesc".Translate());
+                    "UWU_AllowUltratechDesc".Translate(UWU_ResearchDefOf.UniqueFabrication.label));
             }
 
             listing.Gap();
 
+            // Use placeholders for dynamic research names
             listing.CheckboxLabeled(
                 "UWU_AllowArchotech".Translate(),
                 ref Settings.allowArchotechCustomization,
-                "UWU_AllowArchotechDesc".Translate());
+                "UWU_AllowArchotechDesc".Translate(UWU_ResearchDefOf.UniqueFabrication.label));
 
             listing.Gap(24.0f);
 
@@ -195,7 +202,7 @@ namespace UniqueWeaponsUnbound
                 "UWU_HaulPlannerSweep".Translate() + "UWU_DefaultSuffix".Translate(),
                 "UWU_HaulPlannerSweepDesc".Translate(),
                 enabled: true);
-
+                
             DrawHaulPlannerOption(listing,
                 HaulPlannerKind.Thorough,
                 "UWU_HaulPlannerThorough".Translate() + "UWU_ExperimentalSuffix".Translate(),
