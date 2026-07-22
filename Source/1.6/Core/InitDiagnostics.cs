@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -18,11 +19,28 @@ namespace UniqueWeaponsUnbound
     public sealed class InitDiagnostics
     {
         private readonly List<string> failedPhases = new List<string>();
+        private readonly List<string> phaseTimings = new List<string>();
+
+        // Runs from construction until the summary line is built, so it covers
+        // the whole init block — including any glue between timed phases.
+        private readonly Stopwatch totalTimer = Stopwatch.StartNew();
 
         public void RecordFailure(string name, Exception ex)
         {
             Log.Error("[Unique Weapons Unbound] " + name + ".Initialize failed: " + ex);
             failedPhases.Add(name);
+        }
+
+        // Times one init phase for the startup summary. Exceptions propagate
+        // unchanged: subsystem Initialize methods already catch internally and
+        // RecordFailure, and anything else throwing here would have aborted the
+        // static ctor before this existed too.
+        public void Time(string name, Action work)
+        {
+            var sw = Stopwatch.StartNew();
+            work();
+            sw.Stop();
+            phaseTimings.Add(name + " " + sw.ElapsedMilliseconds + "ms");
         }
 
         public void LogSummary()
@@ -45,6 +63,13 @@ namespace UniqueWeaponsUnbound
 
             var sb = new StringBuilder();
             sb.Append("[Unique Weapons Unbound] v").Append(version).AppendLine(" initialized");
+            // Answers "is this mod slowing my startup?" without dev tooling.
+            // Covers the ModInitializer block only — XML load and the texture/
+            // reflection static ctors run outside it, but they're trivial.
+            sb.Append("  Startup init took ").Append(totalTimer.ElapsedMilliseconds).Append("ms");
+            if (phaseTimings.Count > 0)
+                sb.Append(" (").Append(string.Join(", ", phaseTimings)).Append(')');
+            sb.AppendLine();
             if (failedPhases.Count > 0)
             {
                 sb.Append("  Initialization phases failed: ")

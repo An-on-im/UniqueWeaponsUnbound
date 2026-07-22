@@ -2,6 +2,7 @@
 
 ## Features
 
+- Mod option for gating customization on colony crafting skill recipe +2 or 12
 - Blood-soaked trait rule requiring hemogen if biotech and UMW are installed?
 - Optional reinforced barrel replacement rule for underbarrel traits?
 - Random button?
