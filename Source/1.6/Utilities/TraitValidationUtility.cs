@@ -5,20 +5,17 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Validates trait combinations and provides filtered trait lists for the
-    /// weapon customization dialog. Operates purely on defs — no initialization needed.
-    /// </summary>
+    // Validates trait combinations and provides filtered trait lists for the
+    // weapon customization dialog. Operates purely on defs — no initialization
+    // needed.
     public static class TraitValidationUtility
     {
         public const int MaxTraits = 3;
 
-        /// <summary>
-        /// Returns all weapon traits compatible with the given unique weapon def's
-        /// categories, excluding BladeLink (Royalty persona) traits.
-        /// This is the full list shown in the UI — individual traits may still be
-        /// disabled based on the current desired trait selection.
-        /// </summary>
+        // Returns all weapon traits compatible with the given unique weapon
+        // def's categories, excluding BladeLink (Royalty persona) traits. This
+        // is the full list shown in the UI — individual traits may still be
+        // disabled based on the current desired trait selection.
         public static List<WeaponTraitDef> GetCompatibleTraits(ThingDef uniqueDef)
         {
             List<WeaponCategoryDef> categories = GetWeaponCategories(uniqueDef);
@@ -39,10 +36,8 @@ namespace UniqueWeaponsUnbound
             return result;
         }
 
-        /// <summary>
-        /// Returns null if the candidate trait can be added to the desired trait set,
-        /// or a human-readable rejection reason if it cannot.
-        /// </summary>
+        // Returns null if the candidate trait can be added to the desired trait
+        // set, or a human-readable rejection reason if it cannot.
         public static string GetRejectionReason(
             List<WeaponTraitDef> desiredTraits, WeaponTraitDef candidate)
         {
@@ -65,11 +60,9 @@ namespace UniqueWeaponsUnbound
             return null;
         }
 
-        /// <summary>
-        /// Whether the given trait can be removed from the desired set without
-        /// leaving an invalid configuration. Returns false if removal would leave
-        /// a single trait that has canGenerateAlone=false.
-        /// </summary>
+        // Whether the given trait can be removed from the desired set without
+        // leaving an invalid configuration. Returns false if removal would
+        // leave a single trait that has canGenerateAlone=false.
         public static bool CanRemoveTrait(
             List<WeaponTraitDef> desiredTraits, WeaponTraitDef toRemove)
         {
@@ -88,9 +81,8 @@ namespace UniqueWeaponsUnbound
             return true;
         }
 
-        /// <summary>
-        /// Returns the reason a trait cannot be removed, or null if removal is allowed.
-        /// </summary>
+        // Returns the reason a trait cannot be removed, or null if removal is
+        // allowed.
         public static string GetRemovalRejectionReason(
             List<WeaponTraitDef> desiredTraits, WeaponTraitDef toRemove)
         {
@@ -106,10 +98,8 @@ namespace UniqueWeaponsUnbound
             return null;
         }
 
-        /// <summary>
-        /// Whether two traits overlap — same def or shared exclusion tags.
-        /// Mirrors the vanilla WeaponTraitDef.Overlaps() logic.
-        /// </summary>
+        // Whether two traits overlap — same def or shared exclusion tags.
+        // Mirrors the vanilla WeaponTraitDef.Overlaps() logic.
         public static bool TraitsOverlap(WeaponTraitDef a, WeaponTraitDef b)
         {
             if (a == b)
@@ -121,10 +111,8 @@ namespace UniqueWeaponsUnbound
             return a.exclusionTags.Any(tag => b.exclusionTags.Contains(tag));
         }
 
-        /// <summary>
-        /// Extracts the accepted weapon categories from a unique weapon def's
-        /// CompProperties_UniqueWeapon.
-        /// </summary>
+        // Extracts the accepted weapon categories from a unique weapon def's
+        // CompProperties_UniqueWeapon.
         public static List<WeaponCategoryDef> GetWeaponCategories(ThingDef uniqueDef)
         {
             if (uniqueDef?.comps == null)

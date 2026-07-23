@@ -3,20 +3,17 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Stateless game-rule predicates for determining whether weapons are
-    /// customizable and what research is required.
-    /// </summary>
+    // Stateless game-rule predicates for determining whether weapons are
+    // customizable and what research is required.
     public static class CustomizationRules
     {
-        /// <summary>
-        /// Whether this weapon has a customization path and the player has unlocked
-        /// the required customization research. Does not check craftability (recipe
-        /// research) — call <see cref="GetCraftabilityReport"/> separately so callers
-        /// can insert context-dependent checks (e.g. workbench tier) in between.
-        /// Returns AcceptanceReport with a rejection reason if not customizable.
-        /// Returns false with no reason when the option should be hidden entirely.
-        /// </summary>
+        // Whether this weapon has a customization path and the player has
+        // unlocked the required customization research. Does not check
+        // craftability (recipe research) — call GetCraftabilityReport
+        // separately so callers can insert context-dependent checks (e.g.
+        // workbench tier) in between. Returns AcceptanceReport with a rejection
+        // reason if not customizable. Returns false with no reason when the
+        // option should be hidden entirely.
         public static AcceptanceReport IsCustomizable(Thing weapon)
         {
             ThingDef def = weapon.def;
@@ -67,11 +64,9 @@ namespace UniqueWeaponsUnbound
             return true;
         }
 
-        /// <summary>
-        /// Whether the base weapon's crafting prerequisites are met.
-        /// Returns AcceptanceReport with the blocking research name, or false
-        /// with no reason for uncraftable weapons without the mod setting.
-        /// </summary>
+        // Whether the base weapon's crafting prerequisites are met. Returns
+        // AcceptanceReport with the blocking research name, or false with no
+        // reason for uncraftable weapons without the mod setting.
         public static AcceptanceReport GetCraftabilityReport(ThingDef baseDef, ThingDef uniqueDef)
         {
             RecipeMakerProperties recipeMaker = baseDef?.recipeMaker ?? uniqueDef?.recipeMaker;
@@ -88,16 +83,15 @@ namespace UniqueWeaponsUnbound
             return true;
         }
 
-        /// <summary>
-        /// Returns the required research project for customizing weapons of the given tech level,
-        /// or null when the tech level is above the configured customization ceiling
-        /// (i.e. Ultra/Archotech with their mod settings disabled).
-        ///
-        /// Uses tier fallthroughs at both ends: weapons tagged Animal or Undefined fall up to
-        /// UniqueSmithing, and the fabrication tier extends up to whichever high-end tier the
-        /// player has enabled. This makes the gate robust against modded weapons with unusual
-        /// tech levels.
-        /// </summary>
+        // Returns the required research project for customizing weapons of the
+        // given tech level, or null when the tech level is above the configured
+        // customization ceiling (i.e. Ultra/Archotech with their mod settings
+        // disabled).
+        //
+        // Uses tier fallthroughs at both ends: weapons tagged Animal or
+        // Undefined fall up to UniqueSmithing, and the fabrication tier extends
+        // up to whichever high-end tier the player has enabled. This makes the
+        // gate robust against modded weapons with unusual tech levels.
         public static ResearchProjectDef GetRequiredResearch(TechLevel techLevel)
         {
             if (techLevel > GetCustomizationCeiling())
@@ -109,11 +103,10 @@ namespace UniqueWeaponsUnbound
             return UWU_ResearchDefOf.UniqueSmithing;
         }
 
-        /// <summary>
-        /// The highest tech level the player has opted into customizing. Anything above
-        /// this is "beyond comprehension" and falls out of the customization system.
-        /// Archotech implies Ultra, since they share the same research gate.
-        /// </summary>
+        // The highest tech level the player has opted into customizing.
+        // Anything above this is "beyond comprehension" and falls out of the
+        // customization system. Archotech implies Ultra, since they share the
+        // same research gate.
         private static TechLevel GetCustomizationCeiling()
         {
             if (UWU_Mod.Settings.allowArchotechCustomization)
@@ -123,20 +116,18 @@ namespace UniqueWeaponsUnbound
             return TechLevel.Spacer;
         }
 
-        /// <summary>
-        /// Whether the player has completed the required research for the given tech level.
-        /// </summary>
+        // Whether the player has completed the required research for the given
+        // tech level.
         public static bool HasRequiredResearch(TechLevel techLevel)
         {
             ResearchProjectDef required = GetRequiredResearch(techLevel);
             return required != null && required.IsFinished;
         }
 
-        /// <summary>
-        /// Rejection report for paths that are normally hidden (silent <c>false</c>).
-        /// In dev mode, surfaces the reason so the option/gizmo renders as visible-but-disabled,
-        /// letting modders diagnose why a weapon isn't customizable without exporting logs.
-        /// </summary>
+        // Rejection report for paths that are normally hidden (silent false).
+        // In dev mode, surfaces the reason so the option/gizmo renders as
+        // visible-but-disabled, letting modders diagnose why a weapon isn't
+        // customizable without exporting logs.
         private static AcceptanceReport HiddenUnlessDev(string devReason)
         {
             if (!Prefs.DevMode)
@@ -144,10 +135,9 @@ namespace UniqueWeaponsUnbound
             return devReason;
         }
 
-        /// <summary>
-        /// Returns the weapon's tech level if it participates in the customization system.
-        /// Returns TechLevel.Undefined if the weapon has no customization path.
-        /// </summary>
+        // Returns the weapon's tech level if it participates in the
+        // customization system. Returns TechLevel.Undefined if the weapon has
+        // no customization path.
         public static TechLevel GetWeaponTechLevel(Thing weapon)
         {
             ThingDef def = weapon.def;

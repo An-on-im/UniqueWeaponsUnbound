@@ -2,9 +2,9 @@
 
 ## Features
 
-- Blood-soaked trait rule requiring hemogen if biotech and UMW are installed
+- Mod option for gating customization on colony crafting skill recipe +2 or 12
+- Blood-soaked trait rule requiring hemogen if biotech and UMW are installed?
 - Optional reinforced barrel replacement rule for underbarrel traits?
-
 - Random button?
 - Mod setting to disable trait customization?
 - Dev mode mod settings page button to copy settings to clipboard?
@@ -20,8 +20,6 @@
   base<->unique def conversion (today WeaponDefConversion hand-copies a fixed
   set: stuff, quality, hp%, texture, biocoding, art, relic status — anything
   else a mod attaches is dropped)
-- Explore bladelink/persona weapons more thoroughly (currently explicitly
-  excluded/skipped from customization)
 
 ## Cleanup
 

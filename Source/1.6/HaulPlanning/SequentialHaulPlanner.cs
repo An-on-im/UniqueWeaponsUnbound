@@ -4,21 +4,19 @@ using Verse;
 
 namespace UniqueWeaponsUnbound.HaulPlanning
 {
-    /// <summary>
-    /// One-stack-per-trip planner — the algorithm Unique Weapons Unbound has
-    /// shipped with since the customization flow was added. For each demanded
-    /// def it sorts candidate stacks by squared horizontal distance from the
-    /// pawn and takes them in order until demand is met, emitting each picked
-    /// stack as its own single-pickup trip. No batching, no encumbrance math,
-    /// no awareness of the workbench position.
-    ///
-    /// Behaviorally identical to the pre-refactor inline implementation in
-    /// WeaponModificationUtility.TryReserveIngredientsForJob — kept as the
-    /// default so existing players see no change unless they opt in to one of
-    /// the experimental planners. Pool sizing is exact-fit (multiplier 1.0,
-    /// no cap) to preserve that equivalence: a richer pool would let this
-    /// planner pick different (still-valid) stacks than today's behavior.
-    /// </summary>
+    // One-stack-per-trip planner — the algorithm Unique Weapons Unbound has
+    // shipped with since the customization flow was added. For each demanded
+    // def it sorts candidate stacks by squared horizontal distance from the
+    // pawn and takes them in order until demand is met, emitting each picked
+    // stack as its own single-pickup trip. No batching, no encumbrance math, no
+    // awareness of the workbench position.
+    //
+    // Behaviorally identical to the pre-refactor inline implementation in
+    // WeaponModificationUtility.TryReserveIngredientsForJob — kept as the
+    // default so existing players see no change unless they opt in to one of
+    // the experimental planners. Pool sizing is exact-fit (multiplier 1.0, no
+    // cap) to preserve that equivalence: a richer pool would let this planner
+    // pick different (still-valid) stacks than today's behavior.
     public class SequentialHaulPlanner : IHaulPlanner
     {
         public float CandidatePoolMultiplier => 1.0f;

@@ -103,12 +103,11 @@ namespace UniqueWeaponsUnbound
             Text.Anchor = TextAnchor.UpperLeft;
         }
 
-        /// <summary>
-        /// Returns a centered empty-state message attributing the empty list to whichever
-        /// filter is responsible (search > progression > hide-negative > fallback).
-        /// Search takes priority because it's an active user input; progression beats
-        /// hide-negative because it's the harder filter to discover and act on.
-        /// </summary>
+        // Returns a centered empty-state message attributing the empty list to
+        // whichever filter is responsible (search > progression > hide-negative
+        // > fallback). Search takes priority because it's an active user input;
+        // progression beats hide-negative because it's the harder filter to
+        // discover and act on.
         private string GetEmptyTraitListMessage()
         {
             // DrawTraitsTab returns early when compatibleTraits is empty, so
@@ -177,12 +176,10 @@ namespace UniqueWeaponsUnbound
             return desiredTraits.Contains(trait) || originalTraits.Contains(trait);
         }
 
-        /// <summary>
-        /// Returns a progression-mode rejection reason for the trait, or null when
-        /// the progression filter doesn't reject it. Stacks before the regular
-        /// validity rejection — a hostile-only trait is rejected even when it would
-        /// otherwise be addable.
-        /// </summary>
+        // Returns a progression-mode rejection reason for the trait, or null
+        // when the progression filter doesn't reject it. Stacks before the
+        // regular validity rejection — a hostile-only trait is rejected even
+        // when it would otherwise be addable.
         private string GetProgressionRejection(WeaponTraitDef trait)
         {
             if (progressionPool == null)

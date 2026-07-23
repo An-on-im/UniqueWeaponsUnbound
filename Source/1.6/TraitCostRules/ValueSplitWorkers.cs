@@ -4,10 +4,8 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Base class for workers that split off a fraction of base materials and
-    /// convert them to a replacement material by market value.
-    /// </summary>
+    // Base class for workers that split off a fraction of base materials and
+    // convert them to a replacement material by market value.
     public abstract class ValueSplitWorker : TraitCostRuleWorker
     {
         protected abstract ThingDef Replacement { get; }
@@ -19,10 +17,9 @@ namespace UniqueWeaponsUnbound
         }
     }
 
-    /// <summary>
-    /// Converts 70% of base materials into industrial components by market value
-    /// for EMP-related traits. Removes spacer components first to avoid double-counting.
-    /// </summary>
+    // Converts 70% of base materials into industrial components by market value
+    // for EMP-related traits. Removes spacer components first to avoid
+    // double-counting.
     public class EmpSplitWorker : ValueSplitWorker
     {
         protected override ThingDef Replacement => CostRuleHelpers.ComponentIndustrial;
@@ -34,10 +31,8 @@ namespace UniqueWeaponsUnbound
         }
     }
 
-    /// <summary>
-    /// Converts 70% of base materials into bioferrite by market value
-    /// for flarestriker traits.
-    /// </summary>
+    // Converts 70% of base materials into bioferrite by market value for
+    // flarestriker traits.
     public class FlareSplitWorker : ValueSplitWorker
     {
         protected override ThingDef Replacement => CostRuleHelpers.Bioferrite;

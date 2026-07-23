@@ -407,15 +407,13 @@ namespace UniqueWeaponsUnbound
             Close();
         }
 
-        /// <summary>
-        /// Maps a non-Success <see cref="IngredientReservation.ReservationResult"/>
-        /// to a paired log line + player-visible message describing what happened
-        /// at confirm time. Centralised so the two strings can't drift apart.
-        /// For <see cref="IngredientReservation.ReservationOutcome.ReservationConflict"/>
-        /// the result carries the specific def + count that failed to reserve,
-        /// so the message can name it concretely (e.g. "failed to reserve
-        /// plasteel x75") instead of saying "materials unavailable."
-        /// </summary>
+        // Maps a non-Success IngredientReservation.ReservationResult to a
+        // paired log line + player-visible message describing what happened at
+        // confirm time. Centralised so the two strings can't drift apart. For
+        // IngredientReservation.ReservationOutcome.ReservationConflict the
+        // result carries the specific def + count that failed to reserve, so
+        // the message can name it concretely (e.g. "failed to reserve plasteel
+        // x75") instead of saying "materials unavailable."
         private void HandleReservationFailure(IngredientReservation.ReservationResult result)
         {
             string logReason;

@@ -5,10 +5,8 @@ using Verse.AI;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Entry point 3: right-click a weapon on the ground to customize it.
-    /// Auto-selects the best workbench via <see cref="WorkbenchUtility.FindBestWorkbench"/>.
-    /// </summary>
+    // Entry point 3: right-click a weapon on the ground to customize it.
+    // Auto-selects the best workbench via WorkbenchUtility.FindBestWorkbench.
     public class FloatMenuOptionProvider_CustomizeGroundWeapon : FloatMenuOptionProvider
     {
         protected override bool Drafted => true;

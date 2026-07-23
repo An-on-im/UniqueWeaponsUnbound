@@ -4,10 +4,8 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Doubles all costs. Used for traits like akimbo that add a second
-    /// rendered weapon and double the fire rate.
-    /// </summary>
+    // Doubles all costs. Used for traits like akimbo that add a second rendered
+    // weapon and double the fire rate.
     public class DoubleCostWorker : TraitCostRuleWorker
     {
         public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)

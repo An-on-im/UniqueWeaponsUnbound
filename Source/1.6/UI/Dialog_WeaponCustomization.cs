@@ -63,8 +63,8 @@ namespace UniqueWeaponsUnbound
         private readonly Ideo relicIdeo; // Ideology DLC: the ideoligion this relic belongs to
 
         // Snapshot of player-discoverable trait sources at construction time.
-        // Only populated when the progression-mode setting is enabled; null otherwise.
-        // See <see cref="TraitProgressionPool"/> for the scan rules.
+        // Only populated when the progression-mode setting is enabled; null
+        // otherwise. See TraitProgressionPool for the scan rules.
         private readonly TraitProgressionPool progressionPool;
 
         // Desired state — mutated by user interaction
@@ -314,22 +314,17 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        /// <summary>
-        /// True when weapon will revert to its non-unique base def (no traits, base exists).
-        /// Name/texture/color controls are disabled in this state.
-        /// </summary>
+        // True when weapon will revert to its non-unique base def (no traits,
+        // base exists). Name/texture/color controls are disabled in this state.
         private bool IsRevertedToBase => desiredTraits.Count == 0 && baseDef != null && UWU_Mod.Settings.allowDefConversion;
 
-        /// <summary>
-        /// The effective display color: forced color from traits takes priority,
-        /// otherwise the player's manual choice.
-        /// </summary>
+        // The effective display color: forced color from traits takes priority,
+        // otherwise the player's manual choice.
         private ColorDef EffectiveColor => GetForcedColor() ?? desiredColor;
 
-        /// <summary>
-        /// Returns the forced color from the last desired trait with forcedColor != null,
-        /// or null if no trait forces a color. Mirrors vanilla iteration order (last wins).
-        /// </summary>
+        // Returns the forced color from the last desired trait with forcedColor
+        // != null, or null if no trait forces a color. Mirrors vanilla
+        // iteration order (last wins).
         private ColorDef GetForcedColor()
         {
             ColorDef forced = null;
@@ -409,11 +404,9 @@ namespace UniqueWeaponsUnbound
 
         // --- Helpers ---
 
-        /// <summary>
-        /// Returns the available count for a material on the map, cached for
-        /// the dialog's lifetime. See <see cref="availableResources"/> for why
-        /// the count is stable while the dialog is open.
-        /// </summary>
+        // Returns the available count for a material on the map, cached for the
+        // dialog's lifetime. See availableResources for why the count is stable
+        // while the dialog is open.
         private int GetAvailableCount(ThingDef thingDef)
         {
             if (availableResources.TryGetValue(thingDef, out int count))
@@ -423,12 +416,10 @@ namespace UniqueWeaponsUnbound
             return count;
         }
 
-        /// <summary>
-        /// Returns the set of insufficient materials if this trait's cost were added
-        /// on top of the currently committed resources. Accounts for unused refund
-        /// surplus that can offset the hypothetical trait's cost. Returns null if
-        /// fully affordable.
-        /// </summary>
+        // Returns the set of insufficient materials if this trait's cost were
+        // added on top of the currently committed resources. Accounts for
+        // unused refund surplus that can offset the hypothetical trait's cost.
+        // Returns null if fully affordable.
         private HashSet<ThingDef> GetHypotheticalInsufficient(List<ThingDefCountClass> traitCosts)
         {
             if (traitCosts == null || traitCosts.Count == 0)
@@ -455,11 +446,10 @@ namespace UniqueWeaponsUnbound
             return result;
         }
 
-        /// <summary>
-        /// Returns a cached copy of the raw pipeline cost for the given trait and direction.
-        /// The weapon, stuff, and quality are implicit (one dialog = one weapon).
-        /// Callers may mutate the returned list without affecting the cache.
-        /// </summary>
+        // Returns a cached copy of the raw pipeline cost for the given trait
+        // and direction. The weapon, stuff, and quality are implicit (one
+        // dialog = one weapon). Callers may mutate the returned list without
+        // affecting the cache.
         private List<ThingDefCountClass> CachedPipelineCost(WeaponTraitDef trait, bool isRemoval)
         {
             var key = (trait, isRemoval);
@@ -479,10 +469,8 @@ namespace UniqueWeaponsUnbound
             return clone;
         }
 
-        /// <summary>
-        /// Dialog-local equivalent of <see cref="TraitCostUtility.GetAdditionCost"/>,
-        /// using the dialog's pipeline cache.
-        /// </summary>
+        // Dialog-local equivalent of TraitCostUtility.GetAdditionCost, using
+        // the dialog's pipeline cache.
         private List<ThingDefCountClass> GetAdditionCost(WeaponTraitDef trait)
         {
             List<ThingDefCountClass> costs = CachedPipelineCost(trait, isRemoval: false);
@@ -496,10 +484,8 @@ namespace UniqueWeaponsUnbound
             return costs;
         }
 
-        /// <summary>
-        /// Dialog-local equivalent of <see cref="TraitCostUtility.GetRemovalCost"/>,
-        /// using the dialog's pipeline cache.
-        /// </summary>
+        // Dialog-local equivalent of TraitCostUtility.GetRemovalCost, using the
+        // dialog's pipeline cache.
         private List<ThingDefCountClass> GetRemovalCost(WeaponTraitDef trait)
         {
             List<ThingDefCountClass> costs = CachedPipelineCost(trait, isRemoval: true);
@@ -512,10 +498,8 @@ namespace UniqueWeaponsUnbound
             return costs;
         }
 
-        /// <summary>
-        /// Dialog-local equivalent of <see cref="TraitCostUtility.GetTotalCost"/>,
-        /// using the dialog's pipeline cache.
-        /// </summary>
+        // Dialog-local equivalent of TraitCostUtility.GetTotalCost, using the
+        // dialog's pipeline cache.
         private List<ThingDefCountClass> GetTotalCost()
         {
             var totals = new Dictionary<ThingDef, int>();
@@ -547,12 +531,10 @@ namespace UniqueWeaponsUnbound
             return totals.Select(kv => new ThingDefCountClass(kv.Key, kv.Value)).ToList();
         }
 
-        /// <summary>
-        /// Dialog-local equivalent of <see cref="TraitCostUtility.GetTotalRefund"/>,
-        /// using the dialog's pipeline cache. Aggregates raw pipeline costs across
-        /// positive traits first, then applies CostMultiplier and RefundRate once
-        /// per material to avoid cumulative rounding loss.
-        /// </summary>
+        // Dialog-local equivalent of TraitCostUtility.GetTotalRefund, using the
+        // dialog's pipeline cache. Aggregates raw pipeline costs across
+        // positive traits first, then applies CostMultiplier and RefundRate
+        // once per material to avoid cumulative rounding loss.
         private List<ThingDefCountClass> GetTotalRefund()
         {
             var totals = new Dictionary<ThingDef, int>();
@@ -577,11 +559,10 @@ namespace UniqueWeaponsUnbound
             return raw;
         }
 
-        /// <summary>
-        /// Resolves the unique weapon def's graphic and returns the number of texture variants.
-        /// Unwraps Graphic_RandomRotated if needed to access the underlying Graphic_Random.
-        /// Returns 1 if the graphic is not a random-variant type.
-        /// </summary>
+        // Resolves the unique weapon def's graphic and returns the number of
+        // texture variants. Unwraps Graphic_RandomRotated if needed to access
+        // the underlying Graphic_Random. Returns 1 if the graphic is not a
+        // random-variant type.
         private int GetTextureVariantCount()
         {
             Graphic graphic = uniqueDef?.graphicData?.Graphic;
@@ -597,12 +578,11 @@ namespace UniqueWeaponsUnbound
             return 1;
         }
 
-        /// <summary>
-        /// Computes net cost and net surplus by subtracting refunds from costs per-material.
-        /// Net cost contains materials where addition costs exceed refunds.
-        /// Net surplus contains materials where refunds exceed addition costs (or appear
-        /// only in refunds). These are what the player actually receives back.
-        /// </summary>
+        // Computes net cost and net surplus by subtracting refunds from costs
+        // per-material. Net cost contains materials where addition costs exceed
+        // refunds. Net surplus contains materials where refunds exceed addition
+        // costs (or appear only in refunds). These are what the player actually
+        // receives back.
         private static void ComputeNetCostAndSurplus(
             List<ThingDefCountClass> costs, List<ThingDefCountClass> refunds,
             out List<ThingDefCountClass> netCost, out List<ThingDefCountClass> netSurplus)

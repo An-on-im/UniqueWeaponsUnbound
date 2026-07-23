@@ -13,13 +13,11 @@ namespace UniqueWeaponsUnbound
     // finished weapon ends up back where it started (matching returnMode).
     public partial class JobDriver_CustomizeWeapon
     {
-        /// <summary>
-        /// Drops haul-phase inventory items the pawn is still holding when
-        /// the job ends (interrupted between pickup and workbench unload).
-        /// Without this, the pawn would silently carry the ingredients into
-        /// future jobs — confusing for the player and effectively a stockpile
-        /// leak from the world's perspective.
-        /// </summary>
+        // Drops haul-phase inventory items the pawn is still holding when the
+        // job ends (interrupted between pickup and workbench unload). Without
+        // this, the pawn would silently carry the ingredients into future jobs
+        // — confusing for the player and effectively a stockpile leak from the
+        // world's perspective.
         private void DropPendingHaulInventory()
         {
             if (currentTripInvLoad == null || currentTripInvLoad.Count == 0) return;
@@ -41,32 +39,28 @@ namespace UniqueWeaponsUnbound
             currentTripInvLoad.Clear();
         }
 
-        /// <summary>
-        /// Queues a follow-up job so the pawn walks to the weapon and picks it
-        /// up via the standard equip/take-inventory job drivers. Used for both
-        /// normal completion (pawn is at workbench, job completes near-instantly)
-        /// and interruption recovery (pawn walks back to retrieve weapon).
-        ///
-        /// Reads <see cref="weapon"/>; called from the finish action where the
-        /// success-path toil has already nulled the field, so this short-circuits
-        /// on Succeeded and only runs on actual interruption.
-        ///
-        /// TODO: the finish action fires on Succeeded too, so the
-        /// returnWeaponToil's separate recovery call is structurally redundant.
-        /// Removing the toil and relying solely on the finish action would
-        /// collapse the two call sites into one and obsolete the field-null
-        /// guard added for the double-recovery footgun.
-        /// </summary>
+        // Queues a follow-up job so the pawn walks to the weapon and picks it
+        // up via the standard equip/take-inventory job drivers. Used for both
+        // normal completion (pawn is at workbench, job completes
+        // near-instantly) and interruption recovery (pawn walks back to
+        // retrieve weapon).
+        //
+        // Reads weapon; called from the finish action where the success-path
+        // toil has already nulled the field, so this short-circuits on
+        // Succeeded and only runs on actual interruption.
+        //
+        // TODO: the finish action fires on Succeeded too, so the
+        // returnWeaponToil's separate recovery call is structurally redundant.
+        // Removing the toil and relying solely on the finish action would
+        // collapse the two call sites into one and obsolete the field-null
+        // guard added for the double-recovery footgun.
         private void QueueWeaponRecovery() => QueueWeaponRecoveryFor(weapon);
 
-        /// <summary>
-        /// Explicit-weapon variant used by the success-path toil so the field
-        /// can be nulled before recovery runs. The toil nulls
-        /// <see cref="weapon"/> first, then calls this with a stashed reference;
-        /// if recovery throws after enqueueing the follow-up job, the finish
-        /// action's <see cref="QueueWeaponRecovery"/> call sees null and bails
-        /// instead of double-recovering.
-        /// </summary>
+        // Explicit-weapon variant used by the success-path toil so the field
+        // can be nulled before recovery runs. The toil nulls weapon first, then
+        // calls this with a stashed reference; if recovery throws after
+        // enqueueing the follow-up job, the finish action's QueueWeaponRecovery
+        // call sees null and bails instead of double-recovering.
         private void QueueWeaponRecoveryFor(Thing recoverWeapon)
         {
             if (recoverWeapon == null || recoverWeapon.Destroyed)

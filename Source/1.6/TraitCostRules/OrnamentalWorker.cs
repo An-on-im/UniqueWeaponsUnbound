@@ -4,10 +4,9 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Removes components, then converts half of remaining costs to silver by count.
-    /// Ornamental work is decorative craftsmanship, not technical engineering.
-    /// </summary>
+    // Removes components, then converts half of remaining costs to silver by
+    // count. Ornamental work is decorative craftsmanship, not technical
+    // engineering.
     public class OrnamentalWorker : TraitCostRuleWorker
     {
         public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)

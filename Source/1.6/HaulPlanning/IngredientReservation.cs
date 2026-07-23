@@ -7,22 +7,18 @@ using Verse.AI;
 
 namespace UniqueWeaponsUnbound.HaulPlanning
 {
-    /// <summary>
-    /// Bridge between the customization dialog and the IHaulPlanner pipeline.
-    /// Counts ingredient availability for the dialog's per-row indicators,
-    /// builds the candidate pool a planner will draw from, and commits the
-    /// resulting plan to the job's target/count queues with reservations
-    /// already held.
-    ///
-    /// Designed to be callable while the dialog's forcePause is active, so
-    /// reservations lock in before any other pawn AI runs.
-    /// </summary>
+    // Bridge between the customization dialog and the IHaulPlanner pipeline.
+    // Counts ingredient availability for the dialog's per-row indicators,
+    // builds the candidate pool a planner will draw from, and commits the
+    // resulting plan to the job's target/count queues with reservations already
+    // held.
+    //
+    // Designed to be callable while the dialog's forcePause is active, so
+    // reservations lock in before any other pawn AI runs.
     public static class IngredientReservation
     {
-        /// <summary>
-        /// Counts available units of a material on the map that the given
-        /// pawn can access.
-        /// </summary>
+        // Counts available units of a material on the map that the given pawn
+        // can access.
         public static int CountAvailable(Map map, ThingDef thingDef, Pawn pawn)
         {
             int count = 0;
@@ -34,16 +30,13 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             return count;
         }
 
-        /// <summary>
-        /// Result of <see cref="TryReserveIngredientsForJob"/>. Distinguishes
-        /// success from the three failure modes so the caller can produce a
-        /// specific log entry and player-facing message rather than a generic
-        /// "click did nothing." The two failure modes that can realistically
-        /// occur in production are <see cref="PlanInfeasible"/> and
-        /// <see cref="ReservationConflict"/>; <see cref="NoActiveDriver"/>
-        /// indicates an invariant violation (the dialog should only be open
-        /// while our JobDriver is the active driver).
-        /// </summary>
+        // Result of TryReserveIngredientsForJob. Distinguishes success from the
+        // three failure modes so the caller can produce a specific log entry
+        // and player-facing message rather than a generic "click did nothing."
+        // The two failure modes that can realistically occur in production are
+        // PlanInfeasible and ReservationConflict; NoActiveDriver indicates an
+        // invariant violation (the dialog should only be open while our
+        // JobDriver is the active driver).
         public enum ReservationOutcome
         {
             Success,
@@ -52,17 +45,15 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             ReservationConflict,
         }
 
-        /// <summary>
-        /// Pairs an <see cref="ReservationOutcome"/> with the conflict detail
-        /// for <see cref="ReservationOutcome.ReservationConflict"/>: which def
-        /// + count failed to reserve, and (when discoverable) the pawn already
-        /// holding the reservation. Lets callers surface a concrete
-        /// "failed to reserve plasteel x75 (held by Steven)" message instead
-        /// of a vague "materials unavailable." Conflict fields are default
-        /// for non-conflict outcomes; ConflictReserver may be null on a real
-        /// conflict if the existing reserver wasn't a pawn or wasn't reportable
-        /// (e.g. mod-side reservations that don't expose a Pawn).
-        /// </summary>
+        // Pairs an ReservationOutcome with the conflict detail for
+        // ReservationOutcome.ReservationConflict: which def + count failed to
+        // reserve, and (when discoverable) the pawn already holding the
+        // reservation. Lets callers surface a concrete "failed to reserve
+        // plasteel x75 (held by Steven)" message instead of a vague "materials
+        // unavailable." Conflict fields are default for non-conflict outcomes;
+        // ConflictReserver may be null on a real conflict if the existing
+        // reserver wasn't a pawn or wasn't reportable (e.g. mod-side
+        // reservations that don't expose a Pawn).
         public readonly struct ReservationResult
         {
             public readonly ReservationOutcome Outcome;
@@ -91,18 +82,15 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                 new ReservationResult(ReservationOutcome.ReservationConflict, def, count, reserver);
         }
 
-        /// <summary>
-        /// Builds a candidate pool, dispatches to the configured IHaulPlanner,
-        /// reserves the chosen stacks against the active JobDriver's job, and
-        /// populates job.targetQueueA / countQueue for the haul phase. Atomic:
-        /// if planning fails or any reservation can't be acquired, releases
-        /// anything it reserved and returns a failure result without mutating
-        /// the job's queues. Pulls the active job from
-        /// <c>pawn.jobs.curDriver.job</c> directly — the dialog only opens
-        /// from inside the customize JobDriver's wait toil, so this is the
-        /// authoritative source under the dialog's forcePause + absorbInput
-        /// invariants.
-        /// </summary>
+        // Builds a candidate pool, dispatches to the configured IHaulPlanner,
+        // reserves the chosen stacks against the active JobDriver's job, and
+        // populates job.targetQueueA / countQueue for the haul phase. Atomic:
+        // if planning fails or any reservation can't be acquired, releases
+        // anything it reserved and returns a failure result without mutating
+        // the job's queues. Pulls the active job from pawn.jobs.curDriver.job
+        // directly — the dialog only opens from inside the customize
+        // JobDriver's wait toil, so this is the authoritative source under the
+        // dialog's forcePause + absorbInput invariants.
         public static ReservationResult TryReserveIngredientsForJob(
             Pawn pawn, List<ThingDefCountClass> totalCost)
         {
@@ -161,10 +149,8 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             return CommitPlanAtomic(pawn, job, driver, plan);
         }
 
-        /// <summary>
-        /// Builds the pool, request, and runs the configured planner. Returns
-        /// null on failure (planner returned null or threw).
-        /// </summary>
+        // Builds the pool, request, and runs the configured planner. Returns
+        // null on failure (planner returned null or threw).
         private static HaulPlan AttemptPlan(
             Pawn pawn, Dictionary<ThingDef, int> demand, IntVec3 workbenchPos, HaulPlannerKind kind)
         {
@@ -206,17 +192,15 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             }
         }
 
-        /// <summary>
-        /// Reserves every unique Thing in the plan atomically and commits the
-        /// plan to the job's haul queues plus the driver's parallel destination
-        /// and trip-boundary lists. Same Thing may appear in multiple pickups
-        /// (split across CarryTracker + Inventory or across trips); we reserve
-        /// it once, and the driver re-reserves before subsequent pickups since
-        /// vanilla's Toils_Haul.StartCarryThing auto-releases when the per-
-        /// pickup count is satisfied. On reservation failure the returned
-        /// result carries the failed pickup's def + count so the caller can
-        /// surface a concrete "failed to reserve {def} x{count}" message.
-        /// </summary>
+        // Reserves every unique Thing in the plan atomically and commits the
+        // plan to the job's haul queues plus the driver's parallel destination
+        // and trip-boundary lists. Same Thing may appear in multiple pickups
+        // (split across CarryTracker + Inventory or across trips); we reserve
+        // it once, and the driver re-reserves before subsequent pickups since
+        // vanilla's Toils_Haul.StartCarryThing auto-releases when the per-
+        // pickup count is satisfied. On reservation failure the returned result
+        // carries the failed pickup's def + count so the caller can surface a
+        // concrete "failed to reserve {def} x{count}" message.
         private static ReservationResult CommitPlanAtomic(
             Pawn pawn, Job job, JobDriver_CustomizeWeapon driver, HaulPlan plan)
         {
@@ -286,16 +270,15 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             return ReservationResult.Success();
         }
 
-        /// <summary>
-        /// Determines whether a pawn can use the given thing as an ingredient.
-        /// Checks: spawned, not flagged forbidden by the player faction, not
-        /// forbidden to the pawn (allowed-area), reservable by the pawn, and
-        /// reachable. The faction-level forbidden check is explicit because
-        /// IsForbidden(pawn) short-circuits to false for drafted/slave/host-faction
-        /// pawns via CaresAboutForbidden, which would otherwise allow forbidden
-        /// stacks to be hauled. Customization is a direct player order, so the
-        /// player's red-X must always be respected regardless of pawn state.
-        /// </summary>
+        // Determines whether a pawn can use the given thing as an ingredient.
+        // Checks: spawned, not flagged forbidden by the player faction, not
+        // forbidden to the pawn (allowed-area), reservable by the pawn, and
+        // reachable. The faction-level forbidden check is explicit because
+        // IsForbidden(pawn) short-circuits to false for
+        // drafted/slave/host-faction pawns via CaresAboutForbidden, which would
+        // otherwise allow forbidden stacks to be hauled. Customization is a
+        // direct player order, so the player's red-X must always be respected
+        // regardless of pawn state.
         private static bool CanPawnUseIngredient(Thing thing, Pawn pawn)
         {
             return thing.Spawned
@@ -305,20 +288,18 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                 && pawn.CanReach(thing, PathEndMode.ClosestTouch, Danger.Deadly);
         }
 
-        /// <summary>
-        /// Gathers candidate stacks per demanded def for the planner. Each
-        /// candidate has already passed CanPawnUseIngredient. The pool is
-        /// sized to the planner's CandidatePoolMultiplier times demand, capped
-        /// per def by CandidatePoolCap; richer pools give planners more
-        /// sourcing flexibility at the cost of build time. Planners with
-        /// GroupPoolBySlotGroup get the group-level sizing rules and SlotGroup
-        /// annotations instead (see <see cref="GatherGroupLevel"/>).
-        ///
-        /// Sort key for "which stacks to keep when capping" is squared
-        /// distance from the pawn, matching the existing one-stack-per-trip
-        /// behavior. Planners that prefer a workbench-anchored sort can
-        /// re-sort the pool internally without losing candidates.
-        /// </summary>
+        // Gathers candidate stacks per demanded def for the planner. Each
+        // candidate has already passed CanPawnUseIngredient. The pool is sized
+        // to the planner's CandidatePoolMultiplier times demand, capped per def
+        // by CandidatePoolCap; richer pools give planners more sourcing
+        // flexibility at the cost of build time. Planners with
+        // GroupPoolBySlotGroup get the group-level sizing rules and SlotGroup
+        // annotations instead (see GatherGroupLevel).
+        //
+        // Sort key for "which stacks to keep when capping" is squared distance
+        // from the pawn, matching the existing one-stack-per-trip behavior.
+        // Planners that prefer a workbench-anchored sort can re-sort the pool
+        // internally without losing candidates.
         private static Dictionary<ThingDef, List<HaulCandidate>> BuildHaulPool(
             Pawn pawn, Dictionary<ThingDef, int> demand, IHaulPlanner planner)
         {
@@ -378,16 +359,14 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             return candidates;
         }
 
-        /// <summary>
-        /// Group-level gathering for GroupPoolBySlotGroup planners: walk
-        /// stacks nearest-first until cumulative count meets the target AND at
-        /// least two distinct storage groups are represented (when that many
-        /// exist for this def), capped at <paramref name="groupCap"/> distinct
-        /// groups. The two-group floor matters: without it, one big stack
-        /// satisfies the count target and the optimizer receives exactly one
-        /// sourcing option — no choice at all. Stacks outside storage (no
-        /// SlotGroup) are singleton groups with GroupId -1.
-        /// </summary>
+        // Group-level gathering for GroupPoolBySlotGroup planners: walk stacks
+        // nearest-first until cumulative count meets the target AND at least
+        // two distinct storage groups are represented (when that many exist for
+        // this def), capped at groupCap distinct groups. The two-group floor
+        // matters: without it, one big stack satisfies the count target and the
+        // optimizer receives exactly one sourcing option — no choice at all.
+        // Stacks outside storage (no SlotGroup) are singleton groups with
+        // GroupId -1.
         private static List<HaulCandidate> GatherGroupLevel(
             Map map, List<Thing> stacks, int targetCount, int groupCap,
             Dictionary<SlotGroup, int> groupIds)

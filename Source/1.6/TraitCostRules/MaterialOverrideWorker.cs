@@ -4,10 +4,9 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Fallback: auto-detects material names in the trait label and swaps raw resource
-    /// costs with the detected material. Runs at low priority after all thematic rules.
-    /// </summary>
+    // Fallback: auto-detects material names in the trait label and swaps raw
+    // resource costs with the detected material. Runs at low priority after all
+    // thematic rules.
     public class MaterialOverrideWorker : TraitCostRuleWorker
     {
         public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)

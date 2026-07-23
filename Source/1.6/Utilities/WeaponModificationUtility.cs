@@ -5,15 +5,12 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Mutates a weapon Thing in place: adds/removes traits (delegating
-    /// ability-comp wiring to <see cref="EquippableAbilityUtility"/>), sets
-    /// cosmetic properties (name, color, texture), and spawns refunded
-    /// resources. Def conversion (base↔unique) lives in
-    /// <see cref="WeaponDefConversion"/>; ingredient gathering and reservation
-    /// for a customization job lives in
-    /// <see cref="HaulPlanning.IngredientReservation"/>.
-    /// </summary>
+    // Mutates a weapon Thing in place: adds/removes traits (delegating
+    // ability-comp wiring to EquippableAbilityUtility), sets cosmetic
+    // properties (name, color, texture), and spawns refunded resources. Def
+    // conversion (base↔unique) lives in WeaponDefConversion; ingredient
+    // gathering and reservation for a customization job lives in
+    // HaulPlanning.IngredientReservation.
     public static class WeaponModificationUtility
     {
         // Reflection fields for CompUniqueWeapon private members. Resolved once
@@ -42,14 +39,12 @@ namespace UniqueWeaponsUnbound
         internal static readonly FieldInfo VerbBurstCountField = typeof(Verb)
             .GetField("cachedBurstShotCount", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        /// <summary>
-        /// Verifies that every cached CompUniqueWeapon FieldInfo resolved.
-        /// Should be called during StaticConstructorOnStartup so a RimWorld
-        /// API rename surfaces as a startup error rather than a silent no-op
-        /// on every later SetName/SetColor/AddTrait/RemoveTrait. Pure
-        /// diagnostic — no state is built here; the FieldInfos are resolved
-        /// at class-load time by the field initializers above.
-        /// </summary>
+        // Verifies that every cached CompUniqueWeapon FieldInfo resolved.
+        // Should be called during StaticConstructorOnStartup so a RimWorld API
+        // rename surfaces as a startup error rather than a silent no-op on
+        // every later SetName/SetColor/AddTrait/RemoveTrait. Pure diagnostic —
+        // no state is built here; the FieldInfos are resolved at class-load
+        // time by the field initializers above.
         public static void VerifyReflection()
         {
             if (CompNameField == null)
@@ -69,25 +64,23 @@ namespace UniqueWeaponsUnbound
                     + "burst-count trait changes won't take effect until save reload. RimWorld API may have changed.");
         }
 
-        /// <summary>
-        /// Clears the per-Verb lazy caches that fold burstShotSpeedMultiplier
-        /// and burstShotCountMultiplier from the weapon's trait list. Vanilla
-        /// populates these on first access and never invalidates them — and
-        /// they aren't Scribed, so the only thing that resets them is a save
-        /// reload (private fields default back to null on the freshly-loaded
-        /// Verb instance). Without this scrub, adding or removing a burst-
-        /// affecting trait leaves the weapon's burst behavior frozen at the
-        /// pre-change value until the player reloads.
-        ///
-        /// Verb instances live on the weapon's own CompEquippable.VerbTracker,
-        /// not the equipping pawn, so the unequip/re-equip cycle our acquire
-        /// and recovery phases drive doesn't help — the same instances persist
-        /// across it, and Verb.Reset() (which Notify_PickedUp triggers) only
-        /// touches per-shot state, not the burst caches.
-        ///
-        /// Safe on non-unique weapons (CompEquippable absent → no-op) and on
-        /// weapons whose Verbs haven't been accessed yet (fields already null).
-        /// </summary>
+        // Clears the per-Verb lazy caches that fold burstShotSpeedMultiplier
+        // and burstShotCountMultiplier from the weapon's trait list. Vanilla
+        // populates these on first access and never invalidates them — and they
+        // aren't Scribed, so the only thing that resets them is a save reload
+        // (private fields default back to null on the freshly-loaded Verb
+        // instance). Without this scrub, adding or removing a burst-affecting
+        // trait leaves the weapon's burst behavior frozen at the pre-change
+        // value until the player reloads.
+        //
+        // Verb instances live on the weapon's own CompEquippable.VerbTracker,
+        // not the equipping pawn, so the unequip/re-equip cycle our acquire and
+        // recovery phases drive doesn't help — the same instances persist
+        // across it, and Verb.Reset() (which Notify_PickedUp triggers) only
+        // touches per-shot state, not the burst caches.
+        //
+        // Safe on non-unique weapons (CompEquippable absent → no-op) and on
+        // weapons whose Verbs haven't been accessed yet (fields already null).
         internal static void InvalidateVerbBurstCaches(Thing weapon)
         {
             if (VerbBurstTicksField == null && VerbBurstCountField == null)
@@ -181,25 +174,23 @@ namespace UniqueWeaponsUnbound
             EquippableAbilityUtility.SetupAndPreserveCharges(weapon, comp);
         }
 
-        /// <summary>
-        /// Scrubs the random state left behind by <c>CompUniqueWeapon.PostPostMake</c>
-        /// on a freshly minted unique weapon: the auto-rolled trait list, the
-        /// generated name and color, the lazy <c>ignoreAccuracyMaluses</c> cache,
-        /// and the equippable-ability comp's stale <c>props</c> + cached
-        /// <see cref="Ability"/> instance. Called by <see cref="WeaponDefConversion"/>
-        /// right after <c>ThingMaker.MakeThing</c> on a unique-weapon def so the
-        /// customization pipeline starts from a clean slate.
-        ///
-        /// Without the ability-comp scrub, an ability trait randomly rolled by
-        /// <c>InitializeTraits</c> (e.g. SmokeLauncher → LaunchSmokeShell) wires
-        /// up <c>CompEquippableAbilityReloadable.props</c> and lazily constructs
-        /// its <c>Ability</c>. Clearing the trait list afterwards doesn't undo
-        /// that wiring — vanilla <c>Setup()</c> only assigns props for traits
-        /// currently in the list, never clears them — and the cached Ability is
-        /// even deep-scribed across save/load, so the phantom gizmo persists.
-        ///
-        /// No-op on non-unique target defs (no CompUniqueWeapon).
-        /// </summary>
+        // Scrubs the random state left behind by CompUniqueWeapon.PostPostMake
+        // on a freshly minted unique weapon: the auto-rolled trait list, the
+        // generated name and color, the lazy ignoreAccuracyMaluses cache, and
+        // the equippable-ability comp's stale props + cached Ability instance.
+        // Called by WeaponDefConversion right after ThingMaker.MakeThing on a
+        // unique-weapon def so the customization pipeline starts from a clean
+        // slate.
+        //
+        // Without the ability-comp scrub, an ability trait randomly rolled by
+        // InitializeTraits (e.g. SmokeLauncher → LaunchSmokeShell) wires up
+        // CompEquippableAbilityReloadable.props and lazily constructs its
+        // Ability. Clearing the trait list afterwards doesn't undo that wiring
+        // — vanilla Setup() only assigns props for traits currently in the
+        // list, never clears them — and the cached Ability is even deep-scribed
+        // across save/load, so the phantom gizmo persists.
+        //
+        // No-op on non-unique target defs (no CompUniqueWeapon).
         internal static void ClearAutoGeneratedUniqueState(Thing weapon)
         {
             CompUniqueWeapon comp = weapon.TryGetComp<CompUniqueWeapon>();
@@ -241,10 +232,8 @@ namespace UniqueWeaponsUnbound
             weapon.overrideGraphicIndex = index;
         }
 
-        /// <summary>
-        /// Spawns resources near a position (e.g. the workbench).
-        /// Used to refund resources when removing traits.
-        /// </summary>
+        // Spawns resources near a position (e.g. the workbench). Used to refund
+        // resources when removing traits.
         public static void SpawnResourcesNear(
             Map map, IntVec3 center, List<ThingDefCountClass> resources)
         {

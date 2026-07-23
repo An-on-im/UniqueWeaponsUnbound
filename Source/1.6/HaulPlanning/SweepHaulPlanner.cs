@@ -6,26 +6,24 @@ using Verse;
 
 namespace UniqueWeaponsUnbound.HaulPlanning
 {
-    /// <summary>
-    /// Mid-tier planner: clusters ingredient stacks geographically using the
-    /// Gillett &amp; Miller (1974) sweep algorithm anchored at the workbench,
-    /// hybrid bin-packs the sweep-ordered list into trips (one carry-tracker
-    /// pickup + mass-budgeted inventory pickups per trip), repairs partition
-    /// quality with a 2-opt swap pass on inventory pickups across adjacent
-    /// trips, then solves the in-trip TSP exactly with Held-Karp DP. Manhattan
-    /// distance throughout (matches RimWorld's grid pathing better than
-    /// Euclidean and preserves triangle inequality).
-    ///
-    /// Hybrid carry model: the heaviest pickup in each trip is routed via the
-    /// pawn's carry tracker (volume-bound only — see Pawn_CarryTracker.
-    /// MaxStackSpaceEver), letting that mass bypass the inventory budget at no
-    /// encumbrance cost (MassUtility.GearAndInventoryMass excludes the carry
-    /// tracker). Remaining trip pickups go into inventory under a
-    /// spareCap * 0.95 mass cap. Same Thing may legitimately appear as both a
-    /// CarryTracker pickup and an Inventory pickup within the same trip when
-    /// its required count exceeds the carry-tracker volume budget — common
-    /// with stack-size mods.
-    /// </summary>
+    // Mid-tier planner: clusters ingredient stacks geographically using the
+    // Gillett & Miller (1974) sweep algorithm anchored at the workbench, hybrid
+    // bin-packs the sweep-ordered list into trips (one carry-tracker pickup +
+    // mass-budgeted inventory pickups per trip), repairs partition quality with
+    // a 2-opt swap pass on inventory pickups across adjacent trips, then solves
+    // the in-trip TSP exactly with Held-Karp DP. Manhattan distance throughout
+    // (matches RimWorld's grid pathing better than Euclidean and preserves
+    // triangle inequality).
+    //
+    // Hybrid carry model: the heaviest pickup in each trip is routed via the
+    // pawn's carry tracker (volume-bound only — see Pawn_CarryTracker.
+    // MaxStackSpaceEver), letting that mass bypass the inventory budget at no
+    // encumbrance cost (MassUtility.GearAndInventoryMass excludes the carry
+    // tracker). Remaining trip pickups go into inventory under a spareCap *
+    // 0.95 mass cap. Same Thing may legitimately appear as both a CarryTracker
+    // pickup and an Inventory pickup within the same trip when its required
+    // count exceeds the carry-tracker volume budget — common with stack-size
+    // mods.
     public class SweepHaulPlanner : IHaulPlanner
     {
         public float CandidatePoolMultiplier => 1.5f;

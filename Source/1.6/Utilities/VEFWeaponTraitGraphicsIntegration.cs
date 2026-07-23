@@ -6,42 +6,38 @@ using Verse;
 
 namespace UniqueWeaponsUnbound
 {
-    /// <summary>
-    /// Optional integration with Vanilla Expanded Framework's trait-driven
-    /// weapon-graphic override (<c>VEF.Weapons.CompApplyWeaponTraits</c>, the
-    /// system Alpha Armoury's "attachable" traits ride on). VEF lets a
-    /// <c>WeaponTraitDef</c> carry a <c>WeaponTraitDefExtension</c> that swaps the
-    /// weapon's whole graphic for a given base def; its comp resolves the
-    /// highest-priority matching override and writes the result straight into
-    /// <c>Thing.graphicInt</c> — the backing field <c>Thing.Graphic</c> returns —
-    /// with no Harmony patch on the getter. So <em>once that comp has run</em>, the
-    /// override is reachable through <c>Thing.Graphic</c> like any vanilla graphic.
-    ///
-    /// <para>The catch is <em>when</em> it runs: VEF only recomputes on equip and
-    /// on load (and its trait scan is memoized in a private cache that our trait
-    /// edits don't invalidate). Neither fires during our preview, and neither fires
-    /// for a weapon that stays put while we mutate its trait list.
-    /// <see cref="RefreshTraitGraphic"/> reproduces VEF's own guarded refresh —
-    /// flush the cache, then re-run the override iff a trait still carries an
-    /// extension — so the prospective preview and the post-edit real weapon both
-    /// show what an equip would.</para>
-    ///
-    /// <para>All access goes through reflection so this mod compiles and runs
-    /// without VEF installed. Mirrors the structure of
-    /// <see cref="AlphaArmouryIntegration"/> and
-    /// <see cref="VEFRecipeInheritanceIntegration"/>: the static ctor resolves the
-    /// type/members once and logs a single warning when VEF is loaded but the
-    /// integration surface has drifted (renamed type/method/field). When VEF is
-    /// absent the integration is silently unavailable and every entry point no-ops,
-    /// leaving vanilla graphic resolution untouched.</para>
-    ///
-    /// <para>The static ctor is forced to run at startup (ModInitializer reads
-    /// <see cref="Available"/>) rather than lazily on first customization: drift is
-    /// determinable from loaded assemblies alone, so it should surface during load.
-    /// Unlike <see cref="VEFRecipeInheritanceIntegration"/> — touched at load by
-    /// <c>WorkbenchUtility.Initialize</c> — this integration has no other startup
-    /// consumer, so the probe is its only early trigger.</para>
-    /// </summary>
+    // Optional integration with Vanilla Expanded Framework's trait-driven
+    // weapon-graphic override (VEF.Weapons.CompApplyWeaponTraits, the system
+    // Alpha Armoury's "attachable" traits ride on). VEF lets a WeaponTraitDef
+    // carry a WeaponTraitDefExtension that swaps the weapon's whole graphic for
+    // a given base def; its comp resolves the highest-priority matching
+    // override and writes the result straight into Thing.graphicInt — the
+    // backing field Thing.Graphic returns — with no Harmony patch on the
+    // getter. So once that comp has run, the override is reachable through
+    // Thing.Graphic like any vanilla graphic.
+    //
+    // The catch is when it runs: VEF only recomputes on equip and on load (and
+    // its trait scan is memoized in a private cache that our trait edits don't
+    // invalidate). Neither fires during our preview, and neither fires for a
+    // weapon that stays put while we mutate its trait list. RefreshTraitGraphic
+    // reproduces VEF's own guarded refresh — flush the cache, then re-run the
+    // override iff a trait still carries an extension — so the prospective
+    // preview and the post-edit real weapon both show what an equip would.
+    //
+    // All access goes through reflection so this mod compiles and runs without
+    // VEF installed. Mirrors the structure of AlphaArmouryIntegration and
+    // VEFRecipeInheritanceIntegration: the static ctor resolves the
+    // type/members once and logs a single warning when VEF is loaded but the
+    // integration surface has drifted (renamed type/method/field). When VEF is
+    // absent the integration is silently unavailable and every entry point
+    // no-ops, leaving vanilla graphic resolution untouched.
+    //
+    // The static ctor is forced to run at startup (ModInitializer reads
+    // Available) rather than lazily on first customization: drift is
+    // determinable from loaded assemblies alone, so it should surface during
+    // load. Unlike VEFRecipeInheritanceIntegration — touched at load by
+    // WorkbenchUtility.Initialize — this integration has no other startup
+    // consumer, so the probe is its only early trigger.
     internal static class VEFWeaponTraitGraphicsIntegration
     {
         private const string CompTypeName = "VEF.Weapons.CompApplyWeaponTraits";
@@ -121,26 +117,25 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        /// <summary>
-        /// Re-runs VEF's trait-driven graphic override against the weapon's current
-        /// trait list, exactly as an equip would, so the resolved graphic lands in
-        /// <c>graphicInt</c> for the next <c>Thing.Graphic</c> read / draw.
-        ///
-        /// <para>Used in two places: the dialog preview calls it on the prospective
-        /// Thing before reading its <c>Graphic</c>, and the customization job's
-        /// finalize toil calls it on the real weapon once the trait list is final
-        /// (VEF would otherwise not catch the change until a later equip/drop).</para>
-        ///
-        /// <para>Flushes VEF's memoized trait cache first (our edits bypass it), then
-        /// mirrors VEF's own guard: invoke <c>ChangeGraphic</c> only when a trait
-        /// still carries a <c>WeaponTraitDefExtension</c>. With none, null
-        /// <c>graphicInt</c> so the appearance reverts to vanilla resolution — this
-        /// is what clears a stale override after the last attachment trait is
-        /// removed. No-op when VEF is absent, the weapon lacks the comp, or the
-        /// weapon is null. Self-contained: any throw from VEF's recompute is logged
-        /// once and falls back to vanilla resolution rather than propagating into
-        /// GUI layout or the job toil.</para>
-        /// </summary>
+        // Re-runs VEF's trait-driven graphic override against the weapon's
+        // current trait list, exactly as an equip would, so the resolved
+        // graphic lands in graphicInt for the next Thing.Graphic read / draw.
+        //
+        // Used in two places: the dialog preview calls it on the prospective
+        // Thing before reading its Graphic, and the customization job's
+        // finalize toil calls it on the real weapon once the trait list is
+        // final (VEF would otherwise not catch the change until a later
+        // equip/drop).
+        //
+        // Flushes VEF's memoized trait cache first (our edits bypass it), then
+        // mirrors VEF's own guard: invoke ChangeGraphic only when a trait still
+        // carries a WeaponTraitDefExtension. With none, null graphicInt so the
+        // appearance reverts to vanilla resolution — this is what clears a
+        // stale override after the last attachment trait is removed. No-op when
+        // VEF is absent, the weapon lacks the comp, or the weapon is null.
+        // Self-contained: any throw from VEF's recompute is logged once and
+        // falls back to vanilla resolution rather than propagating into GUI
+        // layout or the job toil.
         public static void RefreshTraitGraphic(Thing weapon)
         {
             if (!Available || weapon == null)
