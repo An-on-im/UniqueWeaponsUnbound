@@ -73,6 +73,23 @@ namespace UniqueWeaponsUnbound
             if (adjectives.Count > 0)
                 request.Rules.Add(new Rule_String("trait_adjective", adjectives.RandomElement()));
 
+            // Publish the weapon's material as a "stuff_adjective" grammar symbol so a
+            // companion material-namer (e.g. Unique Melee Weapons) can weave it into the
+            // unique name — its own PostPostMake path can't reach us here, so it keys off
+            // this rule instead. Inert on its own: nothing references [stuff_adjective]
+            // unless such a mod's rulepack is present, so this is a harmless,
+            // dependency-free data contract. Prefer stuffAdjective ("wooden", "golden"),
+            // fall back to the label ("plasteel", "jade"). weapon.Stuff is null for
+            // non-stuffable uniques (e.g. Odyssey's ranged ones) — nothing to publish.
+            ThingDef stuff = weapon.Stuff;
+            if (stuff != null)
+            {
+                string stuffAdjective = stuff.stuffProps?.stuffAdjective;
+                if (stuffAdjective.NullOrEmpty())
+                    stuffAdjective = stuff.label;
+                request.Rules.Add(new Rule_String("stuff_adjective", stuffAdjective));
+            }
+
             // Add the customizing pawn's name data for ANYPAWN_* grammar rules,
             // enabling possessive name patterns like "Kira's Gold Rifle"
             foreach (Rule rule in TaleData_Pawn.GenerateFrom(pawn).GetRules("ANYPAWN"))
