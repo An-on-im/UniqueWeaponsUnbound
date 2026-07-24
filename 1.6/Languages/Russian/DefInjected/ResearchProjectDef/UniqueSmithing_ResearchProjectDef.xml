@@ -4,7 +4,7 @@
   <!-- EN: unique smithing -->
   <UniqueSmithing.label>улучшение оружия (ковка)</UniqueSmithing.label>
   <!-- EN: Upgrade and customize neolithic and medieval weapons at a smithy, adding or removing traits to suit your needs. -->
-  <UniqueSmithing.description>Позволяет улучшать и настраивать оружие неолитической и средневековой эпох в кузнице, добавляя или удаляя свойства по вашему усмотрению.</UniqueSmithing.description>
+  <UniqueSmithing.description>Позволяет улучшать и настраивать оружие неолитической и средневековой эпох на кузне, добавляя или удаляя свойства по вашему усмотрению.</UniqueSmithing.description>
   <!-- EN: Customize neolithic weapons -->
   <UniqueSmithing.customUnlockTexts.0>Настройка оружия неолитической эпохи</UniqueSmithing.customUnlockTexts.0>
   <!-- EN: Customize medieval weapons -->
