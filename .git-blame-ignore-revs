@@ -4,3 +4,6 @@
 
 # style: Convert XML doc comments to plain // comments
 fb73a07a27362c79ce9b314f5ce7defaa4add820
+
+# style: Normalize whitespace in Russian localization files
+434f840aa57c3975888d35d4c3245e321fedbb71
