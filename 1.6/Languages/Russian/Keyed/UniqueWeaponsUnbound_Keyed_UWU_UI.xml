@@ -229,7 +229,7 @@
   <!-- EN: Require weapon crafting research -->
   <UWU_RequireRecipeResearch>Требовать исследование крафта оружия</UWU_RequireRecipeResearch>
   <!-- EN: Require the completion of any research that would enable crafting the weapon. For example, customizing a charge rifle would require Pulse-charged munitions. -->
-  <UWU_RequireRecipeResearchDesc>Требовать завершения любых исследований, которые позволяют крафтить это оружие. Например, для настройки энерговинтовки потребуется исследование «{0}».</UWU_RequireRecipeResearchDesc>
+  <UWU_RequireRecipeResearchDesc>Требовать завершения любых исследований, которые позволяют крафтить это оружие. Например, для настройки {0} потребуется исследование «{1}».</UWU_RequireRecipeResearchDesc>
   <!-- EN: Require appropriate workbench -->
   <UWU_RequireWorkbench>Требовать соответствующий верстак</UWU_RequireWorkbench>
   <!-- EN: Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons. -->
