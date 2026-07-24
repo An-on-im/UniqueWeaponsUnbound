@@ -77,6 +77,43 @@ table, fabrication bench), research project names, tech levels.
 
 Add rows here whenever a native review lands corrections.
 
+### Glossary — Japanese (machine-assisted generation, 2026-07; no native review yet)
+
+Style rules discovered from the vanilla JP data (mandatory):
+
+- Vanilla JP uses ASCII punctuation: `,` and `.` — never `、` or `。`.
+- Descriptions/tooltips: polite です/ます form ending `.`; labels/buttons no period.
+- Job report strings: continuous form 〜している / 〜中, no subject, no period.
+- Quote injected def labels and cross-referenced UI labels with 「」.
+
+| English | Use | Never | Why |
+|---|---|---|---|
+| trait (weapon) | 特性 | — | vanilla `WeaponTraits`=特性; unlike Russian, JP shares the pawn-trait word |
+| unique weapon | ユニークな武器 | | vanilla `UniqueWeapon` |
+| Pulse-charged munitions (ChargedShot research) | チャージライフル | パルス弾 | JP names the research after the rifle; disambiguate as 「チャージライフル」の研究 |
+| fueled / electric smithy | 工作台 / 電動工作台 | 鍛冶場 | vanilla building labels |
+| machining table | 精密工作機械 | | vanilla building label (also the Machining research name) |
+| fabrication bench | コンポーネント工作台 | | vanilla building label |
+| ultratech | 最先端の技術力 (noun) / 最先端技術級 (attributive) | ウルトラテック | vanilla `TechLevel_Ultra` |
+| ideoligion | 思想 | イデオリギオン | JP does not coin a portmanteau; relic = レリック |
+| Cancel / Confirm / Randomize / Reset | キャンセル / 了承 / ランダム / リセット | | vanilla Keyed buttons |
+
+Mod-decided terms pending native review: research trio ユニーク武器の鍛冶 /
+ユニーク武器の精密加工 / ユニーク武器の組立製造; haul planner modes 順次 / 巡回 /
+徹底; net refund/cost 実質返却 / 実質コスト; haul plan 運搬計画.
+
+### Cross-language lessons
+
+- Wrap injected `{0}` def labels in the language's quote marks (JP 「{0}」,
+  RU «{0}») — injected labels never inflect, and quoting sidesteps case and
+  agreement problems.
+- When an English string is reworded, refresh the EN comments in every
+  language **in the same commit** — the checker reports the mismatch as STALE
+  either way, but batching avoids churn.
+- Coined vanilla terms (ideoligion) may be a portmanteau in one language
+  (RU идеолигия) and a plain word in another (JP 思想) — always check, never
+  extrapolate between languages.
+
 ## Workflows
 
 ### Initial generation (`/translate <Language>`)
