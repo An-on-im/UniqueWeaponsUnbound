@@ -10,17 +10,17 @@ The mod targets the languages below, chosen by RimWorld's per-language
 audience size. Contributions for any other language RimWorld supports are
 welcome too.
 
-| Language | Status | Credit |
-|---|---|---|
-| English | Source | — |
-| Simplified Chinese | Planned | |
-| Russian | Native | [An-on-im](https://github.com/An-on-im) |
-| Korean | Planned | |
-| German | Planned | |
-| Spanish | Planned | |
-| French | Planned | |
-| Brazilian Portuguese | Planned | |
-| Japanese | Machine-assisted — native review welcome | |
+| Language             | Status           | Credit                                  |
+| -------------------- | ---------------- | --------------------------------------- |
+| English              | Source           | —                                       |
+| Simplified Chinese   | Planned          |                                         |
+| Russian              | Native           | [An-on-im](https://github.com/An-on-im) |
+| Korean               | Planned          |                                         |
+| German               | Planned          |                                         |
+| Spanish              | Planned          |                                         |
+| French               | Planned          |                                         |
+| Brazilian Portuguese | Planned          |                                         |
+| Japanese             | Machine-assisted |                                         |
 
 Statuses: **Source** (the authoritative English strings), **Machine-assisted**
 (generated with terminology grounded against the official RimWorld
@@ -47,5 +47,6 @@ native speaker), **Planned** (not started — contributions welcome).
 
   It checks key coverage, placeholders, DefInjected paths, staleness, and
   file hygiene.
+
 - Improving a machine-assisted language? Corrections from native speakers
   are gladly merged, no matter how small.
