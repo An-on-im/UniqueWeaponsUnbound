@@ -1,5 +1,6 @@
-# Claude Code
-.claude
+# Claude Code (skills are shared with contributors; local settings/hooks stay private)
+.claude/*
+!.claude/skills/
 
 # Visual Studio
 .vs/
