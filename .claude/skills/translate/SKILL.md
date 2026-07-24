@@ -21,6 +21,10 @@ the source of truth; every other language derives from it.
   (Russian is community-maintained — PR #6.)
 - **Machine-assisted output is a first pass.** PRs and commits containing
   generated translations must say so and invite native-speaker review.
+- **Keep the public roster current.** CONTRIBUTING.md's localization table
+  (Planned / Machine-assisted / Native, plus credit) must be updated in the
+  same commit whenever a language is added or a native review lands. The
+  target roster lives there — consult it before proposing new languages.
 
 ## File map and conventions
 
