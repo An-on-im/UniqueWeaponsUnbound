@@ -117,7 +117,6 @@ namespace UniqueWeaponsUnbound
 
             listing.Gap();
 
-            // Use placeholders for dynamic research names
             listing.CheckboxLabeled(
                 "UWU_RequireCustomizationResearch".Translate(),
                 ref Settings.requireCustomizationResearch,
@@ -125,9 +124,9 @@ namespace UniqueWeaponsUnbound
                     UWU_ResearchDefOf.UniqueSmithing.label,
                     UWU_ResearchDefOf.UniqueMachining.label,
                     UWU_ResearchDefOf.UniqueFabrication.label));
+
             listing.Gap();
 
-            // Use placeholders for dynamic research names
             listing.CheckboxLabeled(
                 "UWU_RequireRecipeResearch".Translate(),
                 ref Settings.requireRecipeResearch,
@@ -168,7 +167,6 @@ namespace UniqueWeaponsUnbound
             }
             else
             {
-                // Use placeholders for dynamic research names
                 listing.CheckboxLabeled(
                     "UWU_AllowUltratech".Translate(),
                     ref Settings.allowUltratechCustomization,
@@ -177,7 +175,6 @@ namespace UniqueWeaponsUnbound
 
             listing.Gap();
 
-            // Use placeholders for dynamic research names
             listing.CheckboxLabeled(
                 "UWU_AllowArchotech".Translate(),
                 ref Settings.allowArchotechCustomization,
