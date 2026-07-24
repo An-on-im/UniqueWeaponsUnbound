@@ -130,7 +130,7 @@ namespace UniqueWeaponsUnbound
             listing.CheckboxLabeled(
                 "UWU_RequireRecipeResearch".Translate(),
                 ref Settings.requireRecipeResearch,
-                "UWU_RequireRecipeResearchDesc".Translate(UWU_WeaponsDefOf.Gun_ChargeRifle.label, UWU_ResearchDefOf.ChargedShot.label));
+                "UWU_RequireRecipeResearchDesc".Translate(UWU_ThingDefOf.Gun_ChargeRifle.label, UWU_ResearchDefOf.ChargedShot.label));
 
             listing.Gap();
 
