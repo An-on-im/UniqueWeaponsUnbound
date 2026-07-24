@@ -42,11 +42,11 @@
   <!-- EN: Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap — just bolt on some junk. -->
   <UWU_HeavyScrap.description>Заменяет все затраты на один кусок металлолома. Модификации из металлолома грубы и дёшевы — просто прикрутите какой-нибудь хлам.</UWU_HeavyScrap.description>
   <!-- EN: charge weapons (category-gated) -->
-  <UWU_ChargeCategoryGated.label>зарядовое оружие (с ограничением по категории)</UWU_ChargeCategoryGated.label>
+  <UWU_ChargeCategoryGated.label>энергетическое оружие (с ограничением по категории)</UWU_ChargeCategoryGated.label>
   <!-- EN: Converts all costs into advanced components by market value for charge-type weapon traits, representing the spacer technology required for pulse and beam modifications. -->
-  <UWU_ChargeCategoryGated.description>Конвертирует все затраты в продвинутые компоненты по рыночной стоимости для свойств оружия зарядового типа, отражая потребность в космических технологиях для модификаций импульсного и лучевого оружия.</UWU_ChargeCategoryGated.description>
+  <UWU_ChargeCategoryGated.description>Конвертирует все затраты в продвинутые компоненты по рыночной стоимости для свойств оружия энергетического типа, отражая потребность в космических технологиях для модификаций импульсного и лучевого оружия.</UWU_ChargeCategoryGated.description>
   <!-- EN: charge weapons (unconditional) -->
-  <UWU_ChargeUnconditional.label>зарядовое оружие (без ограничений)</UWU_ChargeUnconditional.label>
+  <UWU_ChargeUnconditional.label>энергетическое оружие (без ограничений)</UWU_ChargeUnconditional.label>
   <!-- EN: Converts all costs into advanced components by market value for traits involving advanced spacer technology, regardless of weapon category. -->
   <UWU_ChargeUnconditional.description>Конвертирует все затраты в продвинутые компоненты по рыночной стоимости для свойств, связанных с передовыми космическими технологиями, независимо от категории оружия.</UWU_ChargeUnconditional.description>
   <!-- EN: akimbo cost multiplier -->

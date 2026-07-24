@@ -42,7 +42,7 @@
   <UWU_TabColor>Цвет</UWU_TabColor>
   <!-- Dialog: Controls -->
   <!-- EN: This weapon is an ideology relic. Its name can only be changed when forming or reforming an ideoligion. -->
-  <UWU_RelicNameTooltip>Это оружие — реликвия идеологии. Её название можно изменить только при создании или реформировании идеологии.</UWU_RelicNameTooltip>
+  <UWU_RelicNameTooltip>Это оружие — реликвия идеолигии. Её название можно изменить только при создании или реформировании идеолигии.</UWU_RelicNameTooltip>
   <!-- EN: Select at least one trait first -->
   <UWU_SelectTraitFirst>Сначала выберите хотя бы одно свойство</UWU_SelectTraitFirst>
   <!-- EN: Auto-regenerate name when traits change -->
@@ -183,7 +183,7 @@
   <!-- EN: {0} customized, but the final color could not be applied. See log. -->
   <UWU_FinalizeColorFailed>{0} настроен, но не удалось применить окончательный цвет. См. лог.</UWU_FinalizeColorFailed>
   <!-- EN: {0}'s ideoligion color. This weapon is a relic of the {1} ideoligion. -->
-  <UWU_RelicIdeoColorTip>Цвет идеологии {0}. Это оружие является реликвией идеологии {1}.</UWU_RelicIdeoColorTip>
+  <UWU_RelicIdeoColorTip>Цвет идеолигии {0}. Это оружие является реликвией идеолигии {1}.</UWU_RelicIdeoColorTip>
   <!-- Settings: Section headers -->
   <!-- EN: Unique Weapons Unbound -->
   <UWU_SettingsCategory>Unique Weapons Unbound</UWU_SettingsCategory>
