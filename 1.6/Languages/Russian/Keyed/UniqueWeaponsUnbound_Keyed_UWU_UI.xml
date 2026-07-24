@@ -1,293 +1,293 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-	<!-- Float menu / Gizmo -->
-	<!-- EN: Customize {0} -->
-	<UWU_CustomizeWeapon>Настроить {0}</UWU_CustomizeWeapon>
-	<!-- EN: requires {0} -->
-	<UWU_RequiresResearch>требуется {0}</UWU_RequiresResearch>
-	<!-- EN: requires {0} -->
-	<UWU_RequiresWorkbench>требуется {0}</UWU_RequiresWorkbench>
-	<!-- EN: no suitable workbench -->
-	<UWU_NoSuitableWorkbench>нет подходящего верстака</UWU_NoSuitableWorkbench>
-	<!-- EN: requires {0} quality or better -->
-	<UWU_RequiresMinimumQuality>требуется качество {0} или выше</UWU_RequiresMinimumQuality>
-	<!-- EN: Customize -->
-	<UWU_CustomizeGizmoLabel>Настроить</UWU_CustomizeGizmoLabel>
-	<!-- EN: Select a colonist to customize this weapon at a nearby workbench. -->
-	<UWU_CustomizeGizmoDesc>Выберите поселенца, чтобы настроить это оружие на ближайшем верстаке.</UWU_CustomizeGizmoDesc>
-	<!-- Dev-mode diagnostic reasons (surfaced when Prefs.DevMode is on, otherwise hidden) -->
-	<!-- EN: no unique variant -->
-	<UWU_DevNoUniqueVariant>нет уникального варианта</UWU_DevNoUniqueVariant>
-	<!-- EN: base variant upgrades disabled -->
-	<UWU_DevDefConversionDisabled>преобразование базового варианта отключено</UWU_DevDefConversionDisabled>
-	<!-- EN: {0} is beyond comprehension -->
-	<UWU_DevTechLevelBeyondComprehension>{0} выходит за пределы понимания</UWU_DevTechLevelBeyondComprehension>
-	<!-- Dialog: Buttons -->
-	<!-- EN: Cancel -->
-	<UWU_Cancel>Отмена</UWU_Cancel>
-	<!-- EN: Reset -->
-	<UWU_Reset>Сбросить</UWU_Reset>
-	<!-- EN: Confirm -->
-	<UWU_Confirm>Подтвердить</UWU_Confirm>
-	<!-- EN: Randomize -->
-	<UWU_Randomize>Случайно</UWU_Randomize>
-	<!-- EN: Reset to defaults -->
-	<UWU_ResetToDefaults>Сбросить на значения по умолчанию</UWU_ResetToDefaults>
-	<!-- Dialog: Tabs -->
-	<!-- EN: Traits -->
-	<UWU_TabTraits>Свойства</UWU_TabTraits>
-	<!-- EN: Texture -->
-	<UWU_TabTexture>Текстура</UWU_TabTexture>
-	<!-- EN: Color -->
-	<UWU_TabColor>Цвет</UWU_TabColor>
-	<!-- Dialog: Controls -->
-	<!-- EN: This weapon is an ideology relic. Its name can only be changed when forming or reforming an ideoligion. -->
-	<UWU_RelicNameTooltip>Это оружие — реликвия идеологии. Её название можно изменить только при создании или реформировании идеологии.</UWU_RelicNameTooltip>
-	<!-- EN: Select at least one trait first -->
-	<UWU_SelectTraitFirst>Сначала выберите хотя бы одно свойство</UWU_SelectTraitFirst>
-	<!-- EN: Auto-regenerate name when traits change -->
-	<UWU_AutoRegenName>Автоматически обновлять название при изменении свойств</UWU_AutoRegenName>
-	<!-- EN: Hide negative traits -->
-	<UWU_HideNegativeTraits>Скрывать негативные свойства</UWU_HideNegativeTraits>
-	<!-- Dialog: Disabled-state messages -->
-	<!-- EN: Select traits to customize texture -->
-	<UWU_SelectTraitsForTexture>Выберите свойства для настройки текстуры</UWU_SelectTraitsForTexture>
-	<!-- EN: Select traits to customize color -->
-	<UWU_SelectTraitsForColor>Выберите свойства для настройки цвета</UWU_SelectTraitsForColor>
-	<!-- EN: Color determined by {0} -->
-	<UWU_ColorDeterminedBy>Цвет определяется {0}</UWU_ColorDeterminedBy>
-	<!-- Dialog: Color sections -->
-	<!-- EN: Weapon colors -->
-	<UWU_WeaponColors>Цвета оружия</UWU_WeaponColors>
-	<!-- EN: Ideology colors -->
-	<UWU_IdeologyColors>Цвета идеологии</UWU_IdeologyColors>
-	<!-- EN: Structure colors -->
-	<UWU_StructureColors>Цвета конструкций</UWU_StructureColors>
-	<!-- Dialog: Cost display -->
-	<!-- EN: Net refund:  -->
-	<UWU_NetRefund>Чистый возврат: </UWU_NetRefund>
-	<!-- EN: None -->
-	<UWU_RefundNone>Нет</UWU_RefundNone>
-	<!-- EN: Net cost:  -->
-	<UWU_NetCost>Чистая стоимость: </UWU_NetCost>
-	<!-- EN: Free -->
-	<UWU_CostFree>Бесплатно</UWU_CostFree>
-	<!-- EN: Missing resources -->
-	<UWU_MissingResources>Недостающие ресурсы</UWU_MissingResources>
-	<!-- EN: Required materials are insufficient, forbidden, reserved by another pawn, or unreachable from this pawn's position. -->
-	<UWU_NotEnoughMaterials>Необходимых материалов недостаточно, они запрещены, зарезервированы другим поселенцем или недоступны с текущей позиции поселенца.</UWU_NotEnoughMaterials>
-	<!-- EN: Could not customize {0}: no viable haul plan. -->
-	<UWU_CouldNotStartPlanInfeasible>Не удалось настроить {0}: нет возможного плана переноски.</UWU_CouldNotStartPlanInfeasible>
-	<!-- EN: Could not customize {0}: failed to reserve {1} x{2}. -->
-	<UWU_CouldNotStartReservationConflict>Не удалось настроить {0}: не удалось зарезервировать {1} x{2}.</UWU_CouldNotStartReservationConflict>
-	<!-- EN: Could not customize {0}: failed to reserve {1} x{2} (held by {3}). -->
-	<UWU_CouldNotStartReservationConflictHeldBy>Не удалось настроить {0}: не удалось зарезервировать {1} x{2} (занято {3}).</UWU_CouldNotStartReservationConflictHeldBy>
-	<!-- EN: Could not customize {0}: internal error. See log. -->
-	<UWU_CouldNotStartInternalError>Не удалось настроить {0}: внутренняя ошибка. См. лог.</UWU_CouldNotStartInternalError>
-	<!-- Trait tooltips -->
-	<!-- EN: Effects: -->
-	<UWU_Effects>Эффекты:</UWU_Effects>
-	<!-- EN: Damage type -->
-	<UWU_DamageType>Тип урона</UWU_DamageType>
-	<!-- EN: Extra damage -->
-	<UWU_ExtraDamage>Дополнительный урон</UWU_ExtraDamage>
-	<!-- EN: Burst speed -->
-	<UWU_BurstSpeed>Скорость очереди</UWU_BurstSpeed>
-	<!-- EN: Burst count -->
-	<UWU_BurstCount>Количество выстрелов в очереди</UWU_BurstCount>
-	<!-- EN: Stopping power -->
-	<UWU_StoppingPower>Останавливающая сила</UWU_StoppingPower>
-	<!-- EN: Ignores accuracy penalties -->
-	<UWU_IgnoresAccuracyPenalties>Игнорирует штрафы точности</UWU_IgnoresAccuracyPenalties>
-	<!-- Trait validation -->
-	<!-- EN: Already applied -->
-	<UWU_AlreadyApplied>Уже применено</UWU_AlreadyApplied>
-	<!-- EN: Maximum traits reached -->
-	<UWU_MaxTraitsReached>Достигнут лимит свойств</UWU_MaxTraitsReached>
-	<!-- EN: Conflicts with {0} -->
-	<UWU_ConflictsWith>Конфликтует с {0}</UWU_ConflictsWith>
-	<!-- EN: Cannot be the only trait -->
-	<UWU_CannotBeOnlyTrait>Не может быть единственным свойством</UWU_CannotBeOnlyTrait>
-	<!-- EN: {0} cannot be the only trait -->
-	<UWU_TraitCannotBeOnlyTrait>{0} не может быть единственным свойством</UWU_TraitCannotBeOnlyTrait>
-	<!-- EN: Must disarm from hostile -->
-	<UWU_OnlyOnHostiles>Должно быть отобрано у враждебного</UWU_OnlyOnHostiles>
-	<!-- EN: Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons. -->
-	<UWU_LastTraitSourceWarning>Предупреждение: это единственное оружие в вашем пуле с данным свойством. Его удаление уберёт это свойство из списка доступных для применения к другому оружию.</UWU_LastTraitSourceWarning>
-	<!-- EN: No traits match your search. -->
-	<UWU_NoTraitsMatchSearch>Ни одно свойство не соответствует вашему запросу.</UWU_NoTraitsMatchSearch>
-	<!-- EN: No traits available yet.\n\nRecover unique weapons via quests or world loot\nto unlock their traits for customization. -->
-	<UWU_NoTraitsDiscovered>Пока нет доступных свойств.\n\nДобывайте уникальное оружие через квесты или находите в мире,\nчтобы открыть его свойства для настройки.</UWU_NoTraitsDiscovered>
-	<!-- EN: All available traits for this weapon are negative. Disable "Hide negative traits" below to view them. -->
-	<UWU_NoTraitsAfterHideNegative>Все доступные для этого оружия свойства являются негативными. Отключите «Скрывать негативные свойства» ниже, чтобы их увидеть.</UWU_NoTraitsAfterHideNegative>
-	<!-- EN: No traits are compatible with this weapon. -->
-	<UWU_NoTraitsAvailable>Ни одно свойство не совместимо с этим оружием.</UWU_NoTraitsAvailable>
-	<!-- Fallbacks -->
-	<!-- EN: weapon -->
-	<UWU_WeaponFallback>оружие</UWU_WeaponFallback>
-	<!-- EN: Weapon -->
-	<UWU_WeaponTypeFallback>Оружие</UWU_WeaponTypeFallback>
-	<!-- EN: blue -->
-	<UWU_ColorFallback>синий</UWU_ColorFallback>
-	<!-- Jobs -->
-	<!-- EN: Customizing {0} -->
-	<UWU_CustomizingWeapon>Настройка {0}</UWU_CustomizingWeapon>
-	<!-- EN: Adding {0} to {1} -->
-	<UWU_AddingTrait>Добавление {0} к {1}</UWU_AddingTrait>
-	<!-- EN: Removing {0} from {1} -->
-	<UWU_RemovingTrait>Удаление {0} из {1}</UWU_RemovingTrait>
-	<!-- EN: Customizing appearance of {0} -->
-	<UWU_ApplyingCosmetics>Настройка внешнего вида {0}</UWU_ApplyingCosmetics>
-	<!-- EN: Placing {0} on {1} -->
-	<UWU_PlacingWeapon>Размещение {0} на {1}</UWU_PlacingWeapon>
-	<!-- EN: Gathering materials for {0} -->
-	<UWU_GatheringMaterials>Сбор материалов для {0}</UWU_GatheringMaterials>
-	<!-- EN: Admiring work -->
-	<UWU_AdmiringWork>Любуется работой</UWU_AdmiringWork>
-	<!-- EN: Not enough resources to customize this weapon. -->
-	<UWU_InsufficientResources>Недостаточно ресурсов для настройки этого оружия.</UWU_InsufficientResources>
-	<!-- EN: {0} customization interrupted: ingredients lost before {1} could be applied. -->
-	<UWU_IngredientShortfall>Настройка {0} прервана: ингредиенты потеряны до того, как можно было применить {1}.</UWU_IngredientShortfall>
-	<!-- EN: {0} customization interrupted: workbench is no longer available. -->
-	<UWU_BailWorkbenchUnavailable>Настройка {0} прервана: верстак больше недоступен.</UWU_BailWorkbenchUnavailable>
-	<!-- EN: {0} customization interrupted: workbench became unreachable. -->
-	<UWU_BailWorkbenchUnreachable>Настройка {0} прервана: верстак стал недосягаем.</UWU_BailWorkbenchUnreachable>
-	<!-- EN: {0} customization interrupted: workbench has no power or fuel. -->
-	<UWU_BailWorkbenchInactive>Настройка {0} прервана: верстак обесточен или у него нет топлива.</UWU_BailWorkbenchInactive>
-	<!-- EN: {0} customization interrupted: weapon was lost. -->
-	<UWU_BailWeaponLost>Настройка {0} прервана: оружие утеряно.</UWU_BailWeaponLost>
-	<!-- EN: {0} customization interrupted: weapon is no longer accessible. -->
-	<UWU_BailWeaponInaccessible>Настройка {0} прервана: оружие больше недоступно.</UWU_BailWeaponInaccessible>
-	<!-- EN: {0} customization interrupted: an ingredient was lost while hauling. -->
-	<UWU_BailIngredientLost>Настройка {0} прервана: ингредиент потерян при переноске.</UWU_BailIngredientLost>
-	<!-- EN: {0} customization interrupted: a required ingredient became unreachable. -->
-	<UWU_BailIngredientUnreachable>Настройка {0} прервана: необходимый ингредиент стал недосягаем.</UWU_BailIngredientUnreachable>
-	<!-- EN: {0} customization interrupted: no room near the workbench to place an ingredient. -->
-	<UWU_BailIngredientPlacementFailed>Настройка {0} прервана: рядом с верстаком нет места для размещения ингредиента.</UWU_BailIngredientPlacementFailed>
-	<!-- EN: {0} customization interrupted: could not pick up the weapon. -->
-	<UWU_BailCarryStartFailed>Настройка {0} прервана: не удалось поднять оружие.</UWU_BailCarryStartFailed>
-	<!-- EN: {0} customization interrupted: an error occurred while adding {1}. -->
-	<UWU_BailOpAddTraitFailed>Настройка {0} прервана: произошла ошибка при добавлении {1}.</UWU_BailOpAddTraitFailed>
-	<!-- EN: {0} customization interrupted: an error occurred while removing {1}. -->
-	<UWU_BailOpRemoveTraitFailed>Настройка {0} прервана: произошла ошибка при удалении {1}.</UWU_BailOpRemoveTraitFailed>
-	<!-- EN: {0} customization interrupted: an error occurred while applying cosmetic changes. -->
-	<UWU_BailOpCosmeticsFailed>Настройка {0} прервана: произошла ошибка при применении косметических изменений.</UWU_BailOpCosmeticsFailed>
-	<!-- EN: {0} customization failed unexpectedly. -->
-	<UWU_BailUnexpected>Настройка {0} неожиданно прервалась.</UWU_BailUnexpected>
-	<!-- EN: {0} customization interrupted: the customization dialog could not be opened. See log. -->
-	<UWU_BailDialogOpenFailed>Настройка {0} прервана: не удалось открыть диалог настройки. См. лог.</UWU_BailDialogOpenFailed>
-	<!-- EN: {0} customization dialog errored and was closed. See log. -->
-	<UWU_DialogErrored>В диалоге настройки {0} произошла ошибка, окно закрыто. См. лог.</UWU_DialogErrored>
-	<!-- EN: {0} customized, but ability state could not be reconciled. See log. -->
-	<UWU_FinalizeAbilitySyncFailed>{0} настроен, но не удалось синхронизировать состояние способностей. См. лог.</UWU_FinalizeAbilitySyncFailed>
-	<!-- EN: {0} customized, but the final color could not be applied. See log. -->
-	<UWU_FinalizeColorFailed>{0} настроен, но не удалось применить окончательный цвет. См. лог.</UWU_FinalizeColorFailed>
-	<!-- EN: {0}'s ideoligion color. This weapon is a relic of the {1} ideoligion. -->
-	<UWU_RelicIdeoColorTip>Цвет идеологии {0}. Это оружие является реликвией идеологии {1}.</UWU_RelicIdeoColorTip>
-	<!-- Settings: Section headers -->
-	<!-- EN: Unique Weapons Unbound -->
-	<UWU_SettingsCategory>Unique Weapons Unbound</UWU_SettingsCategory>
-	<!-- EN: Progression -->
-	<UWU_SettingsProgression>Прогрессия</UWU_SettingsProgression>
-	<!-- EN: Trait costs -->
-	<UWU_SettingsTraitCosts>Стоимость свойств</UWU_SettingsTraitCosts>
-	<!-- EN: Prerequisites -->
-	<UWU_SettingsPrerequisites>Требования</UWU_SettingsPrerequisites>
-	<!-- EN: Ingredient hauling -->
-	<UWU_SettingsHaulPlanner>Переноска ингредиентов</UWU_SettingsHaulPlanner>
-	<!-- EN: Miscellaneous -->
-	<UWU_SettingsMiscellaneous>Разное</UWU_SettingsMiscellaneous>
-	<!-- Settings: Reusable label suffixes (each includes a leading space) -->
-	<!-- EN:  (default) -->
-	<UWU_DefaultSuffix> (по умолчанию)</UWU_DefaultSuffix>
-	<!-- EN:  (recommended) -->
-	<UWU_RecommendedSuffix> (рекомендуется)</UWU_RecommendedSuffix>
-	<!-- EN:  (vanilla) -->
-	<UWU_VanillaSuffix> (ванильный)</UWU_VanillaSuffix>
-	<!-- EN:  (experimental) -->
-	<UWU_ExperimentalSuffix> (экспериментально)</UWU_ExperimentalSuffix>
-	<!-- Settings: Trait costs -->
-	<!-- EN: Trait cost multiplier: {0}% -->
-	<UWU_TraitCostMultiplier>Множитель стоимости свойств: {0}%</UWU_TraitCostMultiplier>
-	<!-- EN: Trait refund rate: {0}% -->
-	<UWU_TraitRefundRate>Процент возврата стоимости свойств: {0}%</UWU_TraitRefundRate>
-	<!-- EN: Trait refund rate has no effect while trait cost multiplier is 0%. -->
-	<UWU_RefundRateNoEffect>Процент возврата не действует, когда множитель стоимости свойств равен 0%.</UWU_RefundRateNoEffect>
-	<!-- EN: Derive base cost from crafting recipe -->
-	<UWU_UseRecipeBaseCost>Использовать стоимость из рецепта крафта</UWU_UseRecipeBaseCost>
-	<!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
-	<UWU_UseRecipeBaseCostDesc>При включении базовая стоимость материалов для добавления свойств берётся из рецепта крафта оружия. При отключении используется фиксированная стоимость на основе общих ресурсов соответствующего технологического уровня. Отключение этой опции предотвращает неоправданно низкую стоимость свойств для дешёвого в крафте оружия, но может также лишить отдельные/модифицированные оружия подходящей тематической стоимости.</UWU_UseRecipeBaseCostDesc>
-	<!-- Settings: Prerequisites -->
-	<!-- EN: Minimum weapon quality: {0} -->
-	<UWU_MinimumQuality>Минимальное качество оружия: {0}</UWU_MinimumQuality>
-	<!-- EN: Restrict customization to weapons of at least this quality. Awful imposes no restriction. Weapons below the minimum will still show the customization option, but it will be disabled with an explanation. -->
-	<UWU_MinimumQualityDesc>Ограничивает настройку оружием как минимум этого качества. «Ужасное» не налагает ограничений. Оружие ниже минимального качества всё равно будет показывать опцию настройки, но она будет отключена с пояснением.</UWU_MinimumQualityDesc>
-	<!-- EN: Require customization research -->
-	<UWU_RequireCustomizationResearch>Требовать исследования настройки</UWU_RequireCustomizationResearch>
-	<!-- EN: Require the completion of the Unique Smithing, Unique Machining, or Unique Fabrication research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree. -->
-	<UWU_RequireCustomizationResearchDesc>Требовать завершения исследований «{0}», «{1}» или «{2}» перед настройкой оружия соответствующего технологического уровня. При отключении эти исследования скрываются из дерева исследований.</UWU_RequireCustomizationResearchDesc>
-	<!-- EN: Require weapon crafting research -->
-	<UWU_RequireRecipeResearch>Требовать исследование крафта оружия</UWU_RequireRecipeResearch>
-	<!-- EN: Require the completion of any research that would enable crafting the weapon. For example, customizing a charge rifle would require Pulse-charged munitions. -->
-	<UWU_RequireRecipeResearchDesc>Требовать завершения любых исследований, которые позволяют крафтить это оружие. Например, для настройки зарядовой винтовки потребуется исследование «{0}».</UWU_RequireRecipeResearchDesc>
-	<!-- EN: Require appropriate workbench -->
-	<UWU_RequireWorkbench>Требовать соответствующий верстак</UWU_RequireWorkbench>
-	<!-- EN: Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons. -->
-	<UWU_RequireWorkbenchDesc>Требовать, чтобы верстак соответствовал технологическому уровню оружия. При отключении любой верстак, способный создавать оружие, будет подходить для настройки любого оружия.</UWU_RequireWorkbenchDesc>
-	<!-- EN: Allow customizing uncraftable weapons -->
-	<UWU_AllowUncraftable>Разрешить настройку некрафтового оружия</UWU_AllowUncraftable>
-	<!-- EN: Allow customization of weapons that have no crafting recipe. -->
-	<UWU_AllowUncraftableDesc>Разрешить настройку оружия, у которого нет рецепта крафта.</UWU_AllowUncraftableDesc>
-	<!-- EN: Allow customizing ultratech-level weapons -->
-	<UWU_AllowUltratech>Разрешить настройку оружия ультратехнологического уровня</UWU_AllowUltratech>
-	<!-- EN: Allow customization of ultratech weapons, requiring Advanced Weapon Customization research. -->
-	<UWU_AllowUltratechDesc>Разрешить настройку ультратехнологического оружия, требуется исследование «{0}».</UWU_AllowUltratechDesc>
-	<!-- EN: Automatically enabled because "Allow customizing archotech-level weapons" is on. Both tiers share the same research gate. -->
-	<UWU_AllowUltratechImpliedDesc>Автоматически включено, потому что включена опция «Разрешить настройку оружия архотехнологического уровня». Оба уровня используют одно и то же исследование.</UWU_AllowUltratechImpliedDesc>
-	<!-- EN: Allow customizing archotech-level weapons -->
-	<UWU_AllowArchotech>Разрешить настройку оружия архотехнологического уровня</UWU_AllowArchotech>
-	<!-- EN: Allow customization of archotech weapons, requiring Advanced Weapon Customization research. -->
-	<UWU_AllowArchotechDesc>Разрешить настройку архотехнологического оружия, требуется исследование «{0}».</UWU_AllowArchotechDesc>
-	<!-- Settings: Miscellaneous -->
-	<!-- EN: Allow weapon def conversion -->
-	<UWU_AllowDefConversion>Разрешить преобразование определения оружия</UWU_AllowDefConversion>
-	<!-- EN: Allow weapons to convert between base and unique defs during customization. When disabled, only already-unique weapons can be customized, and removing all traits keeps the weapon as a zero-trait unique instead of reverting to its base weapon. -->
-	<UWU_AllowDefConversionDesc>Разрешить оружию преобразовываться между базовым и уникальным определением во время настройки. При отключении настраивать можно только уже уникальное оружие, а удаление всех свойств оставит оружие как уникальное с нулевым количеством свойств вместо возврата к базовому оружию.</UWU_AllowDefConversionDesc>
-	<!-- EN: Enable Ideology color options -->
-	<UWU_EnableIdeoColors>Включить цвета идеологии</UWU_EnableIdeoColors>
-	<!-- EN: Show Ideology and miscellaneous color palettes in the weapon customization color picker. -->
-	<UWU_EnableIdeoColorsDesc>Показывать палитры цветов идеологии и прочие в настройщике цвета оружия.</UWU_EnableIdeoColorsDesc>
-	<!-- EN: Enable structure color options -->
-	<UWU_EnableStructureColors>Включить цвета конструкций</UWU_EnableStructureColors>
-	<!-- EN: Show structure color palette in the weapon customization color picker. -->
-	<UWU_EnableStructureColorsDesc>Показывать палитру цветов конструкций в настройщике цвета оружия.</UWU_EnableStructureColorsDesc>
-	<!-- EN: Enforce trait count limit -->
-	<UWU_EnforceMaxTraitLimit>Ограничивать количество свойств</UWU_EnforceMaxTraitLimit>
-	<!-- EN: Vanilla unique weapons generate with no more than three traits. Enable this to enforce the same limit during customization. Disable to allow any number of traits (other rules such as category and exclusion restrictions still apply). -->
-	<UWU_EnforceMaxTraitLimitDesc>В ванильной версии уникальное оружие генерируется не более чем с тремя свойствами. Включите эту опцию, чтобы соблюдать то же ограничение при настройке. Отключите, чтобы разрешить любое количество свойств (другие правила, такие как категории и исключения, всё ещё действуют).</UWU_EnforceMaxTraitLimitDesc>
-	<!-- EN: Enforce sole-trait restrictions -->
-	<UWU_EnforceSoleTrait>Ограничивать единственное свойство</UWU_EnforceSoleTrait>
-	<!-- EN: Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization. -->
-	<UWU_EnforceSoleTraitDesc>Некоторые свойства не могут быть единственными на оружии при ванильной генерации. Включите эту опцию, чтобы соблюдать то же ограничение при настройке.</UWU_EnforceSoleTraitDesc>
-	<!-- EN: Restrict available traits to discovered weapons -->
-	<UWU_RestrictTraitsToDiscovered>Ограничить доступные свойства обнаруженным оружием</UWU_RestrictTraitsToDiscovered>
-	<!-- EN: Lightweight progression system. When enabled, the customization dialog only offers traits found on unique weapons currently visible to the colony: on a loaded map (not fogged, sealed, or possessed by hostiles) or in a player-faction caravan. No persistent state is added to saves; toggling this off restores the full trait list immediately. -->
-	<UWU_RestrictTraitsToDiscoveredDesc>Облегчённая система прогрессии. При включении диалог настройки предлагает только те свойства, которые есть на уникальном оружии, видимом для колонии в данный момент: на загруженной карте (не в тумане, не запечатано и не принадлежит враждебным) или в караване игровой фракции. В сохранения не добавляется никакого постоянного состояния; отключение этой опции немедленно восстанавливает полный список свойств.</UWU_RestrictTraitsToDiscoveredDesc>
-	<!-- EN: Enable ground weapon right-click menu -->
-	<UWU_EnableGroundCustomization>Включить контекстное меню для оружия на земле</UWU_EnableGroundCustomization>
-	<!-- EN: Show "Customize" options when right-clicking weapons on the ground. Disable this to reduce float menu clutter, especially with storage mods that stack items in the same cell. Weapons can still be customized by selecting them and using the gizmo button. -->
-	<UWU_EnableGroundCustomizationDesc>Показывать опцию «Настроить» при нажатии правой кнопкой мыши на оружие, лежащее на земле. Отключите, чтобы уменьшить засорённость контекстного меню, особенно при использовании модов на хранение, которые складывают предметы в одной ячейке. Оружие всё ещё можно настраивать, выбрав его и используя кнопку-действие.</UWU_EnableGroundCustomizationDesc>
-	<!-- Settings: Haul planner -->
-	<!-- EN: Sequential -->
-	<UWU_HaulPlannerSequential>Последовательный</UWU_HaulPlannerSequential>
-	<!-- EN: Vanilla behavior. Pawns carry up to one ingredient stack at a time, always grabbing the nearest first. Simple and predictable, but means lots of short trips for resource-heavy customizations. -->
-	<UWU_HaulPlannerSequentialDesc>Поведение ванильной игры. Поселенец переносит по одной стопке ингредиентов за раз, всегда беря ближайшую. Просто и предсказуемо, но приводит к множеству коротких походов для ресурсоёмких настроек.</UWU_HaulPlannerSequentialDesc>
-	<!-- EN: Sweep -->
-	<UWU_HaulPlannerSweep>Проходной</UWU_HaulPlannerSweep>
-	<!-- EN: Pawns plan ahead and use spare inventory space to carry more at once, while also routing more efficiently between pickups. Much fewer trips than Sequential, with negligible planning overhead. -->
-	<UWU_HaulPlannerSweepDesc>Поселенец планирует действия и использует свободное место в инвентаре, чтобы нести больше за раз, а также прокладывает более эффективные маршруты между точками забора. Значительно меньше походов, чем при последовательном режиме, с незначительными накладными расходами на планирование.</UWU_HaulPlannerSweepDesc>
-	<!-- EN: Thorough -->
-	<UWU_HaulPlannerThorough>Тщательный</UWU_HaulPlannerThorough>
-	<!-- EN: Like Sweep, but also weighs which stacks to draw from when the map has multiple candidates, rather than always taking the closest. Slower to plan, but usually finds the shortest runs when ingredients are scattered or carrying capacity is tight. Falls back to Sweep for hauls too complex to fully analyze. -->
-	<UWU_HaulPlannerThoroughDesc>Работает как «Проходной», но также учитывает, из каких стопок брать материалы, если на карте есть несколько вариантов, а не всегда берёт ближайшую. Медленнее в планировании, но обычно находит самые короткие маршруты, когда ингредиенты разбросаны или грузоподъёмность ограничена. Переключается на «Проходной» для переносок, которые слишком сложны для полного анализа.</UWU_HaulPlannerThoroughDesc>
+  <!-- Float menu / Gizmo -->
+  <!-- EN: Customize {0} -->
+  <UWU_CustomizeWeapon>Настроить {0}</UWU_CustomizeWeapon>
+  <!-- EN: requires {0} -->
+  <UWU_RequiresResearch>требуется {0}</UWU_RequiresResearch>
+  <!-- EN: requires {0} -->
+  <UWU_RequiresWorkbench>требуется {0}</UWU_RequiresWorkbench>
+  <!-- EN: no suitable workbench -->
+  <UWU_NoSuitableWorkbench>нет подходящего верстака</UWU_NoSuitableWorkbench>
+  <!-- EN: requires {0} quality or better -->
+  <UWU_RequiresMinimumQuality>требуется качество {0} или выше</UWU_RequiresMinimumQuality>
+  <!-- EN: Customize -->
+  <UWU_CustomizeGizmoLabel>Настроить</UWU_CustomizeGizmoLabel>
+  <!-- EN: Select a colonist to customize this weapon at a nearby workbench. -->
+  <UWU_CustomizeGizmoDesc>Выберите поселенца, чтобы настроить это оружие на ближайшем верстаке.</UWU_CustomizeGizmoDesc>
+  <!-- Dev-mode diagnostic reasons (surfaced when Prefs.DevMode is on, otherwise hidden) -->
+  <!-- EN: no unique variant -->
+  <UWU_DevNoUniqueVariant>нет уникального варианта</UWU_DevNoUniqueVariant>
+  <!-- EN: base variant upgrades disabled -->
+  <UWU_DevDefConversionDisabled>преобразование базового варианта отключено</UWU_DevDefConversionDisabled>
+  <!-- EN: {0} is beyond comprehension -->
+  <UWU_DevTechLevelBeyondComprehension>{0} выходит за пределы понимания</UWU_DevTechLevelBeyondComprehension>
+  <!-- Dialog: Buttons -->
+  <!-- EN: Cancel -->
+  <UWU_Cancel>Отмена</UWU_Cancel>
+  <!-- EN: Reset -->
+  <UWU_Reset>Сбросить</UWU_Reset>
+  <!-- EN: Confirm -->
+  <UWU_Confirm>Подтвердить</UWU_Confirm>
+  <!-- EN: Randomize -->
+  <UWU_Randomize>Случайно</UWU_Randomize>
+  <!-- EN: Reset to defaults -->
+  <UWU_ResetToDefaults>Сбросить на значения по умолчанию</UWU_ResetToDefaults>
+  <!-- Dialog: Tabs -->
+  <!-- EN: Traits -->
+  <UWU_TabTraits>Свойства</UWU_TabTraits>
+  <!-- EN: Texture -->
+  <UWU_TabTexture>Текстура</UWU_TabTexture>
+  <!-- EN: Color -->
+  <UWU_TabColor>Цвет</UWU_TabColor>
+  <!-- Dialog: Controls -->
+  <!-- EN: This weapon is an ideology relic. Its name can only be changed when forming or reforming an ideoligion. -->
+  <UWU_RelicNameTooltip>Это оружие — реликвия идеологии. Её название можно изменить только при создании или реформировании идеологии.</UWU_RelicNameTooltip>
+  <!-- EN: Select at least one trait first -->
+  <UWU_SelectTraitFirst>Сначала выберите хотя бы одно свойство</UWU_SelectTraitFirst>
+  <!-- EN: Auto-regenerate name when traits change -->
+  <UWU_AutoRegenName>Автоматически обновлять название при изменении свойств</UWU_AutoRegenName>
+  <!-- EN: Hide negative traits -->
+  <UWU_HideNegativeTraits>Скрывать негативные свойства</UWU_HideNegativeTraits>
+  <!-- Dialog: Disabled-state messages -->
+  <!-- EN: Select traits to customize texture -->
+  <UWU_SelectTraitsForTexture>Выберите свойства для настройки текстуры</UWU_SelectTraitsForTexture>
+  <!-- EN: Select traits to customize color -->
+  <UWU_SelectTraitsForColor>Выберите свойства для настройки цвета</UWU_SelectTraitsForColor>
+  <!-- EN: Color determined by {0} -->
+  <UWU_ColorDeterminedBy>Цвет определяется {0}</UWU_ColorDeterminedBy>
+  <!-- Dialog: Color sections -->
+  <!-- EN: Weapon colors -->
+  <UWU_WeaponColors>Цвета оружия</UWU_WeaponColors>
+  <!-- EN: Ideology colors -->
+  <UWU_IdeologyColors>Цвета идеологии</UWU_IdeologyColors>
+  <!-- EN: Structure colors -->
+  <UWU_StructureColors>Цвета конструкций</UWU_StructureColors>
+  <!-- Dialog: Cost display -->
+  <!-- EN: Net refund:  -->
+  <UWU_NetRefund>Чистый возврат: </UWU_NetRefund>
+  <!-- EN: None -->
+  <UWU_RefundNone>Нет</UWU_RefundNone>
+  <!-- EN: Net cost:  -->
+  <UWU_NetCost>Чистая стоимость: </UWU_NetCost>
+  <!-- EN: Free -->
+  <UWU_CostFree>Бесплатно</UWU_CostFree>
+  <!-- EN: Missing resources -->
+  <UWU_MissingResources>Недостающие ресурсы</UWU_MissingResources>
+  <!-- EN: Required materials are insufficient, forbidden, reserved by another pawn, or unreachable from this pawn's position. -->
+  <UWU_NotEnoughMaterials>Необходимых материалов недостаточно, они запрещены, зарезервированы другим поселенцем или недоступны с текущей позиции поселенца.</UWU_NotEnoughMaterials>
+  <!-- EN: Could not customize {0}: no viable haul plan. -->
+  <UWU_CouldNotStartPlanInfeasible>Не удалось настроить {0}: нет возможного плана переноски.</UWU_CouldNotStartPlanInfeasible>
+  <!-- EN: Could not customize {0}: failed to reserve {1} x{2}. -->
+  <UWU_CouldNotStartReservationConflict>Не удалось настроить {0}: не удалось зарезервировать {1} x{2}.</UWU_CouldNotStartReservationConflict>
+  <!-- EN: Could not customize {0}: failed to reserve {1} x{2} (held by {3}). -->
+  <UWU_CouldNotStartReservationConflictHeldBy>Не удалось настроить {0}: не удалось зарезервировать {1} x{2} (занято {3}).</UWU_CouldNotStartReservationConflictHeldBy>
+  <!-- EN: Could not customize {0}: internal error. See log. -->
+  <UWU_CouldNotStartInternalError>Не удалось настроить {0}: внутренняя ошибка. См. лог.</UWU_CouldNotStartInternalError>
+  <!-- Trait tooltips -->
+  <!-- EN: Effects: -->
+  <UWU_Effects>Эффекты:</UWU_Effects>
+  <!-- EN: Damage type -->
+  <UWU_DamageType>Тип урона</UWU_DamageType>
+  <!-- EN: Extra damage -->
+  <UWU_ExtraDamage>Дополнительный урон</UWU_ExtraDamage>
+  <!-- EN: Burst speed -->
+  <UWU_BurstSpeed>Скорость очереди</UWU_BurstSpeed>
+  <!-- EN: Burst count -->
+  <UWU_BurstCount>Количество выстрелов в очереди</UWU_BurstCount>
+  <!-- EN: Stopping power -->
+  <UWU_StoppingPower>Останавливающая сила</UWU_StoppingPower>
+  <!-- EN: Ignores accuracy penalties -->
+  <UWU_IgnoresAccuracyPenalties>Игнорирует штрафы точности</UWU_IgnoresAccuracyPenalties>
+  <!-- Trait validation -->
+  <!-- EN: Already applied -->
+  <UWU_AlreadyApplied>Уже применено</UWU_AlreadyApplied>
+  <!-- EN: Maximum traits reached -->
+  <UWU_MaxTraitsReached>Достигнут лимит свойств</UWU_MaxTraitsReached>
+  <!-- EN: Conflicts with {0} -->
+  <UWU_ConflictsWith>Конфликтует с {0}</UWU_ConflictsWith>
+  <!-- EN: Cannot be the only trait -->
+  <UWU_CannotBeOnlyTrait>Не может быть единственным свойством</UWU_CannotBeOnlyTrait>
+  <!-- EN: {0} cannot be the only trait -->
+  <UWU_TraitCannotBeOnlyTrait>{0} не может быть единственным свойством</UWU_TraitCannotBeOnlyTrait>
+  <!-- EN: Must disarm from hostile -->
+  <UWU_OnlyOnHostiles>Должно быть отобрано у враждебного</UWU_OnlyOnHostiles>
+  <!-- EN: Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons. -->
+  <UWU_LastTraitSourceWarning>Предупреждение: это единственное оружие в вашем пуле с данным свойством. Его удаление уберёт это свойство из списка доступных для применения к другому оружию.</UWU_LastTraitSourceWarning>
+  <!-- EN: No traits match your search. -->
+  <UWU_NoTraitsMatchSearch>Ни одно свойство не соответствует вашему запросу.</UWU_NoTraitsMatchSearch>
+  <!-- EN: No traits available yet.\n\nRecover unique weapons via quests or world loot\nto unlock their traits for customization. -->
+  <UWU_NoTraitsDiscovered>Пока нет доступных свойств.\n\nДобывайте уникальное оружие через квесты или находите в мире,\nчтобы открыть его свойства для настройки.</UWU_NoTraitsDiscovered>
+  <!-- EN: All available traits for this weapon are negative. Disable "Hide negative traits" below to view them. -->
+  <UWU_NoTraitsAfterHideNegative>Все доступные для этого оружия свойства являются негативными. Отключите «Скрывать негативные свойства» ниже, чтобы их увидеть.</UWU_NoTraitsAfterHideNegative>
+  <!-- EN: No traits are compatible with this weapon. -->
+  <UWU_NoTraitsAvailable>Ни одно свойство не совместимо с этим оружием.</UWU_NoTraitsAvailable>
+  <!-- Fallbacks -->
+  <!-- EN: weapon -->
+  <UWU_WeaponFallback>оружие</UWU_WeaponFallback>
+  <!-- EN: Weapon -->
+  <UWU_WeaponTypeFallback>Оружие</UWU_WeaponTypeFallback>
+  <!-- EN: blue -->
+  <UWU_ColorFallback>синий</UWU_ColorFallback>
+  <!-- Jobs -->
+  <!-- EN: Customizing {0} -->
+  <UWU_CustomizingWeapon>Настройка {0}</UWU_CustomizingWeapon>
+  <!-- EN: Adding {0} to {1} -->
+  <UWU_AddingTrait>Добавление {0} к {1}</UWU_AddingTrait>
+  <!-- EN: Removing {0} from {1} -->
+  <UWU_RemovingTrait>Удаление {0} из {1}</UWU_RemovingTrait>
+  <!-- EN: Customizing appearance of {0} -->
+  <UWU_ApplyingCosmetics>Настройка внешнего вида {0}</UWU_ApplyingCosmetics>
+  <!-- EN: Placing {0} on {1} -->
+  <UWU_PlacingWeapon>Размещение {0} на {1}</UWU_PlacingWeapon>
+  <!-- EN: Gathering materials for {0} -->
+  <UWU_GatheringMaterials>Сбор материалов для {0}</UWU_GatheringMaterials>
+  <!-- EN: Admiring work -->
+  <UWU_AdmiringWork>Любуется работой</UWU_AdmiringWork>
+  <!-- EN: Not enough resources to customize this weapon. -->
+  <UWU_InsufficientResources>Недостаточно ресурсов для настройки этого оружия.</UWU_InsufficientResources>
+  <!-- EN: {0} customization interrupted: ingredients lost before {1} could be applied. -->
+  <UWU_IngredientShortfall>Настройка {0} прервана: ингредиенты потеряны до того, как можно было применить {1}.</UWU_IngredientShortfall>
+  <!-- EN: {0} customization interrupted: workbench is no longer available. -->
+  <UWU_BailWorkbenchUnavailable>Настройка {0} прервана: верстак больше недоступен.</UWU_BailWorkbenchUnavailable>
+  <!-- EN: {0} customization interrupted: workbench became unreachable. -->
+  <UWU_BailWorkbenchUnreachable>Настройка {0} прервана: верстак стал недосягаем.</UWU_BailWorkbenchUnreachable>
+  <!-- EN: {0} customization interrupted: workbench has no power or fuel. -->
+  <UWU_BailWorkbenchInactive>Настройка {0} прервана: верстак обесточен или у него нет топлива.</UWU_BailWorkbenchInactive>
+  <!-- EN: {0} customization interrupted: weapon was lost. -->
+  <UWU_BailWeaponLost>Настройка {0} прервана: оружие утеряно.</UWU_BailWeaponLost>
+  <!-- EN: {0} customization interrupted: weapon is no longer accessible. -->
+  <UWU_BailWeaponInaccessible>Настройка {0} прервана: оружие больше недоступно.</UWU_BailWeaponInaccessible>
+  <!-- EN: {0} customization interrupted: an ingredient was lost while hauling. -->
+  <UWU_BailIngredientLost>Настройка {0} прервана: ингредиент потерян при переноске.</UWU_BailIngredientLost>
+  <!-- EN: {0} customization interrupted: a required ingredient became unreachable. -->
+  <UWU_BailIngredientUnreachable>Настройка {0} прервана: необходимый ингредиент стал недосягаем.</UWU_BailIngredientUnreachable>
+  <!-- EN: {0} customization interrupted: no room near the workbench to place an ingredient. -->
+  <UWU_BailIngredientPlacementFailed>Настройка {0} прервана: рядом с верстаком нет места для размещения ингредиента.</UWU_BailIngredientPlacementFailed>
+  <!-- EN: {0} customization interrupted: could not pick up the weapon. -->
+  <UWU_BailCarryStartFailed>Настройка {0} прервана: не удалось поднять оружие.</UWU_BailCarryStartFailed>
+  <!-- EN: {0} customization interrupted: an error occurred while adding {1}. -->
+  <UWU_BailOpAddTraitFailed>Настройка {0} прервана: произошла ошибка при добавлении {1}.</UWU_BailOpAddTraitFailed>
+  <!-- EN: {0} customization interrupted: an error occurred while removing {1}. -->
+  <UWU_BailOpRemoveTraitFailed>Настройка {0} прервана: произошла ошибка при удалении {1}.</UWU_BailOpRemoveTraitFailed>
+  <!-- EN: {0} customization interrupted: an error occurred while applying cosmetic changes. -->
+  <UWU_BailOpCosmeticsFailed>Настройка {0} прервана: произошла ошибка при применении косметических изменений.</UWU_BailOpCosmeticsFailed>
+  <!-- EN: {0} customization failed unexpectedly. -->
+  <UWU_BailUnexpected>Настройка {0} неожиданно прервалась.</UWU_BailUnexpected>
+  <!-- EN: {0} customization interrupted: the customization dialog could not be opened. See log. -->
+  <UWU_BailDialogOpenFailed>Настройка {0} прервана: не удалось открыть диалог настройки. См. лог.</UWU_BailDialogOpenFailed>
+  <!-- EN: {0} customization dialog errored and was closed. See log. -->
+  <UWU_DialogErrored>В диалоге настройки {0} произошла ошибка, окно закрыто. См. лог.</UWU_DialogErrored>
+  <!-- EN: {0} customized, but ability state could not be reconciled. See log. -->
+  <UWU_FinalizeAbilitySyncFailed>{0} настроен, но не удалось синхронизировать состояние способностей. См. лог.</UWU_FinalizeAbilitySyncFailed>
+  <!-- EN: {0} customized, but the final color could not be applied. See log. -->
+  <UWU_FinalizeColorFailed>{0} настроен, но не удалось применить окончательный цвет. См. лог.</UWU_FinalizeColorFailed>
+  <!-- EN: {0}'s ideoligion color. This weapon is a relic of the {1} ideoligion. -->
+  <UWU_RelicIdeoColorTip>Цвет идеологии {0}. Это оружие является реликвией идеологии {1}.</UWU_RelicIdeoColorTip>
+  <!-- Settings: Section headers -->
+  <!-- EN: Unique Weapons Unbound -->
+  <UWU_SettingsCategory>Unique Weapons Unbound</UWU_SettingsCategory>
+  <!-- EN: Progression -->
+  <UWU_SettingsProgression>Прогрессия</UWU_SettingsProgression>
+  <!-- EN: Trait costs -->
+  <UWU_SettingsTraitCosts>Стоимость свойств</UWU_SettingsTraitCosts>
+  <!-- EN: Prerequisites -->
+  <UWU_SettingsPrerequisites>Требования</UWU_SettingsPrerequisites>
+  <!-- EN: Ingredient hauling -->
+  <UWU_SettingsHaulPlanner>Переноска ингредиентов</UWU_SettingsHaulPlanner>
+  <!-- EN: Miscellaneous -->
+  <UWU_SettingsMiscellaneous>Разное</UWU_SettingsMiscellaneous>
+  <!-- Settings: Reusable label suffixes (each includes a leading space) -->
+  <!-- EN:  (default) -->
+  <UWU_DefaultSuffix> (по умолчанию)</UWU_DefaultSuffix>
+  <!-- EN:  (recommended) -->
+  <UWU_RecommendedSuffix> (рекомендуется)</UWU_RecommendedSuffix>
+  <!-- EN:  (vanilla) -->
+  <UWU_VanillaSuffix> (ванильный)</UWU_VanillaSuffix>
+  <!-- EN:  (experimental) -->
+  <UWU_ExperimentalSuffix> (экспериментально)</UWU_ExperimentalSuffix>
+  <!-- Settings: Trait costs -->
+  <!-- EN: Trait cost multiplier: {0}% -->
+  <UWU_TraitCostMultiplier>Множитель стоимости свойств: {0}%</UWU_TraitCostMultiplier>
+  <!-- EN: Trait refund rate: {0}% -->
+  <UWU_TraitRefundRate>Процент возврата стоимости свойств: {0}%</UWU_TraitRefundRate>
+  <!-- EN: Trait refund rate has no effect while trait cost multiplier is 0%. -->
+  <UWU_RefundRateNoEffect>Процент возврата не действует, когда множитель стоимости свойств равен 0%.</UWU_RefundRateNoEffect>
+  <!-- EN: Derive base cost from crafting recipe -->
+  <UWU_UseRecipeBaseCost>Использовать стоимость из рецепта крафта</UWU_UseRecipeBaseCost>
+  <!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
+  <UWU_UseRecipeBaseCostDesc>При включении базовая стоимость материалов для добавления свойств берётся из рецепта крафта оружия. При отключении используется фиксированная стоимость на основе общих ресурсов соответствующего технологического уровня. Отключение этой опции предотвращает неоправданно низкую стоимость свойств для дешёвого в крафте оружия, но может также лишить отдельные/модифицированные оружия подходящей тематической стоимости.</UWU_UseRecipeBaseCostDesc>
+  <!-- Settings: Prerequisites -->
+  <!-- EN: Minimum weapon quality: {0} -->
+  <UWU_MinimumQuality>Минимальное качество оружия: {0}</UWU_MinimumQuality>
+  <!-- EN: Restrict customization to weapons of at least this quality. Awful imposes no restriction. Weapons below the minimum will still show the customization option, but it will be disabled with an explanation. -->
+  <UWU_MinimumQualityDesc>Ограничивает настройку оружием как минимум этого качества. «Ужасное» не налагает ограничений. Оружие ниже минимального качества всё равно будет показывать опцию настройки, но она будет отключена с пояснением.</UWU_MinimumQualityDesc>
+  <!-- EN: Require customization research -->
+  <UWU_RequireCustomizationResearch>Требовать исследования настройки</UWU_RequireCustomizationResearch>
+  <!-- EN: Require the completion of the Unique Smithing, Unique Machining, or Unique Fabrication research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree. -->
+  <UWU_RequireCustomizationResearchDesc>Требовать завершения исследований «{0}», «{1}» или «{2}» перед настройкой оружия соответствующего технологического уровня. При отключении эти исследования скрываются из дерева исследований.</UWU_RequireCustomizationResearchDesc>
+  <!-- EN: Require weapon crafting research -->
+  <UWU_RequireRecipeResearch>Требовать исследование крафта оружия</UWU_RequireRecipeResearch>
+  <!-- EN: Require the completion of any research that would enable crafting the weapon. For example, customizing a charge rifle would require Pulse-charged munitions. -->
+  <UWU_RequireRecipeResearchDesc>Требовать завершения любых исследований, которые позволяют крафтить это оружие. Например, для настройки зарядовой винтовки потребуется исследование «{0}».</UWU_RequireRecipeResearchDesc>
+  <!-- EN: Require appropriate workbench -->
+  <UWU_RequireWorkbench>Требовать соответствующий верстак</UWU_RequireWorkbench>
+  <!-- EN: Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons. -->
+  <UWU_RequireWorkbenchDesc>Требовать, чтобы верстак соответствовал технологическому уровню оружия. При отключении любой верстак, способный создавать оружие, будет подходить для настройки любого оружия.</UWU_RequireWorkbenchDesc>
+  <!-- EN: Allow customizing uncraftable weapons -->
+  <UWU_AllowUncraftable>Разрешить настройку некрафтового оружия</UWU_AllowUncraftable>
+  <!-- EN: Allow customization of weapons that have no crafting recipe. -->
+  <UWU_AllowUncraftableDesc>Разрешить настройку оружия, у которого нет рецепта крафта.</UWU_AllowUncraftableDesc>
+  <!-- EN: Allow customizing ultratech-level weapons -->
+  <UWU_AllowUltratech>Разрешить настройку оружия ультратехнологического уровня</UWU_AllowUltratech>
+  <!-- EN: Allow customization of ultratech weapons, requiring Advanced Weapon Customization research. -->
+  <UWU_AllowUltratechDesc>Разрешить настройку ультратехнологического оружия, требуется исследование «{0}».</UWU_AllowUltratechDesc>
+  <!-- EN: Automatically enabled because "Allow customizing archotech-level weapons" is on. Both tiers share the same research gate. -->
+  <UWU_AllowUltratechImpliedDesc>Автоматически включено, потому что включена опция «Разрешить настройку оружия архотехнологического уровня». Оба уровня используют одно и то же исследование.</UWU_AllowUltratechImpliedDesc>
+  <!-- EN: Allow customizing archotech-level weapons -->
+  <UWU_AllowArchotech>Разрешить настройку оружия архотехнологического уровня</UWU_AllowArchotech>
+  <!-- EN: Allow customization of archotech weapons, requiring Advanced Weapon Customization research. -->
+  <UWU_AllowArchotechDesc>Разрешить настройку архотехнологического оружия, требуется исследование «{0}».</UWU_AllowArchotechDesc>
+  <!-- Settings: Miscellaneous -->
+  <!-- EN: Allow weapon def conversion -->
+  <UWU_AllowDefConversion>Разрешить преобразование определения оружия</UWU_AllowDefConversion>
+  <!-- EN: Allow weapons to convert between base and unique defs during customization. When disabled, only already-unique weapons can be customized, and removing all traits keeps the weapon as a zero-trait unique instead of reverting to its base weapon. -->
+  <UWU_AllowDefConversionDesc>Разрешить оружию преобразовываться между базовым и уникальным определением во время настройки. При отключении настраивать можно только уже уникальное оружие, а удаление всех свойств оставит оружие как уникальное с нулевым количеством свойств вместо возврата к базовому оружию.</UWU_AllowDefConversionDesc>
+  <!-- EN: Enable Ideology color options -->
+  <UWU_EnableIdeoColors>Включить цвета идеологии</UWU_EnableIdeoColors>
+  <!-- EN: Show Ideology and miscellaneous color palettes in the weapon customization color picker. -->
+  <UWU_EnableIdeoColorsDesc>Показывать палитры цветов идеологии и прочие в настройщике цвета оружия.</UWU_EnableIdeoColorsDesc>
+  <!-- EN: Enable structure color options -->
+  <UWU_EnableStructureColors>Включить цвета конструкций</UWU_EnableStructureColors>
+  <!-- EN: Show structure color palette in the weapon customization color picker. -->
+  <UWU_EnableStructureColorsDesc>Показывать палитру цветов конструкций в настройщике цвета оружия.</UWU_EnableStructureColorsDesc>
+  <!-- EN: Enforce trait count limit -->
+  <UWU_EnforceMaxTraitLimit>Ограничивать количество свойств</UWU_EnforceMaxTraitLimit>
+  <!-- EN: Vanilla unique weapons generate with no more than three traits. Enable this to enforce the same limit during customization. Disable to allow any number of traits (other rules such as category and exclusion restrictions still apply). -->
+  <UWU_EnforceMaxTraitLimitDesc>В ванильной версии уникальное оружие генерируется не более чем с тремя свойствами. Включите эту опцию, чтобы соблюдать то же ограничение при настройке. Отключите, чтобы разрешить любое количество свойств (другие правила, такие как категории и исключения, всё ещё действуют).</UWU_EnforceMaxTraitLimitDesc>
+  <!-- EN: Enforce sole-trait restrictions -->
+  <UWU_EnforceSoleTrait>Ограничивать единственное свойство</UWU_EnforceSoleTrait>
+  <!-- EN: Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization. -->
+  <UWU_EnforceSoleTraitDesc>Некоторые свойства не могут быть единственными на оружии при ванильной генерации. Включите эту опцию, чтобы соблюдать то же ограничение при настройке.</UWU_EnforceSoleTraitDesc>
+  <!-- EN: Restrict available traits to discovered weapons -->
+  <UWU_RestrictTraitsToDiscovered>Ограничить доступные свойства обнаруженным оружием</UWU_RestrictTraitsToDiscovered>
+  <!-- EN: Lightweight progression system. When enabled, the customization dialog only offers traits found on unique weapons currently visible to the colony: on a loaded map (not fogged, sealed, or possessed by hostiles) or in a player-faction caravan. No persistent state is added to saves; toggling this off restores the full trait list immediately. -->
+  <UWU_RestrictTraitsToDiscoveredDesc>Облегчённая система прогрессии. При включении диалог настройки предлагает только те свойства, которые есть на уникальном оружии, видимом для колонии в данный момент: на загруженной карте (не в тумане, не запечатано и не принадлежит враждебным) или в караване игровой фракции. В сохранения не добавляется никакого постоянного состояния; отключение этой опции немедленно восстанавливает полный список свойств.</UWU_RestrictTraitsToDiscoveredDesc>
+  <!-- EN: Enable ground weapon right-click menu -->
+  <UWU_EnableGroundCustomization>Включить контекстное меню для оружия на земле</UWU_EnableGroundCustomization>
+  <!-- EN: Show "Customize" options when right-clicking weapons on the ground. Disable this to reduce float menu clutter, especially with storage mods that stack items in the same cell. Weapons can still be customized by selecting them and using the gizmo button. -->
+  <UWU_EnableGroundCustomizationDesc>Показывать опцию «Настроить» при нажатии правой кнопкой мыши на оружие, лежащее на земле. Отключите, чтобы уменьшить засорённость контекстного меню, особенно при использовании модов на хранение, которые складывают предметы в одной ячейке. Оружие всё ещё можно настраивать, выбрав его и используя кнопку-действие.</UWU_EnableGroundCustomizationDesc>
+  <!-- Settings: Haul planner -->
+  <!-- EN: Sequential -->
+  <UWU_HaulPlannerSequential>Последовательный</UWU_HaulPlannerSequential>
+  <!-- EN: Vanilla behavior. Pawns carry up to one ingredient stack at a time, always grabbing the nearest first. Simple and predictable, but means lots of short trips for resource-heavy customizations. -->
+  <UWU_HaulPlannerSequentialDesc>Поведение ванильной игры. Поселенец переносит по одной стопке ингредиентов за раз, всегда беря ближайшую. Просто и предсказуемо, но приводит к множеству коротких походов для ресурсоёмких настроек.</UWU_HaulPlannerSequentialDesc>
+  <!-- EN: Sweep -->
+  <UWU_HaulPlannerSweep>Проходной</UWU_HaulPlannerSweep>
+  <!-- EN: Pawns plan ahead and use spare inventory space to carry more at once, while also routing more efficiently between pickups. Much fewer trips than Sequential, with negligible planning overhead. -->
+  <UWU_HaulPlannerSweepDesc>Поселенец планирует действия и использует свободное место в инвентаре, чтобы нести больше за раз, а также прокладывает более эффективные маршруты между точками забора. Значительно меньше походов, чем при последовательном режиме, с незначительными накладными расходами на планирование.</UWU_HaulPlannerSweepDesc>
+  <!-- EN: Thorough -->
+  <UWU_HaulPlannerThorough>Тщательный</UWU_HaulPlannerThorough>
+  <!-- EN: Like Sweep, but also weighs which stacks to draw from when the map has multiple candidates, rather than always taking the closest. Slower to plan, but usually finds the shortest runs when ingredients are scattered or carrying capacity is tight. Falls back to Sweep for hauls too complex to fully analyze. -->
+  <UWU_HaulPlannerThoroughDesc>Работает как «Проходной», но также учитывает, из каких стопок брать материалы, если на карте есть несколько вариантов, а не всегда берёт ближайшую. Медленнее в планировании, но обычно находит самые короткие маршруты, когда ингредиенты разбросаны или грузоподъёмность ограничена. Переключается на «Проходной» для переносок, которые слишком сложны для полного анализа.</UWU_HaulPlannerThoroughDesc>
 </LanguageData>
