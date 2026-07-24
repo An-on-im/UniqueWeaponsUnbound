@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- 1.6\Defs\ResearchProjectDefs\UniqueFabrication.xml -->
+  <!-- EN: unique fabrication -->
+  <UniqueFabrication.label>улучшение оружия (производство)</UniqueFabrication.label>
+  <!-- EN: Upgrade and customize spacer and ultratech weapons at a fabrication bench, adding or removing traits to suit your needs. -->
+  <UniqueFabrication.description>Позволяет улучшать и настраивать оружие космической и ультратехнологической эпох на высокоточном станке, добавляя или удаляя свойства по вашему усмотрению.</UniqueFabrication.description>
+  <!-- EN: Upgrade and customize spacer weapons -->
+  <UniqueFabrication.customUnlockTexts.0>Улучшение и настройка оружия космической эпохи</UniqueFabrication.customUnlockTexts.0>
+  <!-- EN: Upgrade and customize ultratech weapons -->
+  <UniqueFabrication.customUnlockTexts.1>Улучшение и настройка оружия ультратехнологической эпохи</UniqueFabrication.customUnlockTexts.1>
+  <!-- EN: 
+    <li>subject->unique fabrication</li>
+    <li>subject_story->decoded the secrets of modifying pulse-charged and beam weapon traits</li>
+    <li>subject_story->used fabrication nanotechnology to alter spacer weapon components</li>
+    <li>subject_gerund->fabricating unique weapons</li>
+   -->
+  <UniqueFabrication.generalRules.rulesStrings>
+    <li>subject->улучшение оружия (производство)</li>
+    <li>subject_story->расшифровал секреты модификации свойств импульсного и лучевого оружия</li>
+    <li>subject_story->использовал производственные нанотехнологии для изменения компонентов оружия космической эпохи</li>
+    <li>subject_gerund->производство уникального оружия</li>
+  </UniqueFabrication.generalRules.rulesStrings>
+</LanguageData>

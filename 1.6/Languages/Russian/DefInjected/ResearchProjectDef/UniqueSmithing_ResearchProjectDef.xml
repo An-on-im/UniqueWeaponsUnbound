@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- 1.6\Defs\ResearchProjectDefs\UniqueSmithing.xml -->
+  <!-- EN: unique smithing -->
+  <UniqueSmithing.label>улучшение оружия (ковка)</UniqueSmithing.label>
+  <!-- EN: Upgrade and customize neolithic and medieval weapons at a smithy, adding or removing traits to suit your needs. -->
+  <UniqueSmithing.description>Позволяет улучшать и настраивать оружие неолитической и средневековой эпох на кузне, добавляя или удаляя свойства по вашему усмотрению.</UniqueSmithing.description>
+  <!-- EN: Customize neolithic weapons -->
+  <UniqueSmithing.customUnlockTexts.0>Настройка оружия неолитической эпохи</UniqueSmithing.customUnlockTexts.0>
+  <!-- EN: Customize medieval weapons -->
+  <UniqueSmithing.customUnlockTexts.1>Настройка оружия средневековой эпохи</UniqueSmithing.customUnlockTexts.1>
+  <!-- EN: 
+    <li>subject->unique smithing</li>
+    <li>subject_story->learned to modify unique weapons by studying their traits</li>
+    <li>subject_story->experimented with ancient weapon enhancements</li>
+    <li>subject_gerund->smithing unique weapons</li>
+   -->
+  <UniqueSmithing.generalRules.rulesStrings>
+    <li>subject->улучшение оружия (ковка)</li>
+    <li>subject_story->научился модифицировать уникальное оружие, изучая его свойства</li>
+    <li>subject_story->экспериментировал с улучшениями древнего оружия</li>
+    <li>subject_gerund->ковка уникального оружия</li>
+  </UniqueSmithing.generalRules.rulesStrings>
+</LanguageData>

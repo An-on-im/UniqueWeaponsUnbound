@@ -120,14 +120,17 @@ namespace UniqueWeaponsUnbound
             listing.CheckboxLabeled(
                 "UWU_RequireCustomizationResearch".Translate(),
                 ref Settings.requireCustomizationResearch,
-                "UWU_RequireCustomizationResearchDesc".Translate());
+                "UWU_RequireCustomizationResearchDesc".Translate(
+                    UWU_ResearchDefOf.UniqueSmithing.label,
+                    UWU_ResearchDefOf.UniqueMachining.label,
+                    UWU_ResearchDefOf.UniqueFabrication.label));
 
             listing.Gap();
 
             listing.CheckboxLabeled(
                 "UWU_RequireRecipeResearch".Translate(),
                 ref Settings.requireRecipeResearch,
-                "UWU_RequireRecipeResearchDesc".Translate());
+                "UWU_RequireRecipeResearchDesc".Translate(UWU_ThingDefOf.Gun_ChargeRifle.label, UWU_ResearchDefOf.ChargedShot.label));
 
             listing.Gap();
 
@@ -167,7 +170,7 @@ namespace UniqueWeaponsUnbound
                 listing.CheckboxLabeled(
                     "UWU_AllowUltratech".Translate(),
                     ref Settings.allowUltratechCustomization,
-                    "UWU_AllowUltratechDesc".Translate());
+                    "UWU_AllowUltratechDesc".Translate(UWU_ResearchDefOf.UniqueFabrication.label));
             }
 
             listing.Gap();
@@ -175,7 +178,7 @@ namespace UniqueWeaponsUnbound
             listing.CheckboxLabeled(
                 "UWU_AllowArchotech".Translate(),
                 ref Settings.allowArchotechCustomization,
-                "UWU_AllowArchotechDesc".Translate());
+                "UWU_AllowArchotechDesc".Translate(UWU_ResearchDefOf.UniqueFabrication.label));
 
             listing.Gap(24.0f);
 

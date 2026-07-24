@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- 1.6\Defs\ResearchProjectDefs\UniqueMachining.xml -->
+  <!-- EN: unique machining -->
+  <UniqueMachining.label>улучшение оружия (обработка)</UniqueMachining.label>
+  <!-- EN: Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs. -->
+  <UniqueMachining.description>Позволяет улучшать и настраивать оружие индустриальной эпохи на верстаке, добавляя или удаляя свойства по вашему усмотрению.</UniqueMachining.description>
+  <!-- EN: Upgrade and customize industrial unique weapons -->
+  <UniqueMachining.customUnlockTexts.0>Улучшение и настройка уникального оружия индустриальной эпохи</UniqueMachining.customUnlockTexts.0>
+  <!-- EN: 
+    <li>subject->unique machining</li>
+    <li>subject_story->reverse-engineered unique weapon modifications using industrial tools</li>
+    <li>subject_story->perfected the art of applying weapon traits with precision machinery</li>
+    <li>subject_gerund->machining unique weapons</li>
+   -->
+  <UniqueMachining.generalRules.rulesStrings>
+    <li>subject->улучшение оружия (обработка)</li>
+    <li>subject_story->восстановил уникальные модификации оружия с помощью промышленных инструментов</li>
+    <li>subject_story->усовершенствовал искусство нанесения свойств на оружие с помощью прецизионного оборудования</li>
+    <li>subject_gerund->обработка уникального оружия</li>
+  </UniqueMachining.generalRules.rulesStrings>
+</LanguageData>

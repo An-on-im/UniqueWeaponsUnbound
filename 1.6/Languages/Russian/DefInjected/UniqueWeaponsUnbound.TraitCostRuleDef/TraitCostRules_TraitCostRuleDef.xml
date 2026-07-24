@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- 1.6\Defs\TraitCostRuleDefs\TraitCostRules.xml -->
+  <!-- EN: base cost from tech level -->
+  <UWU_BaseCostFromTechLevel.label>базовая стоимость зависит от технологического уровня</UWU_BaseCostFromTechLevel.label>
+  <!-- EN: Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components -->
+  <UWU_BaseCostFromTechLevel.description>Определяет базовую стоимость исходя из технологического уровня оружия. Гарантирует, что у любого оружия будет стоимость настройки, даже если у него нет рецепта крафта. Для неолита используется дерево, для средневековья — сталь, для индустриальной эпохи — сталь и компоненты, для космической и выше — пласталь и продвинутые компоненты.</UWU_BaseCostFromTechLevel.description>
+  <!-- EN: base cost from recipe -->
+  <UWU_BaseCostFromRecipe.label>базовая стоимость из рецепта</UWU_BaseCostFromRecipe.label>
+  <!-- EN: Replaces the tech-level fallback with the weapon's actual crafting recipe costs, including both fixed ingredients and stuff costs. Only acts when the weapon has a craftable base definition. -->
+  <UWU_BaseCostFromRecipe.description>Заменяет базовую стоимость от технологического уровня на реальные затраты из рецепта крафта оружия, включая фиксированные ингредиенты и затраты материалов. Срабатывает только в том случае, если у оружия есть крафтовый базовый вариант.</UWU_BaseCostFromRecipe.description>
+  <!-- EN: quality multiplier -->
+  <UWU_QualityMultiplier.label>множитель качества</UWU_QualityMultiplier.label>
+  <!-- EN: Scales costs based on weapon quality. Higher-quality weapons cost more to customize. Includes the base 50% cost fraction so each trait costs half the weapon's full recipe value before quality scaling. -->
+  <UWU_QualityMultiplier.description>Масштабирует стоимость в зависимости от качества оружия. Оружие более высокого качества дороже настраивать. Включает базовую долю стоимости в 50%, так что каждое свойство стоит половину полной стоимости рецепта до применения множителя качества.</UWU_QualityMultiplier.description>
+  <!-- EN: negative trait material downgrade -->
+  <UWU_NegativeDowngrade.label>понижение материалов для негативных свойств</UWU_NegativeDowngrade.label>
+  <!-- EN: Downgrades cost materials by one technology level for negative traits. Spacer components become industrial, plasteel becomes steel, steel becomes wood. Reflects that negative modifications use cruder, cheaper techniques. -->
+  <UWU_NegativeDowngrade.description>Понижает материалы стоимости на один технологический уровень для негативных свойств. Компоненты космической эпохи становятся индустриальными, пласталь становится сталью, сталь становится деревом. Отражает тот факт, что негативные модификации используют более грубые и дешёвые методы.</UWU_NegativeDowngrade.description>
+  <!-- EN: toxic component swap -->
+  <UWU_ToxSwap.label>замена на токсичные компоненты</UWU_ToxSwap.label>
+  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. If no components are present, converts 70% of base materials to herbal medicine by market value. -->
+  <UWU_ToxSwap.description>Заменяет компоненты на лекарственные травы (в 3-кратном количестве), что отражает потребность в органических токсинах. Если компонентов нет, конвертирует 70% базовых материалов в лекарственные травы по рыночной стоимости.</UWU_ToxSwap.description>
+  <!-- EN: incendiary component swap -->
+  <UWU_IncendiarySwap.label>замена на зажигательные компоненты</UWU_IncendiarySwap.label>
+  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. If no components are present, converts 70% of base materials to chemfuel by market value. -->
+  <UWU_IncendiarySwap.description>Заменяет компоненты на химтопливо (в 10-кратном количестве), отражая потребность в летучем топливе. Если компонентов нет, конвертирует 70% базовых материалов в химтопливо по рыночной стоимости.</UWU_IncendiarySwap.description>
+  <!-- EN: EMP value split -->
+  <UWU_EmpSplit.label>разделение стоимости ЭМИ</UWU_EmpSplit.label>
+  <!-- EN: Removes spacer components, then converts 70% of base material costs into industrial components by market value, representing the electronic parts needed for EMP modifications. -->
+  <UWU_EmpSplit.description>Убирает компоненты космической эпохи, затем конвертирует 70% стоимости базовых материалов в компоненты индустриальной эпохи по рыночной стоимости, отражая потребность в электронных деталях для модификаций ЭМИ.</UWU_EmpSplit.description>
+  <!-- EN: lightweight swap -->
+  <UWU_Lightweight.label>замена на облегчённые материалы</UWU_Lightweight.label>
+  <!-- EN: Replaces 40% of wood costs with birdskin, representing the feather tails used on arrows. -->
+  <UWU_Lightweight.description>Заменяет 40% стоимости древесины на птичью шкуру, что отражает использование перьевых оперений на стрелах.</UWU_Lightweight.description>
+  <!-- EN: flarestriker value split -->
+  <UWU_Flarestriker.label>разделение стоимости сигнальной ракетницы</UWU_Flarestriker.label>
+  <!-- EN: Converts 70% of base material costs into bioferrite by market value, reflecting the exotic fuel source needed for flare launchers. -->
+  <UWU_Flarestriker.description>Конвертирует 70% стоимости базовых материалов в биоферрит по рыночной стоимости, отражая потребность в экзотическом топливе для ракетниц.</UWU_Flarestriker.description>
+  <!-- EN: heavy scrap flat cost -->
+  <UWU_HeavyScrap.label>фиксированная стоимость из металлолома</UWU_HeavyScrap.label>
+  <!-- EN: Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap — just bolt on some junk. -->
+  <UWU_HeavyScrap.description>Заменяет все затраты на один кусок металлолома. Модификации из металлолома грубы и дёшевы — просто прикрутите какой-нибудь хлам.</UWU_HeavyScrap.description>
+  <!-- EN: charge weapons (category-gated) -->
+  <UWU_ChargeCategoryGated.label>энергетическое оружие (с ограничением по категории)</UWU_ChargeCategoryGated.label>
+  <!-- EN: Converts all costs into advanced components by market value for charge-type weapon traits, representing the spacer technology required for pulse and beam modifications. -->
+  <UWU_ChargeCategoryGated.description>Конвертирует все затраты в продвинутые компоненты по рыночной стоимости для свойств оружия энергетического типа, отражая потребность в космических технологиях для модификаций импульсного и лучевого оружия.</UWU_ChargeCategoryGated.description>
+  <!-- EN: charge weapons (unconditional) -->
+  <UWU_ChargeUnconditional.label>энергетическое оружие (без ограничений)</UWU_ChargeUnconditional.label>
+  <!-- EN: Converts all costs into advanced components by market value for traits involving advanced spacer technology, regardless of weapon category. -->
+  <UWU_ChargeUnconditional.description>Конвертирует все затраты в продвинутые компоненты по рыночной стоимости для свойств, связанных с передовыми космическими технологиями, независимо от категории оружия.</UWU_ChargeUnconditional.description>
+  <!-- EN: akimbo cost multiplier -->
+  <UWU_Akimbo.label>множитель стоимости для двуручного боя</UWU_Akimbo.label>
+  <!-- EN: Doubles all costs to reflect that akimbo adds a second rendered weapon and doubles the fire rate. This counteracts the base 50% cost fraction to bring the total to full recipe cost. -->
+  <UWU_Akimbo.description>Удваивает все затраты, чтобы отразить, что двуручный бой добавляет второе отображаемое оружие и удваивает скорострельность. Это компенсирует базовую долю стоимости в 50%, доводя общую стоимость до полной стоимости рецепта.</UWU_Akimbo.description>
+  <!-- EN: grip component removal -->
+  <UWU_Grip.label>удаление компонентов для рукоятки</UWU_Grip.label>
+  <!-- EN: Removes industrial and spacer components from the cost. Grip modifications are simple mechanical adjustments that don't require complex parts. -->
+  <UWU_Grip.description>Убирает из стоимости компоненты индустриальной и космической эпох. Модификации рукоятки — это простые механические изменения, не требующие сложных деталей.</UWU_Grip.description>
+  <!-- EN: comfort material conversion -->
+  <UWU_Comfort.label>конвертация материалов для комфорта</UWU_Comfort.label>
+  <!-- EN: Converts half of all cost materials to thrumbofur by count, reflecting the luxurious padding and wrapping used for comfort modifications. -->
+  <UWU_Comfort.description>Конвертирует половину всех материалов в шкуру трумбо по количеству, отражая роскошные накладки и обмотки, используемые для модификаций комфорта.</UWU_Comfort.description>
+  <!-- EN: ornamental conversion -->
+  <UWU_Ornamental.label>конвертация для декоративных украшений</UWU_Ornamental.label>
+  <!-- EN: Removes components, then converts half of remaining costs to silver by count. Ornamental work is decorative craftsmanship, not technical engineering. -->
+  <UWU_Ornamental.description>Убирает компоненты, затем конвертирует половину оставшихся затрат в серебро по количеству. Декоративные работы — это ремесленное мастерство, а не техническое конструирование.</UWU_Ornamental.description>
+  <!-- EN: inlay component removal -->
+  <UWU_Inlay.label>удаление компонентов для инкрустации</UWU_Inlay.label>
+  <!-- EN: Removes industrial and spacer components from the cost. Inlays are purely cosmetic modifications that require only raw materials, not complex parts. -->
+  <UWU_Inlay.description>Убирает из стоимости компоненты индустриальной и космической эпох. Инкрустация — это чисто косметическая модификация, требующая только сырья, а не сложных деталей.</UWU_Inlay.description>
+  <!-- EN: material override fallback -->
+  <UWU_MaterialOverride.label>замена материала (резервная)</UWU_MaterialOverride.label>
+  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with that material. Acts as a catch-all for traits without a specific thematic rule. -->
+  <UWU_MaterialOverride.description>Обнаруживает названия материалов в названии свойства (например, «золото» в «Золотая инкрустация») и заменяет затраты ресурсов на этот материал. Служит универсальным решением для свойств без специального тематического правила.</UWU_MaterialOverride.description>
+  <!-- EN: cost material pruning -->
+  <UWU_CostPrune.label>сокращение типов материалов</UWU_CostPrune.label>
+  <!-- EN: Limits the cost to at most 3 material types to prevent UI overflow. When there are more than 3, the cheapest materials by unit price are trimmed first. -->
+  <UWU_CostPrune.description>Ограничивает стоимость не более чем 3 типами материалов, чтобы избежать переполнения интерфейса. Если их больше 3, сначала удаляются самые дешёвые материалы по цене за единицу.</UWU_CostPrune.description>
+</LanguageData>
