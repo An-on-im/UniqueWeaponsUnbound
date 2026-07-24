@@ -24,7 +24,7 @@
   <UWU_DevTechLevelBeyondComprehension>{0} выходит за пределы понимания</UWU_DevTechLevelBeyondComprehension>
   <!-- Dialog: Buttons -->
   <!-- EN: Cancel -->
-  <UWU_Cancel>Отмена</UWU_Cancel>
+  <UWU_Cancel>Отменить</UWU_Cancel>
   <!-- EN: Reset -->
   <UWU_Reset>Сбросить</UWU_Reset>
   <!-- EN: Confirm -->
@@ -143,7 +143,7 @@
   <!-- EN: Gathering materials for {0} -->
   <UWU_GatheringMaterials>Сбор материалов для {0}</UWU_GatheringMaterials>
   <!-- EN: Admiring work -->
-  <UWU_AdmiringWork>Любуется работой</UWU_AdmiringWork>
+  <UWU_AdmiringWork>Любование работой</UWU_AdmiringWork>
   <!-- EN: Not enough resources to customize this weapon. -->
   <UWU_InsufficientResources>Недостаточно ресурсов для настройки этого оружия.</UWU_InsufficientResources>
   <!-- EN: {0} customization interrupted: ingredients lost before {1} could be applied. -->
@@ -229,7 +229,7 @@
   <!-- EN: Require weapon crafting research -->
   <UWU_RequireRecipeResearch>Требовать исследование крафта оружия</UWU_RequireRecipeResearch>
   <!-- EN: Require the completion of any research that would enable crafting the weapon. For example, customizing a charge rifle would require Pulse-charged munitions. -->
-  <UWU_RequireRecipeResearchDesc>Требовать завершения любых исследований, которые позволяют крафтить это оружие. Например, для настройки зарядовой винтовки потребуется исследование «{0}».</UWU_RequireRecipeResearchDesc>
+  <UWU_RequireRecipeResearchDesc>Требовать завершения любых исследований, которые позволяют крафтить это оружие. Например, для настройки энерговинтовки потребуется исследование «{0}».</UWU_RequireRecipeResearchDesc>
   <!-- EN: Require appropriate workbench -->
   <UWU_RequireWorkbench>Требовать соответствующий верстак</UWU_RequireWorkbench>
   <!-- EN: Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons. -->
