@@ -224,11 +224,11 @@
   <UWU_MinimumQualityDesc>Ограничивает настройку оружием как минимум этого качества. «Ужасное» не налагает ограничений. Оружие ниже минимального качества всё равно будет показывать опцию настройки, но она будет отключена с пояснением.</UWU_MinimumQualityDesc>
   <!-- EN: Require customization research -->
   <UWU_RequireCustomizationResearch>Требовать исследования настройки</UWU_RequireCustomizationResearch>
-  <!-- EN: Require the completion of the Unique Smithing, Unique Machining, or Unique Fabrication research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree. -->
+  <!-- EN: Require the completion of the {0}, {1}, or {2} research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree. -->
   <UWU_RequireCustomizationResearchDesc>Требовать завершения исследований «{0}», «{1}» или «{2}» перед настройкой оружия соответствующего технологического уровня. При отключении эти исследования скрываются из дерева исследований.</UWU_RequireCustomizationResearchDesc>
   <!-- EN: Require weapon crafting research -->
   <UWU_RequireRecipeResearch>Требовать исследование крафта оружия</UWU_RequireRecipeResearch>
-  <!-- EN: Require the completion of any research that would enable crafting the weapon. For example, customizing a charge rifle would require Pulse-charged munitions. -->
+  <!-- EN: Require the completion of any research that would enable crafting the weapon. For example, customizing a {0} would require {1}. -->
   <UWU_RequireRecipeResearchDesc>Требовать завершения любых исследований, которые позволяют крафтить это оружие. Например, для настройки {0} потребуется исследование «{1}».</UWU_RequireRecipeResearchDesc>
   <!-- EN: Require appropriate workbench -->
   <UWU_RequireWorkbench>Требовать соответствующий верстак</UWU_RequireWorkbench>
@@ -240,13 +240,13 @@
   <UWU_AllowUncraftableDesc>Разрешить настройку оружия, у которого нет рецепта крафта.</UWU_AllowUncraftableDesc>
   <!-- EN: Allow customizing ultratech-level weapons -->
   <UWU_AllowUltratech>Разрешить настройку оружия ультратехнологического уровня</UWU_AllowUltratech>
-  <!-- EN: Allow customization of ultratech weapons, requiring Advanced Weapon Customization research. -->
+  <!-- EN: Allow customization of ultratech weapons, requiring {0} research. -->
   <UWU_AllowUltratechDesc>Разрешить настройку ультратехнологического оружия, требуется исследование «{0}».</UWU_AllowUltratechDesc>
   <!-- EN: Automatically enabled because "Allow customizing archotech-level weapons" is on. Both tiers share the same research gate. -->
   <UWU_AllowUltratechImpliedDesc>Автоматически включено, потому что включена опция «Разрешить настройку оружия архотехнологического уровня». Оба уровня используют одно и то же исследование.</UWU_AllowUltratechImpliedDesc>
   <!-- EN: Allow customizing archotech-level weapons -->
   <UWU_AllowArchotech>Разрешить настройку оружия архотехнологического уровня</UWU_AllowArchotech>
-  <!-- EN: Allow customization of archotech weapons, requiring Advanced Weapon Customization research. -->
+  <!-- EN: Allow customization of archotech weapons, requiring {0} research. -->
   <UWU_AllowArchotechDesc>Разрешить настройку архотехнологического оружия, требуется исследование «{0}».</UWU_AllowArchotechDesc>
   <!-- Settings: Miscellaneous -->
   <!-- EN: Allow weapon def conversion -->
