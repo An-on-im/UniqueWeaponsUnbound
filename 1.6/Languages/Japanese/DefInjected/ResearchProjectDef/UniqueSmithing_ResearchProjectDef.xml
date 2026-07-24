@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- EN: unique smithing -->
+  <UniqueSmithing.label>ユニーク武器の鍛冶</UniqueSmithing.label>
+  <!-- EN: Upgrade and customize neolithic and medieval weapons at a smithy, adding or removing traits to suit your needs. -->
+  <UniqueSmithing.description>工作台で新石器時代や中世の武器を強化・カスタマイズし,必要に応じて特性を追加または除去できるようになります.</UniqueSmithing.description>
+
+  <!-- EN: Customize neolithic weapons -->
+  <UniqueSmithing.customUnlockTexts.0>新石器時代の武器のカスタマイズ</UniqueSmithing.customUnlockTexts.0>
+  <!-- EN: Customize medieval weapons -->
+  <UniqueSmithing.customUnlockTexts.1>中世の武器のカスタマイズ</UniqueSmithing.customUnlockTexts.1>
+
+  <!-- EN:
+    <li>subject->unique smithing</li>
+    <li>subject_story->learned to modify unique weapons by studying their traits</li>
+    <li>subject_story->experimented with ancient weapon enhancements</li>
+    <li>subject_gerund->smithing unique weapons</li>
+  -->
+  <UniqueSmithing.generalRules.rulesStrings>
+    <li>subject->ユニーク武器の鍛冶</li>
+    <li>subject_story->ユニークな武器の特性を研究し,その改造方法を学んだ</li>
+    <li>subject_story->古の武器強化の実験を行った</li>
+    <li>subject_gerund->ユニーク武器の鍛冶</li>
+  </UniqueSmithing.generalRules.rulesStrings>
+
+</LanguageData>
