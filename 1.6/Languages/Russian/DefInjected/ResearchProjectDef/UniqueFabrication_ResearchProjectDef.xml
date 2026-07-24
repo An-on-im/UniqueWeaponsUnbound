@@ -4,7 +4,7 @@
   <!-- EN: unique fabrication -->
   <UniqueFabrication.label>улучшение оружия (производство)</UniqueFabrication.label>
   <!-- EN: Upgrade and customize spacer and ultratech weapons at a fabrication bench, adding or removing traits to suit your needs. -->
-  <UniqueFabrication.description>Позволяет улучшать и настраивать оружие космической и ультратехнологической эпох на сборочном столе, добавляя или удаляя свойства по вашему усмотрению.</UniqueFabrication.description>
+  <UniqueFabrication.description>Позволяет улучшать и настраивать оружие космической и ультратехнологической эпох на высокоточном станке, добавляя или удаляя свойства по вашему усмотрению.</UniqueFabrication.description>
   <!-- EN: Upgrade and customize spacer weapons -->
   <UniqueFabrication.customUnlockTexts.0>Улучшение и настройка оружия космической эпохи</UniqueFabrication.customUnlockTexts.0>
   <!-- EN: Upgrade and customize ultratech weapons -->
