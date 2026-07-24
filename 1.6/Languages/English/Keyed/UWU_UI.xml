@@ -140,7 +140,7 @@
   <UWU_RequireCustomizationResearchDesc>Require the completion of the {0}, {1}, or {2} research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree.</UWU_RequireCustomizationResearchDesc>
   <UWU_RequireRecipeResearch>Require weapon crafting research</UWU_RequireRecipeResearch>
   <!-- {0} = pulse-charged munitions (vanilla ChargedShot research label) -->
-  <UWU_RequireRecipeResearchDesc>Require the completion of any research that would enable crafting the weapon. For example, customizing a charge rifle would require {0}.</UWU_RequireRecipeResearchDesc>
+  <UWU_RequireRecipeResearchDesc>Require the completion of any research that would enable crafting the weapon. For example, customizing a {0} would require {1}.</UWU_RequireRecipeResearchDesc>
   <UWU_RequireWorkbench>Require appropriate workbench</UWU_RequireWorkbench>
   <UWU_RequireWorkbenchDesc>Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons.</UWU_RequireWorkbenchDesc>
   <UWU_AllowUncraftable>Allow customizing uncraftable weapons</UWU_AllowUncraftable>
