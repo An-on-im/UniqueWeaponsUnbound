@@ -240,12 +240,12 @@
   <UWU_MinimumQualityDesc>カスタマイズをこの品質以上の武器に制限します.「壊れかけ」の場合は制限がありません.最低品質に満たない武器にもカスタマイズの選択肢は表示されますが,説明付きで無効化されます.</UWU_MinimumQualityDesc>
   <!-- EN: Require customization research -->
   <UWU_RequireCustomizationResearch>カスタマイズ研究を必要とする</UWU_RequireCustomizationResearch>
-  <!-- EN: Require the completion of the Unique Smithing, Unique Machining, or Unique Fabrication research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree. -->
-  <UWU_RequireCustomizationResearchDesc>対応する技術レベルの武器をカスタマイズする前に,研究プロジェクト「ユニーク武器の鍛冶」「ユニーク武器の精密加工」「ユニーク武器の組立製造」の完了を必要とします.無効にすると,これらの研究プロジェクトは研究画面に表示されなくなります.</UWU_RequireCustomizationResearchDesc>
+  <!-- EN: Require the completion of the {0}, {1}, or {2} research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree. -->
+  <UWU_RequireCustomizationResearchDesc>対応する技術レベルの武器をカスタマイズする前に,研究プロジェクト「{0}」「{1}」「{2}」の完了を必要とします.無効にすると,これらの研究プロジェクトは研究画面に表示されなくなります.</UWU_RequireCustomizationResearchDesc>
   <!-- EN: Require weapon crafting research -->
   <UWU_RequireRecipeResearch>武器の製作研究を必要とする</UWU_RequireRecipeResearch>
-  <!-- EN: Require the completion of any research that would enable crafting the weapon. For example, customizing a charge rifle would require Pulse-charged munitions. -->
-  <UWU_RequireRecipeResearchDesc>その武器の製作を可能にする研究の完了を必要とします.例えば,チャージライフルをカスタマイズするには「チャージライフル」の研究が必要になります.</UWU_RequireRecipeResearchDesc>
+  <!-- EN: Require the completion of any research that would enable crafting the weapon. For example, customizing a {0} would require {1}. -->
+  <UWU_RequireRecipeResearchDesc>その武器の製作を可能にする研究の完了を必要とします.例えば,{0}をカスタマイズするには「{1}」の研究が必要になります.</UWU_RequireRecipeResearchDesc>
   <!-- EN: Require appropriate workbench -->
   <UWU_RequireWorkbench>適切な作業台を必要とする</UWU_RequireWorkbench>
   <!-- EN: Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons. -->
@@ -256,14 +256,14 @@
   <UWU_AllowUncraftableDesc>製作レシピを持たない武器のカスタマイズを許可します.</UWU_AllowUncraftableDesc>
   <!-- EN: Allow customizing ultratech-level weapons -->
   <UWU_AllowUltratech>最先端技術級武器のカスタマイズを許可</UWU_AllowUltratech>
-  <!-- EN: Allow customization of ultratech weapons, requiring Advanced Weapon Customization research. -->
-  <UWU_AllowUltratechDesc>最先端技術の武器のカスタマイズを許可します.研究「高度な武器カスタマイズ」の完了が必要になります.</UWU_AllowUltratechDesc>
+  <!-- EN: Allow customization of ultratech weapons, requiring {0} research. -->
+  <UWU_AllowUltratechDesc>最先端技術の武器のカスタマイズを許可します.研究「{0}」の完了が必要になります.</UWU_AllowUltratechDesc>
   <!-- EN: Automatically enabled because "Allow customizing archotech-level weapons" is on. Both tiers share the same research gate. -->
   <UWU_AllowUltratechImpliedDesc>「アルコテック級武器のカスタマイズを許可」がオンになっているため,自動的に有効化されています.両方の技術レベルは同じ研究を前提条件として共有しています.</UWU_AllowUltratechImpliedDesc>
   <!-- EN: Allow customizing archotech-level weapons -->
   <UWU_AllowArchotech>アルコテック級武器のカスタマイズを許可</UWU_AllowArchotech>
-  <!-- EN: Allow customization of archotech weapons, requiring Advanced Weapon Customization research. -->
-  <UWU_AllowArchotechDesc>アルコテック武器のカスタマイズを許可します.研究「高度な武器カスタマイズ」の完了が必要になります.</UWU_AllowArchotechDesc>
+  <!-- EN: Allow customization of archotech weapons, requiring {0} research. -->
+  <UWU_AllowArchotechDesc>アルコテック武器のカスタマイズを許可します.研究「{0}」の完了が必要になります.</UWU_AllowArchotechDesc>
 
   <!-- Settings: Miscellaneous -->
   <!-- EN: Allow weapon def conversion -->
