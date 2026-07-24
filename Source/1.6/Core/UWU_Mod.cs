@@ -128,11 +128,10 @@ namespace UniqueWeaponsUnbound
             listing.Gap();
 
             // Use placeholders for dynamic research names
-            string pulseResearchLabel = DefDatabase<ResearchProjectDef>.GetNamedSilentFail("PulseChargedMunitions")?.label ?? "Pulse-charged munitions";
             listing.CheckboxLabeled(
                 "UWU_RequireRecipeResearch".Translate(),
                 ref Settings.requireRecipeResearch,
-                "UWU_RequireRecipeResearchDesc".Translate(pulseResearchLabel));
+                "UWU_RequireRecipeResearchDesc".Translate(UWU_ResearchDefOf.ChargedShot.label));
 
             listing.Gap();
 
