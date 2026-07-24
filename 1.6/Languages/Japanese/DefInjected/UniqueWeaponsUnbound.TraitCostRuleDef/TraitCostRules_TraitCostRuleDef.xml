@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- ===== Pipeline foundation (always run) ===== -->
+
+  <!-- EN: base cost from tech level -->
+  <UWU_BaseCostFromTechLevel.label>技術レベルによる基本コスト</UWU_BaseCostFromTechLevel.label>
+  <!-- EN: Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components -->
+  <UWU_BaseCostFromTechLevel.description>武器の技術レベルに基づくフォールバックの基本コストを設定します.製作レシピを持たない武器にも必ずカスタマイズコストが設定されるようにします.新石器時代は木材,中世はスチール,産業革命はスチールとコンポーネント,宇宙世紀以上はプラスチールと先進コンポーネントを使用します.</UWU_BaseCostFromTechLevel.description>
+
+  <!-- EN: base cost from recipe -->
+  <UWU_BaseCostFromRecipe.label>レシピによる基本コスト</UWU_BaseCostFromRecipe.label>
+  <!-- EN: Replaces the tech-level fallback with the weapon's actual crafting recipe costs, including both fixed ingredients and stuff costs. Only acts when the weapon has a craftable base definition. -->
+  <UWU_BaseCostFromRecipe.description>技術レベルによるフォールバックを,固定材料と素材コストの両方を含む武器の実際の製作レシピコストに置き換えます.武器に製作可能な基本定義がある場合にのみ作用します.</UWU_BaseCostFromRecipe.description>
+
+  <!-- EN: quality multiplier -->
+  <UWU_QualityMultiplier.label>品質倍率</UWU_QualityMultiplier.label>
+  <!-- EN: Scales costs based on weapon quality. Higher-quality weapons cost more to customize. Includes the base 50% cost fraction so each trait costs half the weapon's full recipe value before quality scaling. -->
+  <UWU_QualityMultiplier.description>武器の品質に応じてコストを増減します.高品質な武器ほどカスタマイズのコストが高くなります.基本の50%コスト係数を含んでおり,品質による増減の前は各特性のコストが武器のレシピ総額の半分になります.</UWU_QualityMultiplier.description>
+
+  <!-- EN: negative trait material downgrade -->
+  <UWU_NegativeDowngrade.label>ネガティブな特性の素材ダウングレード</UWU_NegativeDowngrade.label>
+  <!-- EN: Downgrades cost materials by one technology level for negative traits. Spacer components become industrial, plasteel becomes steel, steel becomes wood. Reflects that negative modifications use cruder, cheaper techniques. -->
+  <UWU_NegativeDowngrade.description>ネガティブな特性のコスト素材を技術レベル1段階分ダウングレードします.先進コンポーネントはコンポーネントに,プラスチールはスチールに,スチールは木材になります.ネガティブな改造には粗雑で安価な技術が使われることを反映しています.</UWU_NegativeDowngrade.description>
+
+  <!-- ===== Thematic rules (keyword-matched) ===== -->
+
+  <!-- EN: toxic component swap -->
+  <UWU_ToxSwap.label>毒性コンポーネント置換</UWU_ToxSwap.label>
+  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. If no components are present, converts 70% of base materials to herbal medicine by market value. -->
+  <UWU_ToxSwap.description>必要となる有機毒素を反映して,コンポーネントを薬草(コンポーネント数の3倍)に置き換えます.コンポーネントがない場合は,基本素材の70%を市場価格ベースで薬草に変換します.</UWU_ToxSwap.description>
+
+  <!-- EN: incendiary component swap -->
+  <UWU_IncendiarySwap.label>焼夷コンポーネント置換</UWU_IncendiarySwap.label>
+  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. If no components are present, converts 70% of base materials to chemfuel by market value. -->
+  <UWU_IncendiarySwap.description>必要となる揮発性燃料を反映して,コンポーネントをバイオ液化燃料(コンポーネント数の10倍)に置き換えます.コンポーネントがない場合は,基本素材の70%を市場価格ベースでバイオ液化燃料に変換します.</UWU_IncendiarySwap.description>
+
+  <!-- EN: EMP value split -->
+  <UWU_EmpSplit.label>EMPの価値分割</UWU_EmpSplit.label>
+  <!-- EN: Removes spacer components, then converts 70% of base material costs into industrial components by market value, representing the electronic parts needed for EMP modifications. -->
+  <UWU_EmpSplit.description>先進コンポーネントを除去した後,基本素材コストの70%を市場価格ベースでコンポーネントに変換します.EMP改造に必要な電子部品を表しています.</UWU_EmpSplit.description>
+
+  <!-- EN: lightweight swap -->
+  <UWU_Lightweight.label>軽量化置換</UWU_Lightweight.label>
+  <!-- EN: Replaces 40% of wood costs with birdskin, representing the feather tails used on arrows. -->
+  <UWU_Lightweight.description>木材コストの40%を鳥の皮に置き換えます.矢に使われる矢羽根を表しています.</UWU_Lightweight.description>
+
+  <!-- EN: flarestriker value split -->
+  <UWU_Flarestriker.label>フレアストライカーの価値分割</UWU_Flarestriker.label>
+  <!-- EN: Converts 70% of base material costs into bioferrite by market value, reflecting the exotic fuel source needed for flare launchers. -->
+  <UWU_Flarestriker.description>基本素材コストの70%を市場価格ベースでバイオフェライトに変換します.フレアランチャーに必要な特殊な燃料源を反映しています.</UWU_Flarestriker.description>
+
+  <!-- EN: heavy scrap flat cost -->
+  <UWU_HeavyScrap.label>ヘビースクラップ固定コスト</UWU_HeavyScrap.label>
+  <!-- EN: Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap — just bolt on some junk. -->
+  <UWU_HeavyScrap.description>すべてのコストを鉄くずの塊1個に置き換えます.スクラップ改造は粗雑で安上がりです.ガラクタをボルトで留めるだけです.</UWU_HeavyScrap.description>
+
+  <!-- EN: charge weapons (category-gated) -->
+  <UWU_ChargeCategoryGated.label>チャージ武器(カテゴリ限定)</UWU_ChargeCategoryGated.label>
+  <!-- EN: Converts all costs into advanced components by market value for charge-type weapon traits, representing the spacer technology required for pulse and beam modifications. -->
+  <UWU_ChargeCategoryGated.description>チャージ系の武器特性について,すべてのコストを市場価格ベースで先進コンポーネントに変換します.パルスやビームの改造に必要な宇宙世紀の技術を表しています.</UWU_ChargeCategoryGated.description>
+
+  <!-- EN: charge weapons (unconditional) -->
+  <UWU_ChargeUnconditional.label>チャージ武器(無条件)</UWU_ChargeUnconditional.label>
+  <!-- EN: Converts all costs into advanced components by market value for traits involving advanced spacer technology, regardless of weapon category. -->
+  <UWU_ChargeUnconditional.description>高度な宇宙世紀技術が関わる特性について,武器カテゴリにかかわらず,すべてのコストを市場価格ベースで先進コンポーネントに変換します.</UWU_ChargeUnconditional.description>
+
+  <!-- EN: akimbo cost multiplier -->
+  <UWU_Akimbo.label>アキンボのコスト倍率</UWU_Akimbo.label>
+  <!-- EN: Doubles all costs to reflect that akimbo adds a second rendered weapon and doubles the fire rate. This counteracts the base 50% cost fraction to bring the total to full recipe cost. -->
+  <UWU_Akimbo.description>アキンボが2つ目の武器を追加で描画し,発射速度を2倍にすることを反映して,すべてのコストを2倍にします.これにより基本の50%コスト係数が相殺され,合計がレシピの全額になります.</UWU_Akimbo.description>
+
+  <!-- EN: grip component removal -->
+  <UWU_Grip.label>グリップのコンポーネント除去</UWU_Grip.label>
+  <!-- EN: Removes industrial and spacer components from the cost. Grip modifications are simple mechanical adjustments that don't require complex parts. -->
+  <UWU_Grip.description>コストからコンポーネントと先進コンポーネントを除去します.グリップ改造は複雑な部品を必要としない単純な機械的調整です.</UWU_Grip.description>
+
+  <!-- EN: comfort material conversion -->
+  <UWU_Comfort.label>快適性の素材変換</UWU_Comfort.label>
+  <!-- EN: Converts half of all cost materials to thrumbofur by count, reflecting the luxurious padding and wrapping used for comfort modifications. -->
+  <UWU_Comfort.description>すべてのコスト素材の半分を個数ベースでスランボの毛皮に変換します.快適性改造に使われる豪華な詰め物や巻き革を反映しています.</UWU_Comfort.description>
+
+  <!-- EN: ornamental conversion -->
+  <UWU_Ornamental.label>装飾変換</UWU_Ornamental.label>
+  <!-- EN: Removes components, then converts half of remaining costs to silver by count. Ornamental work is decorative craftsmanship, not technical engineering. -->
+  <UWU_Ornamental.description>コンポーネントを除去した後,残りのコストの半分を個数ベースでシルバーに変換します.装飾作業は技術的なエンジニアリングではなく,装飾的な職人技です.</UWU_Ornamental.description>
+
+  <!-- ===== Late-running rules ===== -->
+
+  <!-- EN: inlay component removal -->
+  <UWU_Inlay.label>象嵌のコンポーネント除去</UWU_Inlay.label>
+  <!-- EN: Removes industrial and spacer components from the cost. Inlays are purely cosmetic modifications that require only raw materials, not complex parts. -->
+  <UWU_Inlay.description>コストからコンポーネントと先進コンポーネントを除去します.象嵌は複雑な部品を必要とせず,原材料のみを使う純粋に見た目だけの改造です.</UWU_Inlay.description>
+
+  <!-- ===== Fallback (always runs last) ===== -->
+
+  <!-- EN: material override fallback -->
+  <UWU_MaterialOverride.label>素材上書きフォールバック</UWU_MaterialOverride.label>
+  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with that material. Acts as a catch-all for traits without a specific thematic rule. -->
+  <UWU_MaterialOverride.description>特性名に含まれる素材名(例:「Gold Inlay」の「gold」)を検出し,原材料コストをその素材に置き換えます.専用のテーマ別ルールがない特性の受け皿として機能します.</UWU_MaterialOverride.description>
+
+  <!-- EN: cost material pruning -->
+  <UWU_CostPrune.label>コスト素材の削減</UWU_CostPrune.label>
+  <!-- EN: Limits the cost to at most 3 material types to prevent UI overflow. When there are more than 3, the cheapest materials by unit price are trimmed first. -->
+  <UWU_CostPrune.description>UIがあふれるのを防ぐため,コストを最大3種類の素材に制限します.3種類を超える場合は,単価の安い素材から順に削除されます.</UWU_CostPrune.description>
+
+</LanguageData>

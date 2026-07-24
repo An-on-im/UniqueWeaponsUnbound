@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Float menu / Gizmo -->
+  <!-- EN: Customize {0} -->
+  <UWU_CustomizeWeapon>{0}をカスタマイズ</UWU_CustomizeWeapon>
+  <!-- EN: requires {0} -->
+  <UWU_RequiresResearch>{0}の研究が必要</UWU_RequiresResearch>
+  <!-- EN: requires {0} -->
+  <UWU_RequiresWorkbench>{0}が必要</UWU_RequiresWorkbench>
+  <!-- EN: no suitable workbench -->
+  <UWU_NoSuitableWorkbench>適切な作業台がない</UWU_NoSuitableWorkbench>
+  <!-- EN: requires {0} quality or better -->
+  <UWU_RequiresMinimumQuality>{0}以上の品質が必要</UWU_RequiresMinimumQuality>
+  <!-- EN: Customize -->
+  <UWU_CustomizeGizmoLabel>カスタマイズ</UWU_CustomizeGizmoLabel>
+  <!-- EN: Select a colonist to customize this weapon at a nearby workbench. -->
+  <UWU_CustomizeGizmoDesc>入植者を選択して,近くの作業台でこの武器をカスタマイズさせます.</UWU_CustomizeGizmoDesc>
+
+  <!-- Dev-mode diagnostic reasons (surfaced when Prefs.DevMode is on, otherwise hidden) -->
+  <!-- EN: no unique variant -->
+  <UWU_DevNoUniqueVariant>ユニーク版が存在しない</UWU_DevNoUniqueVariant>
+  <!-- EN: base variant upgrades disabled -->
+  <UWU_DevDefConversionDisabled>基本版のアップグレードが無効</UWU_DevDefConversionDisabled>
+  <!-- EN: {0} is beyond comprehension -->
+  <UWU_DevTechLevelBeyondComprehension>{0}は理解を超えている</UWU_DevTechLevelBeyondComprehension>
+
+  <!-- Dialog: Buttons -->
+  <!-- EN: Cancel -->
+  <UWU_Cancel>キャンセル</UWU_Cancel>
+  <!-- EN: Reset -->
+  <UWU_Reset>リセット</UWU_Reset>
+  <!-- EN: Confirm -->
+  <UWU_Confirm>了承</UWU_Confirm>
+  <!-- EN: Randomize -->
+  <UWU_Randomize>ランダム</UWU_Randomize>
+  <!-- EN: Reset to defaults -->
+  <UWU_ResetToDefaults>デフォルトに戻す</UWU_ResetToDefaults>
+
+  <!-- Dialog: Tabs -->
+  <!-- EN: Traits -->
+  <UWU_TabTraits>特性</UWU_TabTraits>
+  <!-- EN: Texture -->
+  <UWU_TabTexture>テクスチャ</UWU_TabTexture>
+  <!-- EN: Color -->
+  <UWU_TabColor>色</UWU_TabColor>
+
+  <!-- Dialog: Controls -->
+  <!-- EN: This weapon is an ideology relic. Its name can only be changed when forming or reforming an ideoligion. -->
+  <UWU_RelicNameTooltip>この武器は思想のレリックです.名前は思想の形成時か改変時にのみ変更できます.</UWU_RelicNameTooltip>
+  <!-- EN: Select at least one trait first -->
+  <UWU_SelectTraitFirst>まず特性を1つ以上選択してください</UWU_SelectTraitFirst>
+  <!-- EN: Auto-regenerate name when traits change -->
+  <UWU_AutoRegenName>特性の変更時に名前を自動で再生成</UWU_AutoRegenName>
+  <!-- EN: Hide negative traits -->
+  <UWU_HideNegativeTraits>ネガティブな特性を隠す</UWU_HideNegativeTraits>
+
+  <!-- Dialog: Disabled-state messages -->
+  <!-- EN: Select traits to customize texture -->
+  <UWU_SelectTraitsForTexture>テクスチャをカスタマイズするには特性を選択してください</UWU_SelectTraitsForTexture>
+  <!-- EN: Select traits to customize color -->
+  <UWU_SelectTraitsForColor>色をカスタマイズするには特性を選択してください</UWU_SelectTraitsForColor>
+  <!-- EN: Color determined by {0} -->
+  <UWU_ColorDeterminedBy>色は{0}によって決まります</UWU_ColorDeterminedBy>
+
+  <!-- Dialog: Color sections -->
+  <!-- EN: Weapon colors -->
+  <UWU_WeaponColors>武器の色</UWU_WeaponColors>
+  <!-- EN: Ideology colors -->
+  <UWU_IdeologyColors>思想の色</UWU_IdeologyColors>
+  <!-- EN: Structure colors -->
+  <UWU_StructureColors>構造の色</UWU_StructureColors>
+
+  <!-- Dialog: Cost display -->
+  <!-- EN: Net refund:  -->
+  <UWU_NetRefund>実質返却: </UWU_NetRefund>
+  <!-- EN: None -->
+  <UWU_RefundNone>なし</UWU_RefundNone>
+  <!-- EN: Net cost:  -->
+  <UWU_NetCost>実質コスト: </UWU_NetCost>
+  <!-- EN: Free -->
+  <UWU_CostFree>無料</UWU_CostFree>
+  <!-- EN: Missing resources -->
+  <UWU_MissingResources>資源不足</UWU_MissingResources>
+  <!-- EN: Required materials are insufficient, forbidden, reserved by another pawn, or unreachable from this pawn's position. -->
+  <UWU_NotEnoughMaterials>必要な材料が不足しているか,禁止されているか,他の誰かに予約されているか,この入植者の位置から到達できません.</UWU_NotEnoughMaterials>
+  <!-- EN: Could not customize {0}: no viable haul plan. -->
+  <UWU_CouldNotStartPlanInfeasible>{0}をカスタマイズできませんでした: 実行可能な運搬計画がありません.</UWU_CouldNotStartPlanInfeasible>
+  <!-- EN: Could not customize {0}: failed to reserve {1} x{2}. -->
+  <UWU_CouldNotStartReservationConflict>{0}をカスタマイズできませんでした: {1} x{2}を予約できませんでした.</UWU_CouldNotStartReservationConflict>
+  <!-- EN: Could not customize {0}: failed to reserve {1} x{2} (held by {3}). -->
+  <UWU_CouldNotStartReservationConflictHeldBy>{0}をカスタマイズできませんでした: {1} x{2}を予約できませんでした ({3}が所持).</UWU_CouldNotStartReservationConflictHeldBy>
+  <!-- EN: Could not customize {0}: internal error. See log. -->
+  <UWU_CouldNotStartInternalError>{0}をカスタマイズできませんでした: 内部エラーです.ログを確認してください.</UWU_CouldNotStartInternalError>
+
+  <!-- Trait tooltips -->
+  <!-- EN: Effects: -->
+  <UWU_Effects>効果:</UWU_Effects>
+  <!-- EN: Damage type -->
+  <UWU_DamageType>ダメージタイプ</UWU_DamageType>
+  <!-- EN: Extra damage -->
+  <UWU_ExtraDamage>追加ダメージ</UWU_ExtraDamage>
+  <!-- EN: Burst speed -->
+  <UWU_BurstSpeed>連射速度</UWU_BurstSpeed>
+  <!-- EN: Burst count -->
+  <UWU_BurstCount>バースト時の弾数</UWU_BurstCount>
+  <!-- EN: Stopping power -->
+  <UWU_StoppingPower>威力</UWU_StoppingPower>
+  <!-- EN: Ignores accuracy penalties -->
+  <UWU_IgnoresAccuracyPenalties>命中精度ペナルティを無視</UWU_IgnoresAccuracyPenalties>
+
+  <!-- Trait validation -->
+  <!-- EN: Already applied -->
+  <UWU_AlreadyApplied>適用済み</UWU_AlreadyApplied>
+  <!-- EN: Maximum traits reached -->
+  <UWU_MaxTraitsReached>特性の上限に到達</UWU_MaxTraitsReached>
+  <!-- EN: Conflicts with {0} -->
+  <UWU_ConflictsWith>{0}と競合</UWU_ConflictsWith>
+  <!-- EN: Cannot be the only trait -->
+  <UWU_CannotBeOnlyTrait>唯一の特性にはできない</UWU_CannotBeOnlyTrait>
+  <!-- EN: {0} cannot be the only trait -->
+  <UWU_TraitCannotBeOnlyTrait>{0}を唯一の特性にはできない</UWU_TraitCannotBeOnlyTrait>
+  <!-- EN: Must disarm from hostile -->
+  <UWU_OnlyOnHostiles>敵対者からの武装解除が必要</UWU_OnlyOnHostiles>
+  <!-- EN: Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons. -->
+  <UWU_LastTraitSourceWarning>警告: この特性を持つ武器はプール内でこの1つだけです.これを取り除くと,他の武器に適用できる特性のプールからこの特性も失われます.</UWU_LastTraitSourceWarning>
+  <!-- EN: No traits match your search. -->
+  <UWU_NoTraitsMatchSearch>検索に一致する特性はありません.</UWU_NoTraitsMatchSearch>
+  <!-- EN: No traits available yet.\n\nRecover unique weapons via quests or world loot\nto unlock their traits for customization. -->
+  <UWU_NoTraitsDiscovered>利用可能な特性はまだありません.\n\nクエストや世界の戦利品からユニークな武器を回収して\nその特性をカスタマイズに使えるようにしましょう.</UWU_NoTraitsDiscovered>
+  <!-- EN: All available traits for this weapon are negative. Disable "Hide negative traits" below to view them. -->
+  <UWU_NoTraitsAfterHideNegative>この武器で利用可能な特性はすべてネガティブです.表示するには下の「ネガティブな特性を隠す」を無効にしてください.</UWU_NoTraitsAfterHideNegative>
+  <!-- EN: No traits are compatible with this weapon. -->
+  <UWU_NoTraitsAvailable>この武器と互換性のある特性はありません.</UWU_NoTraitsAvailable>
+
+  <!-- Fallbacks -->
+  <!-- EN: weapon -->
+  <UWU_WeaponFallback>武器</UWU_WeaponFallback>
+  <!-- EN: Weapon -->
+  <UWU_WeaponTypeFallback>武器</UWU_WeaponTypeFallback>
+  <!-- EN: blue -->
+  <UWU_ColorFallback>青</UWU_ColorFallback>
+
+  <!-- Jobs -->
+  <!-- EN: Customizing {0} -->
+  <UWU_CustomizingWeapon>{0}をカスタマイズしている</UWU_CustomizingWeapon>
+  <!-- EN: Adding {0} to {1} -->
+  <UWU_AddingTrait>{1}に{0}を追加している</UWU_AddingTrait>
+  <!-- EN: Removing {0} from {1} -->
+  <UWU_RemovingTrait>{1}から{0}を取り除いている</UWU_RemovingTrait>
+  <!-- EN: Customizing appearance of {0} -->
+  <UWU_ApplyingCosmetics>{0}の外観をカスタマイズしている</UWU_ApplyingCosmetics>
+  <!-- EN: Placing {0} on {1} -->
+  <UWU_PlacingWeapon>{1}に{0}を置いている</UWU_PlacingWeapon>
+  <!-- EN: Gathering materials for {0} -->
+  <UWU_GatheringMaterials>{0}の材料を集めている</UWU_GatheringMaterials>
+  <!-- EN: Admiring work -->
+  <UWU_AdmiringWork>出来栄えを鑑賞している</UWU_AdmiringWork>
+  <!-- EN: Not enough resources to customize this weapon. -->
+  <UWU_InsufficientResources>この武器をカスタマイズするための資源が足りません.</UWU_InsufficientResources>
+  <!-- EN: {0} customization interrupted: ingredients lost before {1} could be applied. -->
+  <UWU_IngredientShortfall>{0}のカスタマイズが中断されました: {1}を適用する前に材料が失われました.</UWU_IngredientShortfall>
+  <!-- EN: {0} customization interrupted: workbench is no longer available. -->
+  <UWU_BailWorkbenchUnavailable>{0}のカスタマイズが中断されました: 作業台が利用できなくなりました.</UWU_BailWorkbenchUnavailable>
+  <!-- EN: {0} customization interrupted: workbench became unreachable. -->
+  <UWU_BailWorkbenchUnreachable>{0}のカスタマイズが中断されました: 作業台に到達できなくなりました.</UWU_BailWorkbenchUnreachable>
+  <!-- EN: {0} customization interrupted: workbench has no power or fuel. -->
+  <UWU_BailWorkbenchInactive>{0}のカスタマイズが中断されました: 作業台に電力または燃料がありません.</UWU_BailWorkbenchInactive>
+  <!-- EN: {0} customization interrupted: weapon was lost. -->
+  <UWU_BailWeaponLost>{0}のカスタマイズが中断されました: 武器が失われました.</UWU_BailWeaponLost>
+  <!-- EN: {0} customization interrupted: weapon is no longer accessible. -->
+  <UWU_BailWeaponInaccessible>{0}のカスタマイズが中断されました: 武器を扱えなくなりました.</UWU_BailWeaponInaccessible>
+  <!-- EN: {0} customization interrupted: an ingredient was lost while hauling. -->
+  <UWU_BailIngredientLost>{0}のカスタマイズが中断されました: 運搬中に材料が失われました.</UWU_BailIngredientLost>
+  <!-- EN: {0} customization interrupted: a required ingredient became unreachable. -->
+  <UWU_BailIngredientUnreachable>{0}のカスタマイズが中断されました: 必要な材料に到達できなくなりました.</UWU_BailIngredientUnreachable>
+  <!-- EN: {0} customization interrupted: no room near the workbench to place an ingredient. -->
+  <UWU_BailIngredientPlacementFailed>{0}のカスタマイズが中断されました: 作業台の近くに材料を置く場所がありません.</UWU_BailIngredientPlacementFailed>
+  <!-- EN: {0} customization interrupted: could not pick up the weapon. -->
+  <UWU_BailCarryStartFailed>{0}のカスタマイズが中断されました: 武器を拾い上げられませんでした.</UWU_BailCarryStartFailed>
+  <!-- EN: {0} customization interrupted: an error occurred while adding {1}. -->
+  <UWU_BailOpAddTraitFailed>{0}のカスタマイズが中断されました: {1}の追加中にエラーが発生しました.</UWU_BailOpAddTraitFailed>
+  <!-- EN: {0} customization interrupted: an error occurred while removing {1}. -->
+  <UWU_BailOpRemoveTraitFailed>{0}のカスタマイズが中断されました: {1}の除去中にエラーが発生しました.</UWU_BailOpRemoveTraitFailed>
+  <!-- EN: {0} customization interrupted: an error occurred while applying cosmetic changes. -->
+  <UWU_BailOpCosmeticsFailed>{0}のカスタマイズが中断されました: 外観の変更を適用中にエラーが発生しました.</UWU_BailOpCosmeticsFailed>
+  <!-- EN: {0} customization failed unexpectedly. -->
+  <UWU_BailUnexpected>{0}のカスタマイズが予期せず失敗しました.</UWU_BailUnexpected>
+  <!-- EN: {0} customization interrupted: the customization dialog could not be opened. See log. -->
+  <UWU_BailDialogOpenFailed>{0}のカスタマイズが中断されました: カスタマイズダイアログを開けませんでした.ログを確認してください.</UWU_BailDialogOpenFailed>
+  <!-- EN: {0} customization dialog errored and was closed. See log. -->
+  <UWU_DialogErrored>{0}のカスタマイズダイアログでエラーが発生したため閉じられました.ログを確認してください.</UWU_DialogErrored>
+  <!-- EN: {0} customized, but ability state could not be reconciled. See log. -->
+  <UWU_FinalizeAbilitySyncFailed>{0}をカスタマイズしましたが,アビリティの状態を同期できませんでした.ログを確認してください.</UWU_FinalizeAbilitySyncFailed>
+  <!-- EN: {0} customized, but the final color could not be applied. See log. -->
+  <UWU_FinalizeColorFailed>{0}をカスタマイズしましたが,最終的な色を適用できませんでした.ログを確認してください.</UWU_FinalizeColorFailed>
+  <!-- EN: {0}'s ideoligion color. This weapon is a relic of the {1} ideoligion. -->
+  <UWU_RelicIdeoColorTip>{0}の思想の色です.この武器は思想「{1}」のレリックです.</UWU_RelicIdeoColorTip>
+
+  <!-- Settings: Section headers -->
+  <!-- EN: Unique Weapons Unbound -->
+  <UWU_SettingsCategory>Unique Weapons Unbound</UWU_SettingsCategory>
+  <!-- EN: Progression -->
+  <UWU_SettingsProgression>進行要素</UWU_SettingsProgression>
+  <!-- EN: Trait costs -->
+  <UWU_SettingsTraitCosts>特性コスト</UWU_SettingsTraitCosts>
+  <!-- EN: Prerequisites -->
+  <UWU_SettingsPrerequisites>前提条件</UWU_SettingsPrerequisites>
+  <!-- EN: Ingredient hauling -->
+  <UWU_SettingsHaulPlanner>材料の運搬</UWU_SettingsHaulPlanner>
+  <!-- EN: Miscellaneous -->
+  <UWU_SettingsMiscellaneous>その他</UWU_SettingsMiscellaneous>
+
+  <!-- Settings: Reusable label suffixes (each includes a leading space) -->
+  <!-- EN:  (default) -->
+  <UWU_DefaultSuffix> (デフォルト)</UWU_DefaultSuffix>
+  <!-- EN:  (recommended) -->
+  <UWU_RecommendedSuffix> (推奨)</UWU_RecommendedSuffix>
+  <!-- EN:  (vanilla) -->
+  <UWU_VanillaSuffix> (バニラ)</UWU_VanillaSuffix>
+  <!-- EN:  (experimental) -->
+  <UWU_ExperimentalSuffix> (実験的)</UWU_ExperimentalSuffix>
+
+  <!-- Settings: Trait costs -->
+  <!-- EN: Trait cost multiplier: {0}% -->
+  <UWU_TraitCostMultiplier>特性コスト倍率: {0}%</UWU_TraitCostMultiplier>
+  <!-- EN: Trait refund rate: {0}% -->
+  <UWU_TraitRefundRate>特性返還率: {0}%</UWU_TraitRefundRate>
+  <!-- EN: Trait refund rate has no effect while trait cost multiplier is 0%. -->
+  <UWU_RefundRateNoEffect>特性コスト倍率が0%の間は,特性返還率に効果はありません.</UWU_RefundRateNoEffect>
+  <!-- EN: Derive base cost from crafting recipe -->
+  <UWU_UseRecipeBaseCost>基本コストを製作レシピから算出</UWU_UseRecipeBaseCost>
+  <!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
+  <UWU_UseRecipeBaseCostDesc>有効にすると,特性を追加する際の基本材料コストが武器の製作レシピから算出されます.無効にすると,代わりに武器の技術レベルに応じた汎用資源に基づく固定コストが使用されます.無効にすることで,製作コストの安い武器の特性コストが不当に低くなるのを防げますが,個性的な武器やMODの武器がテーマに合ったコストを持てなくなる場合もあります.</UWU_UseRecipeBaseCostDesc>
+
+  <!-- Settings: Prerequisites -->
+  <!-- EN: Minimum weapon quality: {0} -->
+  <UWU_MinimumQuality>武器の最低品質: {0}</UWU_MinimumQuality>
+  <!-- EN: Restrict customization to weapons of at least this quality. Awful imposes no restriction. Weapons below the minimum will still show the customization option, but it will be disabled with an explanation. -->
+  <UWU_MinimumQualityDesc>カスタマイズをこの品質以上の武器に制限します.「壊れかけ」の場合は制限がありません.最低品質に満たない武器にもカスタマイズの選択肢は表示されますが,説明付きで無効化されます.</UWU_MinimumQualityDesc>
+  <!-- EN: Require customization research -->
+  <UWU_RequireCustomizationResearch>カスタマイズ研究を必要とする</UWU_RequireCustomizationResearch>
+  <!-- EN: Require the completion of the Unique Smithing, Unique Machining, or Unique Fabrication research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree. -->
+  <UWU_RequireCustomizationResearchDesc>対応する技術レベルの武器をカスタマイズする前に,研究プロジェクト「ユニーク武器の鍛冶」「ユニーク武器の精密加工」「ユニーク武器の組立製造」の完了を必要とします.無効にすると,これらの研究プロジェクトは研究画面に表示されなくなります.</UWU_RequireCustomizationResearchDesc>
+  <!-- EN: Require weapon crafting research -->
+  <UWU_RequireRecipeResearch>武器の製作研究を必要とする</UWU_RequireRecipeResearch>
+  <!-- EN: Require the completion of any research that would enable crafting the weapon. For example, customizing a charge rifle would require Pulse-charged munitions. -->
+  <UWU_RequireRecipeResearchDesc>その武器の製作を可能にする研究の完了を必要とします.例えば,チャージライフルをカスタマイズするには「チャージライフル」の研究が必要になります.</UWU_RequireRecipeResearchDesc>
+  <!-- EN: Require appropriate workbench -->
+  <UWU_RequireWorkbench>適切な作業台を必要とする</UWU_RequireWorkbench>
+  <!-- EN: Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons. -->
+  <UWU_RequireWorkbenchDesc>作業台が武器の技術レベルに適合していることを必要とします.無効にすると,武器を製作できる作業台であれば,すべての武器のカスタマイズに使用できます.</UWU_RequireWorkbenchDesc>
+  <!-- EN: Allow customizing uncraftable weapons -->
+  <UWU_AllowUncraftable>製作不可能な武器のカスタマイズを許可</UWU_AllowUncraftable>
+  <!-- EN: Allow customization of weapons that have no crafting recipe. -->
+  <UWU_AllowUncraftableDesc>製作レシピを持たない武器のカスタマイズを許可します.</UWU_AllowUncraftableDesc>
+  <!-- EN: Allow customizing ultratech-level weapons -->
+  <UWU_AllowUltratech>最先端技術級武器のカスタマイズを許可</UWU_AllowUltratech>
+  <!-- EN: Allow customization of ultratech weapons, requiring Advanced Weapon Customization research. -->
+  <UWU_AllowUltratechDesc>最先端技術の武器のカスタマイズを許可します.研究「高度な武器カスタマイズ」の完了が必要になります.</UWU_AllowUltratechDesc>
+  <!-- EN: Automatically enabled because "Allow customizing archotech-level weapons" is on. Both tiers share the same research gate. -->
+  <UWU_AllowUltratechImpliedDesc>「アルコテック級武器のカスタマイズを許可」がオンになっているため,自動的に有効化されています.両方の技術レベルは同じ研究を前提条件として共有しています.</UWU_AllowUltratechImpliedDesc>
+  <!-- EN: Allow customizing archotech-level weapons -->
+  <UWU_AllowArchotech>アルコテック級武器のカスタマイズを許可</UWU_AllowArchotech>
+  <!-- EN: Allow customization of archotech weapons, requiring Advanced Weapon Customization research. -->
+  <UWU_AllowArchotechDesc>アルコテック武器のカスタマイズを許可します.研究「高度な武器カスタマイズ」の完了が必要になります.</UWU_AllowArchotechDesc>
+
+  <!-- Settings: Miscellaneous -->
+  <!-- EN: Allow weapon def conversion -->
+  <UWU_AllowDefConversion>武器defの変換を許可</UWU_AllowDefConversion>
+  <!-- EN: Allow weapons to convert between base and unique defs during customization. When disabled, only already-unique weapons can be customized, and removing all traits keeps the weapon as a zero-trait unique instead of reverting to its base weapon. -->
+  <UWU_AllowDefConversionDesc>カスタマイズ中に,武器が基本defとユニークdefの間で変換されることを許可します.無効にすると,すでにユニークな武器のみカスタマイズ可能になり,すべての特性を取り除いても基本の武器には戻らず,特性を持たないユニークな武器のままになります.</UWU_AllowDefConversionDesc>
+  <!-- EN: Enable Ideology color options -->
+  <UWU_EnableIdeoColors>思想の色オプションを有効化</UWU_EnableIdeoColors>
+  <!-- EN: Show Ideology and miscellaneous color palettes in the weapon customization color picker. -->
+  <UWU_EnableIdeoColorsDesc>武器カスタマイズのカラーピッカーに,思想およびその他のカラーパレットを表示します.</UWU_EnableIdeoColorsDesc>
+  <!-- EN: Enable structure color options -->
+  <UWU_EnableStructureColors>建築物の色オプションを有効化</UWU_EnableStructureColors>
+  <!-- EN: Show structure color palette in the weapon customization color picker. -->
+  <UWU_EnableStructureColorsDesc>武器カスタマイズのカラーピッカーに,建築物のカラーパレットを表示します.</UWU_EnableStructureColorsDesc>
+  <!-- EN: Enforce trait count limit -->
+  <UWU_EnforceMaxTraitLimit>特性数の上限を適用</UWU_EnforceMaxTraitLimit>
+  <!-- EN: Vanilla unique weapons generate with no more than three traits. Enable this to enforce the same limit during customization. Disable to allow any number of traits (other rules such as category and exclusion restrictions still apply). -->
+  <UWU_EnforceMaxTraitLimitDesc>バニラのユニークな武器は,3つ以下の特性を持つように生成されます.有効にすると,カスタマイズ時にも同じ上限を適用します.無効にすると,特性の数に制限がなくなります(カテゴリや排他などの他の制限は引き続き適用されます).</UWU_EnforceMaxTraitLimitDesc>
+  <!-- EN: Enforce sole-trait restrictions -->
+  <UWU_EnforceSoleTrait>単独特性の制限を適用</UWU_EnforceSoleTrait>
+  <!-- EN: Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization. -->
+  <UWU_EnforceSoleTraitDesc>一部の特性は,バニラの生成時には武器の唯一の特性になることができません.有効にすると,カスタマイズ時にも同じ制限を適用します.</UWU_EnforceSoleTraitDesc>
+  <!-- EN: Restrict available traits to discovered weapons -->
+  <UWU_RestrictTraitsToDiscovered>利用可能な特性を発見済みの武器に制限</UWU_RestrictTraitsToDiscovered>
+  <!-- EN: Lightweight progression system. When enabled, the customization dialog only offers traits found on unique weapons currently visible to the colony: on a loaded map (not fogged, sealed, or possessed by hostiles) or in a player-faction caravan. No persistent state is added to saves; toggling this off restores the full trait list immediately. -->
+  <UWU_RestrictTraitsToDiscoveredDesc>軽量な進行システムです.有効にすると,カスタマイズダイアログには,現在コロニーから視認できるユニークな武器が持つ特性のみが提示されます.対象は,読み込まれたマップ上にあるもの(未探索の領域や密閉された場所になく,敵対勢力に所持されていないもの),またはプレイヤー勢力のキャラバンにあるものです.セーブデータに永続的な状態は追加されず,オフに戻すと特性の全リストが即座に復元されます.</UWU_RestrictTraitsToDiscoveredDesc>
+  <!-- EN: Enable ground weapon right-click menu -->
+  <UWU_EnableGroundCustomization>地面の武器の右クリックメニューを有効化</UWU_EnableGroundCustomization>
+  <!-- EN: Show "Customize" options when right-clicking weapons on the ground. Disable this to reduce float menu clutter, especially with storage mods that stack items in the same cell. Weapons can still be customized by selecting them and using the gizmo button. -->
+  <UWU_EnableGroundCustomizationDesc>地面にある武器を右クリックしたときに「カスタマイズ」の選択肢を表示します.無効にすると右クリックメニューの煩雑さを減らせます.特に,同じマスにアイテムを積み重ねるストレージ系MODを使用している場合に有効です.武器を選択して表示されるボタンからは,引き続きカスタマイズできます.</UWU_EnableGroundCustomizationDesc>
+
+  <!-- Settings: Haul planner -->
+  <!-- EN: Sequential -->
+  <UWU_HaulPlannerSequential>順次</UWU_HaulPlannerSequential>
+  <!-- EN: Vanilla behavior. Pawns carry up to one ingredient stack at a time, always grabbing the nearest first. Simple and predictable, but means lots of short trips for resource-heavy customizations. -->
+  <UWU_HaulPlannerSequentialDesc>バニラの動作です.入植者は一度に1つまでの材料スタックしか運ばず,常に最も近いものから取っていきます.単純で予測しやすい反面,資源を多く使うカスタマイズでは短い往復が多くなります.</UWU_HaulPlannerSequentialDesc>
+  <!-- EN: Sweep -->
+  <UWU_HaulPlannerSweep>巡回</UWU_HaulPlannerSweep>
+  <!-- EN: Pawns plan ahead and use spare inventory space to carry more at once, while also routing more efficiently between pickups. Much fewer trips than Sequential, with negligible planning overhead. -->
+  <UWU_HaulPlannerSweepDesc>入植者が先を見越して運搬計画を立て,所持品の空きを活用して一度により多くの材料を運びつつ,回収地点の間をより効率的に移動します.「順次」よりも往復回数が大幅に少なく,計画にかかる負荷はごくわずかです.</UWU_HaulPlannerSweepDesc>
+  <!-- EN: Thorough -->
+  <UWU_HaulPlannerThorough>徹底</UWU_HaulPlannerThorough>
+  <!-- EN: Like Sweep, but also weighs which stacks to draw from when the map has multiple candidates, rather than always taking the closest. Slower to plan, but usually finds the shortest runs when ingredients are scattered or carrying capacity is tight. Falls back to Sweep for hauls too complex to fully analyze. -->
+  <UWU_HaulPlannerThoroughDesc>「巡回」と同様ですが,マップ上に複数の候補がある場合,常に最も近いスタックを取るのではなく,どのスタックから取るかも検討します.計画には時間がかかりますが,材料が散らばっている場合や積載量に余裕がない場合には,たいてい最短の運搬経路を見つけます.完全に分析するには複雑すぎる運搬の場合は「巡回」の動作に切り替わります.</UWU_HaulPlannerThoroughDesc>
+
+</LanguageData>

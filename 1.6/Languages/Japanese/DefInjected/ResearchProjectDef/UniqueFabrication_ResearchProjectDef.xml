@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- EN: unique fabrication -->
+  <UniqueFabrication.label>ユニーク武器の組立製造</UniqueFabrication.label>
+  <!-- EN: Upgrade and customize spacer and ultratech weapons at a fabrication bench, adding or removing traits to suit your needs. -->
+  <UniqueFabrication.description>コンポーネント工作台で宇宙世紀や最先端技術級の武器を強化・カスタマイズし,必要に応じて特性を追加または除去できるようになります.</UniqueFabrication.description>
+
+  <!-- EN: Upgrade and customize spacer weapons -->
+  <UniqueFabrication.customUnlockTexts.0>宇宙世紀の武器の強化とカスタマイズ</UniqueFabrication.customUnlockTexts.0>
+  <!-- EN: Upgrade and customize ultratech weapons -->
+  <UniqueFabrication.customUnlockTexts.1>最先端技術級武器の強化とカスタマイズ</UniqueFabrication.customUnlockTexts.1>
+
+  <!-- EN:
+    <li>subject->unique fabrication</li>
+    <li>subject_story->decoded the secrets of modifying pulse-charged and beam weapon traits</li>
+    <li>subject_story->used fabrication nanotechnology to alter spacer weapon components</li>
+    <li>subject_gerund->fabricating unique weapons</li>
+  -->
+  <UniqueFabrication.generalRules.rulesStrings>
+    <li>subject->ユニーク武器の組立製造</li>
+    <li>subject_story->チャージ武器やビーム武器の特性を改造する秘密を解き明かした</li>
+    <li>subject_story->組立製造ナノテクノロジーで宇宙世紀の武器部品を改変した</li>
+    <li>subject_gerund->ユニーク武器の組立製造</li>
+  </UniqueFabrication.generalRules.rulesStrings>
+
+</LanguageData>
